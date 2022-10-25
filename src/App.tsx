@@ -1,10 +1,12 @@
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   return (
-    <div className="App">
-      <h1 className="text-center">Welcome to the Dispatch project</h1>
+    <div>
+      <Navbar />
+      <div className="contentLayout">Už text</div>
     </div>
   );
-}
+};
 
 export default App;

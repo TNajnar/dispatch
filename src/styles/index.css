@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+    margin: 0;
+    font-family: 'arial', sans-serif;
+}
+
+.pageLayout {
+    width: 100%;
+    max-width: 1300px;
+    margin: auto
+}
+
+.contentLayout {
+    background: white;
+    width: 100%;
+    max-width: 1300px; /* prevent too wide texts on large screens */
+    margin: auto;
+    /* padding-top: 3.2rem;  prevent hiding content behind navbar */
+}
+
+
