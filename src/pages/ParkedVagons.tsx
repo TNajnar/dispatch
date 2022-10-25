@@ -1,7 +1,7 @@
 import React from "react";
 
 const ParkedVagons = () => {
-  return <div className="contentLayout">Hello ParkedVagons</div>;
+  return <div>Hello ParkedVagons</div>;
 };
 
 export default ParkedVagons;
