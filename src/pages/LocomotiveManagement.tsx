@@ -1,5 +1,7 @@
 import React from "react";
 
-export const LocomotiveManagemnt = () => {
-  return <div>Hello From Locomotive Management</div>;
+const LocomotiveManagemnt = () => {
+  return <div className="contentLayout">Hello From Locomotive Management</div>;
 };
+
+export default LocomotiveManagemnt;
