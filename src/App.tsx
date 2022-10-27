@@ -1,28 +1,46 @@
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import MainComponent from "./components/MainComponent";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import LocomotiveManagement from "./pages/LocomotiveManagement";
 import ParkedVagons from "./pages/ParkedVagons";
 
 const App = () => {
-  let contentContainer;
-  switch (window.location.pathname) {
-    case "/":
-      contentContainer = <HomePage />;
-      break;
-    case "/manage-vagons":
-      contentContainer = <LocomotiveManagement />;
-      break;
-    case "/parked-vagons":
-      contentContainer = <ParkedVagons />;
-      break;
-    default:
-      break;
-  }
-
   return (
     <div className="pageLayout">
       <Navbar />
-      <div className="contentLayout">{contentContainer}</div>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MainComponent>
+                <HomePage />
+              </MainComponent>
+            }
+          ></Route>
+        </Routes>
+        <Routes>
+          <Route
+            path="/manage-vagons"
+            element={
+              <MainComponent>
+                <LocomotiveManagement />
+              </MainComponent>
+            }
+          ></Route>
+        </Routes>
+        <Routes>
+          <Route
+            path="/parked-vagons"
+            element={
+              <MainComponent>
+                <ParkedVagons />
+              </MainComponent>
+            }
+          ></Route>
+        </Routes>
+      </Router>
     </div>
   );
 };
