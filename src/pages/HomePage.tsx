@@ -1,7 +1,20 @@
-import React from "react";
+import Locomotive from "../components/Train/Locomotive";
+import Vehicle from "../components/Train/Vehicle";
 
 const HomePage = () => {
-  return <div>Tady budou nějaké instrukce ohledně chování appky</div>;
+  return (
+    <div>
+      <h1 className="text-2xl pb-6">Instrukce do aplikace</h1>
+      <div className="flex gap-6">
+        Lokomotiva =
+        <Locomotive />
+      </div>
+      <div className="flex gap-14">
+        Vagon =
+        <Vehicle />
+      </div>
+    </div>
+  );
 };
 
 export default HomePage;
