@@ -7,12 +7,12 @@ const NavItems = [
   {
     name: "Managemnet vozů",
     icon: "",
-    url: "/manage-vagons",
+    url: "/manage-vehicles",
   },
   {
     name: "Odstavené vozy",
     icon: "",
-    url: "/parked-vagons",
+    url: "/parked-vehicles",
   },
 ];
 

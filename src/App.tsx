@@ -3,7 +3,7 @@ import MainComponent from "./components/MainComponent";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import LocomotiveManagement from "./pages/LocomotiveManagement";
-import ParkedVagons from "./pages/ParkedVagons";
+import ParkedVagons from "./pages/ParkedVehicles";
 
 const App = () => {
   return (
@@ -22,7 +22,7 @@ const App = () => {
         </Routes>
         <Routes>
           <Route
-            path="/manage-vagons"
+            path="/manage-vehicles"
             element={
               <MainComponent>
                 <LocomotiveManagement />
@@ -32,7 +32,7 @@ const App = () => {
         </Routes>
         <Routes>
           <Route
-            path="/parked-vagons"
+            path="/parked-vehicles"
             element={
               <MainComponent>
                 <ParkedVagons />
