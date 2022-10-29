@@ -1,5 +1,3 @@
-import React from "react";
-
 interface MainComponentProps {
   children: JSX.Element;
 }
