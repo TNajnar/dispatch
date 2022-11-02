@@ -1,5 +1,11 @@
-const LocomotiveManagemnt = () => {
-  return <div>Hello From Locomotive Management</div>;
+import VehicleRow from "../components/LocomotiveManagement/VehicleRow";
+
+const LocomotiveManagement = () => {
+  return (
+    <div>
+      <VehicleRow />
+    </div>
+  );
 };
 
-export default LocomotiveManagemnt;
+export default LocomotiveManagement;

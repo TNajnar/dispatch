@@ -4,8 +4,7 @@ import App from "./App";
 import "./styles/index.css";
 
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
 
 // My web app's Firebase configuration
 const firebaseConfig = {
@@ -16,14 +15,11 @@ const firebaseConfig = {
   messagingSenderId: "625732761586",
   appId: "1:625732761586:web:979183f3764a5d283c1d6b",
   measurementId: "G-E45E03T7BM",
-  databaseURL:
-    "https://dispatch-89c2b-default-rtdb.europe-west1.firebasedatabase.app/", // myDB
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app); // initialize my RealTime DB
-const analytics = getAnalytics(app);
+const database = getFirestore(app); // initialize my RealTime DB
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
