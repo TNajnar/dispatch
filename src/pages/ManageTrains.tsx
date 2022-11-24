@@ -9,14 +9,13 @@ import {
 import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
+import Button from "../components/ui/Button";
 
 const ManageTrains = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<any>([]);
   const collectionRows = collection(database, "ManageTrains");
   const id = nanoid();
-
-  const f = docRow.map((item: any) => item.id);
 
   const AddRow = async () => {
     await setDoc(doc(collectionRows), {
@@ -28,7 +27,7 @@ const ManageTrains = () => {
     setIsClicked(true);
   };
 
-  const deleteRow = async (rowID: string) => {
+  const DeleteVehicle = async (rowID: string) => {
     await deleteDoc(doc(database, "ManageTrains", rowID));
     console.log(rowID);
   };
@@ -61,23 +60,15 @@ const ManageTrains = () => {
       {docRow.map((document: any) => (
         <div className="flex w-full items-center">
           <VehicleRow key={document.id} document={document} />
-          <div
-            onClick={() => deleteRow(document.id)}
-            className="w-14 h-14 flex items-center text-3xl justify-center"
-          >
-            -
-          </div>
+          <Button
+            text="-"
+            clasName="absolute right-8"
+            onClick={() => DeleteVehicle(document.id)}
+          />
         </div>
       ))}
 
-      <div className="flex gap-4">
-        <div
-          onClick={AddRow}
-          className="w-14 h-14 flex items-center text-3xl justify-center border-4 border-black divide-x-4 rounded-full bg-[#fabb00]"
-        >
-          +
-        </div>
-      </div>
+      <Button text="+" onClick={AddRow} isRounded={true} />
     </div>
   );
 };

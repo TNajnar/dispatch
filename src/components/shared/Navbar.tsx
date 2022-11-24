@@ -18,7 +18,7 @@ const NavItems = [
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-around bg-[#fabb00] text-black">
+    <nav className="flex items-center justify-around bg-primary-yellow text-black">
       <div className="flex">
         {NavItems.map(({ name, url }) => (
           <a
