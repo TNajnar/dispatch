@@ -16,7 +16,7 @@
 .contentLayout {
     background: white;
     width: 100%;
-    max-width: 1400px; /* prevent too wide texts on large screens */
+    max-width: 90%; /* prevent too wide texts on large screens */
     margin: auto;
     padding-top: 2rem;  /*prevent hiding content behind navbar */
 }
