@@ -1,23 +1,36 @@
 import { useEffect, useState } from "react";
-import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
+import { nanoid } from "nanoid";
 
 const ManageTrains = () => {
-  const [counterRow, setCounterRow] = useState(0);
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<any>([]);
   const collectionRows = collection(database, "ManageTrains");
+  const id = nanoid();
 
-  const addRow = async () => {
+  const f = docRow.map((item: any) => item.id);
+
+  const AddRow = async () => {
     await setDoc(doc(collectionRows), {
       vehicles: [],
-      locomotives: { locomotiveID: 1 },
+      locomotives: { locomotiveID: id },
       line: [],
     });
-    setCounterRow(counterRow + 1);
+
     setIsClicked(true);
-    console.log("rowID", counterRow);
+  };
+
+  const deleteRow = async (rowID: string) => {
+    await deleteDoc(doc(database, "ManageTrains", rowID));
+    console.log(rowID);
   };
 
   useEffect(() => {
@@ -45,15 +58,25 @@ const ManageTrains = () => {
         <h3 className="font-bold">Spoj</h3>
       </div>
 
-      {docRow.map((item: any, index: number, rowId: string) => (
-        <VehicleRow item={item} />
+      {docRow.map((document: any) => (
+        <div className="flex w-full items-center">
+          <VehicleRow key={document.id} document={document} />
+          <div
+            onClick={() => deleteRow(document.id)}
+            className="w-14 h-14 flex items-center text-3xl justify-center"
+          >
+            -
+          </div>
+        </div>
       ))}
 
-      <div
-        onClick={addRow}
-        className="w-14 h-14 flex items-center text-3xl justify-center border-4 border-black divide-x-4 rounded-full bg-[#fabb00]"
-      >
-        +
+      <div className="flex gap-4">
+        <div
+          onClick={AddRow}
+          className="w-14 h-14 flex items-center text-3xl justify-center border-4 border-black divide-x-4 rounded-full bg-[#fabb00]"
+        >
+          +
+        </div>
       </div>
     </div>
   );
