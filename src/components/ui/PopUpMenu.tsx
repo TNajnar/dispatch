@@ -11,7 +11,7 @@ interface IPopUpMenu {
   value?: string;
   handleClose: () => void;
   handleOnSubmit: () => void;
-  handleOnChange: () => void;
+  handleOnChange:  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
 }
 
 const PopUpMenu = ({

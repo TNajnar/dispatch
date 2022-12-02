@@ -12,19 +12,21 @@ import database from "../shared/firebaseconfig";
 import TrainRail from "../components/ParkedVehicles/TrainRail";
 import PopUpMenu from "../components/ui/PopUpMenu";
 
+const collectionRows = collection(database, "ParkedVehicles");
+
 const ParkedVagons = () => {
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string>();
   const [docRow, setDocRow] = useState<any>([]);
   const [rowName, setRowName] = useState(String);
 
-  const collectionRows = collection(database, "ParkedVehicles");
-
   const AddRow = async () => {
-    await setDoc(doc(collectionRows), {
+    const newDoc = doc(collectionRows);
+    await setDoc(newDoc, {
       nameRail: "",
       vehicles: [],
     });
-    setOpenMenu(true);
+
+    setOpenMenuId(newDoc.id);
   };
 
   const DeleteRow = async (rowID: string) => {
@@ -37,7 +39,7 @@ const ParkedVagons = () => {
       event.preventDefault();
     }
     UpdateRowName(rowID);
-    setOpenMenu(false);
+    setOpenMenuId(undefined);
     console.log(rowName);
   };
 
@@ -59,7 +61,7 @@ const ParkedVagons = () => {
   };
 
   const handleCloseMenu = () => {
-    setOpenMenu(false);
+    setOpenMenuId(undefined);
   };
 
   useEffect(() => {
@@ -84,23 +86,23 @@ const ParkedVagons = () => {
       <h2 className="w-full text-h2 font-bold border-b border-black">Kolej</h2>
 
       {docRow.map((document: any) => (
-        <div className="relative">
+        <div className="relative" key={document.id}>
           <Button
             text="-"
             clasName="absolute -right-10 inset-y-1/2"
             onClick={() => DeleteRow(document.id)}
           />
           <TrainRail document={document} />
-          <PopUpMenu
-            open={openMenu}
-            value={rowName}
-            handleClose={handleCloseMenu}
-            handleOnSubmit={() => handleSubmit(document.id, this)}
-            handleOnChange={() => handleOnChange}
-            // updateRowName={() => UpdateRowName(document.id)}
-          />
         </div>
       ))}
+      <PopUpMenu
+        open={!!openMenuId}
+        value={rowName}
+        handleClose={handleCloseMenu}
+        handleOnSubmit={() => handleSubmit(openMenuId!, this)}
+        handleOnChange={handleOnChange}
+        // updateRowName={() => UpdateRowName(document.id)}
+      />
 
       <Button
         clasName="self-center"
