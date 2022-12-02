@@ -44,7 +44,7 @@ const VehicleRow = ({ document }: any) => {
   };
 
   return (
-    <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray-200">
+    <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray">
       <div className="flex col-span-2 items-center gap-4">
         <Button text="+" onClick={AddVehicle} isRounded={true} />
 

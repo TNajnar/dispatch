@@ -27,7 +27,7 @@ const ManageTrains = () => {
     setIsClicked(true);
   };
 
-  const DeleteVehicle = async (rowID: string) => {
+  const DeleteRow = async (rowID: string) => {
     await deleteDoc(doc(database, "ManageTrains", rowID));
     console.log(rowID);
   };
@@ -63,7 +63,7 @@ const ManageTrains = () => {
           <Button
             text="-"
             clasName="absolute right-8"
-            onClick={() => DeleteVehicle(document.id)}
+            onClick={() => DeleteRow(document.id)}
           />
         </div>
       ))}
