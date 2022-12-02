@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getCountFromServer,
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
@@ -30,7 +31,6 @@ const ManageTrains = () => {
 
   const deleteRow = async (rowID: string) => {
     await deleteDoc(doc(database, "ManageTrains", rowID));
-    console.log(rowID);
   };
 
   useEffect(() => {
@@ -47,6 +47,7 @@ const ManageTrains = () => {
         setDocRow(documents);
       }
     );
+
     return () => unsub();
   }, []);
 

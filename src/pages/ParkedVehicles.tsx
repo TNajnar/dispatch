@@ -15,9 +15,9 @@ import PopUpMenu from "../components/ui/PopUpMenu";
 const collectionRows = collection(database, "ParkedVehicles");
 
 const ParkedVagons = () => {
-  const [openMenuId, setOpenMenuId] = useState<string>();
+  const [openMenuID, setOpenMenuID] = useState<string>();
   const [docRow, setDocRow] = useState<any>([]);
-  const [rowName, setRowName] = useState(String);
+  const [rowName, setRowName] = useState<string>();
 
   const addRow = async () => {
     const newDoc = doc(collectionRows);
@@ -26,11 +26,7 @@ const ParkedVagons = () => {
       vehicles: [],
     });
 
-    setOpenMenuId(newDoc.id);
-  };
-
-  const deleteRow = async (rowID: string) => {
-    await deleteDoc(doc(database, "ParkedVehicles", rowID));
+    setOpenMenuID(newDoc.id);
   };
 
   const handleSubmit = (rowID: string, event: any) => {
@@ -38,7 +34,8 @@ const ParkedVagons = () => {
       event.preventDefault();
     }
     updateRowName(rowID);
-    setOpenMenuId(undefined);
+    setRowName(undefined);
+    setOpenMenuID(undefined);
   };
 
   const handleOnChange = (event: any) => {
@@ -50,15 +47,15 @@ const ParkedVagons = () => {
 
     await updateDoc(rowRef, {
       nameRail: rowName,
-    })
-      .then(() => alert("Added successfully "))
-      .catch((error) => {
-        console.error("Error adding document: ", error);
-      });
+    });
+  };
+
+  const deleteRow = async (rowID: string) => {
+    await deleteDoc(doc(database, "ParkedVehicles", rowID));
   };
 
   const handleCloseMenu = () => {
-    setOpenMenuId(undefined);
+    setOpenMenuID(undefined);
   };
 
   useEffect(() => {
@@ -92,11 +89,15 @@ const ParkedVagons = () => {
           <TrainRail document={document} />
         </div>
       ))}
+
       <PopUpMenu
-        open={!!openMenuId}
+        open={!!openMenuID}
         value={rowName}
+        title="Název koleje"
+        context="Zde napiš nápiš název koleje na které budou vozy"
+        label="Název linky"
         handleClose={handleCloseMenu}
-        handleOnSubmit={() => handleSubmit(openMenuId!, this)}
+        handleOnSubmit={() => handleSubmit(openMenuID!, this)}
         handleOnChange={handleOnChange}
       />
 

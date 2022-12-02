@@ -9,32 +9,38 @@ import DialogTitle from "@mui/material/DialogTitle";
 interface IPopUpMenu {
   open: boolean;
   value?: string;
+  title?: string;
+  context?: string;
+  label?: string;
   handleClose: () => void;
   handleOnSubmit: () => void;
-  handleOnChange:  React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+  handleOnChange: React.ChangeEventHandler<
+    HTMLTextAreaElement | HTMLInputElement
+  >;
 }
 
 const PopUpMenu = ({
   open,
   value,
+  title,
+  context,
+  label,
   handleClose,
   handleOnSubmit,
   handleOnChange,
 }: IPopUpMenu) => {
   return (
     <Dialog open={open} onClose={handleClose} onSubmit={handleOnSubmit}>
-      <DialogTitle>Název koleje</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Zde napiš nápiš název koleje na které budou vozy.
-        </DialogContentText>
+        <DialogContentText>{context}</DialogContentText>
         <TextField
           onChange={handleOnChange}
           value={value}
           autoFocus
           margin="dense"
           id="name"
-          label="Název koleje"
+          label={label}
           type="text"
           fullWidth
           variant="standard"
