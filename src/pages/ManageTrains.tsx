@@ -11,13 +11,14 @@ import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
 import Button from "../components/ui/Button";
 
+const collectionRows = collection(database, "ManageTrains");
+const id = nanoid();
+
 const ManageTrains = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<any>([]);
-  const collectionRows = collection(database, "ManageTrains");
-  const id = nanoid();
 
-  const AddRow = async () => {
+  const addRow = async () => {
     await setDoc(doc(collectionRows), {
       vehicles: [],
       locomotives: { locomotiveID: id },
@@ -27,7 +28,7 @@ const ManageTrains = () => {
     setIsClicked(true);
   };
 
-  const DeleteRow = async (rowID: string) => {
+  const deleteRow = async (rowID: string) => {
     await deleteDoc(doc(database, "ManageTrains", rowID));
     console.log(rowID);
   };
@@ -58,17 +59,17 @@ const ManageTrains = () => {
       </div>
 
       {docRow.map((document: any) => (
-        <div className="flex w-full items-center">
-          <VehicleRow key={document.id} document={document} />
+        <div key={document.id} className="flex w-full items-center">
+          <VehicleRow document={document} />
           <Button
             text="-"
             clasName="absolute right-8"
-            onClick={() => DeleteRow(document.id)}
+            onClick={() => deleteRow(document.id)}
           />
         </div>
       ))}
 
-      <Button text="+" onClick={AddRow} isRounded={true} />
+      <Button text="+" onClick={addRow} isRounded={true} />
     </div>
   );
 };

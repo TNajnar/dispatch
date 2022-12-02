@@ -11,13 +11,14 @@ import Vehicle from "../Train/Vehicle";
 import Button from "../ui/Button";
 import { nanoid } from "nanoid";
 
-const TrainRail = ({ document }: any) => {
-  const collectionRows = collection(database, "ParkedVehicles");
-  const id = nanoid();
+const collectionRows = collection(database, "ParkedVehicles");
+const id = nanoid();
 
+const TrainRail = ({ document }: any) => {
+  const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
 
-  const AddVehicle = async () => {
+  const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
     try {
       await runTransaction(database, async (transaction) => {
@@ -34,7 +35,7 @@ const TrainRail = ({ document }: any) => {
     }
   };
 
-  const DeleteVehicle = async (vehicleID: string) => {
+  const deleteVehicle = async (vehicleID: string) => {
     const getDocRef = doc(database, "ParkedVehicles", document.id);
     await updateDoc(getDocRef, {
       vehicles: arrayRemove({ id: vehicleID }),
@@ -43,19 +44,23 @@ const TrainRail = ({ document }: any) => {
 
   return (
     <div className="flex items-center py-4 gap-8 border-b border-gray h-full">
-      <h2 className="pr-4 text-h3 font-bold border-r border-black">17a</h2>
+      {!!nameRail && (
+        <h2 className="pr-4 text-h3 font-bold border-r border-black">
+          {nameRail}
+        </h2>
+      )}
       {parkedVehicles.map((vehicle: any) => (
         <div className="relative flex justify-center">
           <Button
             text="-"
             clasName="absolute bottom-16"
-            onClick={() => DeleteVehicle(vehicle.id)}
+            onClick={() => deleteVehicle(vehicle.id)}
           />
           <Vehicle />
         </div>
       ))}
 
-      <Button text="+" onClick={AddVehicle} isRounded={true} />
+      <Button text="+" onClick={addVehicle} isRounded={true} />
     </div>
   );
 };

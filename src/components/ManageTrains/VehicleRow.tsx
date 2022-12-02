@@ -13,13 +13,13 @@ import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 
-const VehicleRow = ({ document }: any) => {
-  const collectionRows = collection(database, "ManageTrains");
-  const id = nanoid();
+const collectionRows = collection(database, "ManageTrains");
+const id = nanoid();
 
+const VehicleRow = ({ document }: any) => {
   const vehicles = document.vehicles;
 
-  const AddVehicle = async () => {
+  const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
     try {
       await runTransaction(database, async (transaction) => {
@@ -36,7 +36,7 @@ const VehicleRow = ({ document }: any) => {
     }
   };
 
-  const DeleteVehicle = async (vehicleID: string) => {
+  const deleteVehicle = async (vehicleID: string) => {
     const getDocRef = doc(database, "ManageTrains", document.id);
     await updateDoc(getDocRef, {
       vehicles: arrayRemove({ id: vehicleID }),
@@ -46,14 +46,17 @@ const VehicleRow = ({ document }: any) => {
   return (
     <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray">
       <div className="flex col-span-2 items-center gap-4">
-        <Button text="+" onClick={AddVehicle} isRounded={true} />
+        <Button text="+" onClick={addVehicle} isRounded={true} />
 
         {vehicles.map((vehicle: any) => (
-          <div className="relative flex flex-col items-center gap-6">
+          <div
+            key={vehicle.id}
+            className="relative flex flex-col items-center gap-6"
+          >
             <Button
               text="-"
               clasName="absolute bottom-20"
-              onClick={() => DeleteVehicle(vehicle.id)}
+              onClick={() => deleteVehicle(vehicle.id)}
             />
 
             <Vehicle key={vehicle.id} />
