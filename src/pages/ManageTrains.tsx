@@ -12,11 +12,11 @@ import { nanoid } from "nanoid";
 import Button from "../components/ui/Button";
 
 const collectionRows = collection(database, "ManageTrains");
-const id = nanoid();
 
 const ManageTrains = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<any>([]);
+  const id = nanoid();
 
   const addRow = async () => {
     await setDoc(doc(collectionRows), {

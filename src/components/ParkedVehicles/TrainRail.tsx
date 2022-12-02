@@ -12,11 +12,11 @@ import Button from "../ui/Button";
 import { nanoid } from "nanoid";
 
 const collectionRows = collection(database, "ParkedVehicles");
-const id = nanoid();
 
 const TrainRail = ({ document }: any) => {
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
+  const id = nanoid();
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
@@ -50,7 +50,7 @@ const TrainRail = ({ document }: any) => {
         </h2>
       )}
       {parkedVehicles.map((vehicle: any) => (
-        <div className="relative flex justify-center">
+        <div key={vehicle.id} className="relative flex justify-center">
           <Button
             text="-"
             clasName="absolute bottom-16"

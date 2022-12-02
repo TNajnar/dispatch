@@ -14,10 +14,10 @@ import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 
 const collectionRows = collection(database, "ManageTrains");
-const id = nanoid();
 
 const VehicleRow = ({ document }: any) => {
   const vehicles = document.vehicles;
+  const id = nanoid();
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
