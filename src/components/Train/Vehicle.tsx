@@ -14,32 +14,42 @@ const Vehicle = ({ id }: VehicleProps) => {
   const initialPosition = useRef<Position>();
   const isMouseDown = useRef<boolean>();
 
-  const showMenu = () => { };
+  const showMenu = () => {};
 
   const onMouseDrag: EventHandler<MouseEvent> = (e) => {
-    if (!isMouseDown.current || !initialPosition.current || !wrapperRef.current) return;
+    if (!isMouseDown.current || !initialPosition.current || !wrapperRef.current)
+      return;
     const translateY = e.clientY - initialPosition.current.y;
     const translateX = e.clientX - initialPosition.current.x;
-    wrapperRef.current!.style.transform = `translate(${translateX},${translateY})`;
-  }
+    wrapperRef.current!.style.transform = `translate(${translateX}px,${translateY})px`;
+  };
 
   const onMouseDown: EventHandler<MouseEvent> = (e) => {
     isMouseDown.current = true;
     initialPosition.current = {
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
     };
-  }
+  };
 
   const onMouseUp: EventHandler<MouseEvent> = (e) => {
     isMouseDown.current = false;
     if (!initialPosition.current || !wrapperRef.current) return;
-    wrapperRef.current!.style.transform = ''
-    if (e.clientX === initialPosition.current.x && e.clientY === initialPosition.current.y) showMenu();
-  }
+    wrapperRef.current!.style.transform = "";
+    if (
+      e.clientX === initialPosition.current.x &&
+      e.clientY === initialPosition.current.y
+    )
+      showMenu();
+  };
 
   return (
-    <div ref={wrapperRef} onMouseMove={onMouseDrag} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+    <div
+      ref={wrapperRef}
+      onMouseMove={onMouseDrag}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    >
       <div className="relative w-[100px] h-14 overflow-hidden border border-black rounded-lg" />
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">
@@ -48,6 +58,6 @@ const Vehicle = ({ id }: VehicleProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default Vehicle;
