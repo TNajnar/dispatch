@@ -95,7 +95,7 @@ const ParkedVagons = () => {
         value={rowName}
         title="Název koleje"
         context="Zde napiš nápiš název koleje na které budou vozy"
-        label="Název linky"
+        label="Název koleje"
         handleClose={handleCloseMenu}
         handleOnSubmit={() => handleSubmit(openMenuID!, this)}
         handleOnChange={handleOnChange}

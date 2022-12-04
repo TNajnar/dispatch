@@ -14,6 +14,9 @@ module.exports = {
         primary: {
           yellow: "#fabb00",
           gray: "#FFFFFF"
+        },
+        secondary: {
+          yellow: '#FFE1A4'
         }
       }
     },

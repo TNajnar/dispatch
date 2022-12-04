@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Locomotive from "../Train/Locomotive";
 import Vehicle from "../Train/Vehicle";
 import {
-  arrayRemove,
   arrayUnion,
   collection,
   doc,
-  getCountFromServer,
   runTransaction,
   updateDoc,
 } from "firebase/firestore";
@@ -17,9 +15,11 @@ import PopUpMenu from "../ui/PopUpMenu";
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({ document }: any) => {
+const VehicleRow = ({ document }: any): JSX.Element => {
+  const outsideClickRef = useRef<HTMLDivElement>(null);
   const [openMenuID, setOpenMenuID] = useState<string>();
   const [nameLine, setNameLine] = useState<string>();
+
   const id = nanoid();
 
   const vehicles = document.vehicles;
@@ -65,13 +65,6 @@ const VehicleRow = ({ document }: any) => {
     });
   };
 
-  const deleteVehicle = async (vehicleID: string) => {
-    const getDocRef = doc(database, "ManageTrains", document.id);
-    await updateDoc(getDocRef, {
-      vehicles: arrayRemove({ id: vehicleID }),
-    });
-  };
-
   const handleCloseMenu = () => {
     setOpenMenuID(undefined);
   };
@@ -80,19 +73,9 @@ const VehicleRow = ({ document }: any) => {
     <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray">
       <div className="flex col-span-2 items-center gap-4">
         <Button text="+" onClick={addVehicle} isRounded={true} />
-
         {vehicles.map((vehicle: any) => (
-          <div
-            key={vehicle.id}
-            className="relative flex flex-col items-center gap-6"
-          >
-            <Button
-              text="-"
-              clasName="absolute bottom-20"
-              onClick={() => deleteVehicle(vehicle.id)}
-            />
-
-            <Vehicle key={vehicle.id} />
+          <div key={vehicle.id} className="flex flex-col items-center gap-6">
+            <Vehicle id={vehicle.id} documentID={document.id} />
           </div>
         ))}
       </div>

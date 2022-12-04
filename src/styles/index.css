@@ -21,4 +21,15 @@
     padding-top: 2rem;  /*prevent hiding content behind navbar */
 }
 
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+    color: #fabb00 !important;
+} 
+
+.css-1a1fmpi-MuiInputBase-root-MuiInput-root:after {
+    border-bottom-color: #fabb00 !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
+    background-color: #FFE1A4 !important;
+}
 
