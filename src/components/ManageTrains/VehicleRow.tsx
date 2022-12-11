@@ -12,6 +12,7 @@ import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 import PopUpMenu from "../ui/PopUpMenu";
+import clsx from "clsx";
 
 const collectionRows = collection(database, "ManageTrains");
 
@@ -90,7 +91,7 @@ const VehicleRow = ({ document, rowIndex }: any) => {
         <Locomotive />
       </div>
       <div className="flex gap-4">
-        {linesLenght < 3 && <Button text="+" onClick={addLine} />}
+        {linesLenght < 4 && <Button text="+" onClick={addLine} />}
         {lines.map(
           (line: any) =>
             !!line.nameLine && (

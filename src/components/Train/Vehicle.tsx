@@ -5,7 +5,6 @@ import {
   arrayUnion,
   collection,
   doc,
-  onSnapshot,
   runTransaction,
   updateDoc,
 } from "firebase/firestore";
@@ -102,7 +101,6 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
       console.log("Transaction failed: ", e);
     }
     setIsEditable(false);
-    setSpzState(spzState);
     setIsMenuOpen(false);
   };
 
@@ -136,13 +134,13 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
         />
       )}
 
-      <div className="relative flex justify-center items-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+      <div className="relative flex justify-center items-center w-[100px] h-14 gap-3 overflow-hidden bg-white border border-black rounded-lg">
         <input
           type="text"
           value={`${!!isEditable ? spzState : vehicleSpz}`}
           className={clsx(
-            "w-11 text-center text-gray-600 bg-white",
-            (!!vehicleSpz?.length || !!isEditable) && "border-b border-gray"
+            "w-12 text-center text-gray-600 bg-white",
+            (!!isEditable || !!vehicleSpz?.length) && "border-b border-gray"
           )}
           disabled={!isEditable}
           onChange={handleOnChange}
