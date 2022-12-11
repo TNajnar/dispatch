@@ -15,8 +15,7 @@ import PopUpMenu from "../ui/PopUpMenu";
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({ document }: any): JSX.Element => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
+const VehicleRow = ({ document, rowIndex }: any) => {
   const [openMenuID, setOpenMenuID] = useState<string>();
   const [nameLine, setNameLine] = useState<string>();
 
@@ -36,21 +35,15 @@ const VehicleRow = ({ document }: any): JSX.Element => {
           throw "Document does not exist!";
         }
 
-        const newVehicle = (sfDoc.data().vehicles = arrayUnion({ id: id }));
+        const newVehicle = (sfDoc.data().vehicles = arrayUnion({
+          id: id,
+          spz: "",
+        }));
         transaction.update(docRefToUpdate, { vehicles: newVehicle });
       });
     } catch (e) {
       console.log("Transaction failed: ", e);
     }
-  };
-
-  const handleSubmit = (event: any) => {
-    if (event && event.preventDefault) {
-      event.preventDefault();
-    }
-    addLine();
-    setNameLine(undefined);
-    setOpenMenuID(undefined);
   };
 
   const handleOnChange = (event: any) => {
@@ -65,6 +58,15 @@ const VehicleRow = ({ document }: any): JSX.Element => {
     });
   };
 
+  const handleSubmit = (event: any) => {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+    addLine();
+    setNameLine(undefined);
+    setOpenMenuID(undefined);
+  };
+
   const handleCloseMenu = () => {
     setOpenMenuID(undefined);
   };
@@ -75,7 +77,12 @@ const VehicleRow = ({ document }: any): JSX.Element => {
         <Button text="+" onClick={addVehicle} isRounded={true} />
         {vehicles.map((vehicle: any) => (
           <div key={vehicle.id} className="flex flex-col items-center gap-6">
-            <Vehicle id={vehicle.id} documentID={document.id} />
+            <Vehicle
+              id={vehicle.id}
+              vehicleSpz={vehicle.spz}
+              documentID={document.id}
+              rowIndex={rowIndex}
+            />
           </div>
         ))}
       </div>

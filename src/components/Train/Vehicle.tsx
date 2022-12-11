@@ -1,11 +1,22 @@
-import { EventHandler, MouseEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, EventHandler, MouseEvent, useRef, useState } from "react";
 import VehicleMenu from "../ui/VehicleMenu";
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  onSnapshot,
+  runTransaction,
+  updateDoc,
+} from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import clsx from "clsx";
 
 interface IVehicleProps {
   id?: string;
+  vehicleSpz?: string;
   documentID?: string;
+  rowIndex?: number;
 }
 
 type Position = {
@@ -13,55 +24,98 @@ type Position = {
   y: number;
 };
 
-const Vehicle = ({ id, documentID }: IVehicleProps) => {
+const collectionRows = collection(database, "ManageTrains");
+
+const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const initialPosition = useRef<Position>();
   const isMouseDown = useRef<boolean>();
   const outsideClickRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [spzState, setSpzState] = useState<string>("");
 
-  const onMouseDrag: EventHandler<MouseEvent> = (e) => {
+  const onMouseDrag: EventHandler<MouseEvent> = (event) => {
     if (!isMouseDown.current || !initialPosition.current || !wrapperRef.current)
       return;
-    const translateY = e.clientY - initialPosition.current.y;
-    const translateX = e.clientX - initialPosition.current.x;
-    wrapperRef.current!.style.transform = `translate(${translateX}px,${translateY})px`;
+    const translateY = event.clientY - initialPosition.current.y;
+    const translateX = event.clientX - initialPosition.current.x;
+    wrapperRef.current!.style.transform = `translate(${translateX}px,${translateY}px)`;
+    wrapperRef.current!.style.zIndex = "1000";
   };
 
-  const onMouseDown: EventHandler<MouseEvent> = (e) => {
+  const onMouseDown: EventHandler<MouseEvent> = (event) => {
     isMouseDown.current = true;
     initialPosition.current = {
-      x: e.clientX,
-      y: e.clientY,
+      x: event.clientX,
+      y: event.clientY,
     };
-    // console.log("Now should be draggable. Mouse is down.");
   };
 
-  const onMouseUp: EventHandler<MouseEvent> = (e) => {
+  const onMouseUp: EventHandler<MouseEvent> = (event) => {
     isMouseDown.current = false;
     if (!initialPosition.current || !wrapperRef.current) return;
     wrapperRef.current!.style.transform = "";
+    wrapperRef.current!.style.zIndex = "";
     if (
-      e.clientX === initialPosition.current.x &&
-      e.clientY === initialPosition.current.y
+      event.clientX === initialPosition.current.x &&
+      event.clientY === initialPosition.current.y
     )
       setIsMenuOpen(true);
 
     if (
       outsideClickRef.current &&
-      !outsideClickRef.current.contains(e.target as Node)
+      !outsideClickRef.current.contains(event.target as Node)
     ) {
       setIsMenuOpen(false);
     }
+  };
 
-    // console.log("Now menu is open. Mouse is Up.");
-    // showMenu();
+  const handleEditVehicle = () => {
+    setIsEditable(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleSumbitEdit = async () => {
+    const docRefToUpdate = doc(collectionRows, documentID);
+
+    const newValues = {
+      id: id,
+      spz: spzState,
+    };
+
+    try {
+      await runTransaction(database, async (transaction) => {
+        const sfDoc = await transaction.get(docRefToUpdate);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        const data = sfDoc.data();
+
+        const filterVehicles = [
+          ...data.vehicles.filter((v: any) => v.id !== id),
+          newValues,
+        ];
+        transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+      });
+    } catch (e) {
+      console.log("Transaction failed: ", e);
+    }
+    setIsEditable(false);
+    setSpzState(spzState);
+    setIsMenuOpen(false);
+  };
+
+  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+    event
+  ) => {
+    setSpzState(event?.target.value);
   };
 
   const deleteVehicle = async () => {
     const getDocRef = doc(database, "ManageTrains", documentID!);
     await updateDoc(getDocRef, {
-      vehicles: arrayRemove({ id: id }),
+      vehicles: arrayRemove({ id: id, spz: vehicleSpz }),
     });
   };
 
@@ -69,23 +123,43 @@ const Vehicle = ({ id, documentID }: IVehicleProps) => {
     <div
       className="relative"
       ref={wrapperRef}
-      draggable={true}
       onMouseMove={onMouseDrag}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {isMenuOpen && (
+      {!isEditable && isMenuOpen && (
         <VehicleMenu
           outsideClickRef={outsideClickRef}
           deleteVehicle={deleteVehicle}
+          editVehicle={handleEditVehicle}
+          rowIndex={rowIndex}
         />
       )}
 
-      <div className="relative w-[100px] h-14 overflow-hidden border border-black rounded-lg" />
+      <div className="relative flex justify-center items-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+        <input
+          type="text"
+          value={`${!!isEditable ? spzState : vehicleSpz}`}
+          className={clsx(
+            "w-11 text-center text-gray-600 bg-white",
+            (!!vehicleSpz?.length || !!isEditable) && "border-b border-gray"
+          )}
+          disabled={!isEditable}
+          onChange={handleOnChange}
+        />
+        {!!isEditable && (
+          <div
+            className="text-xs border border-black"
+            onClick={handleSumbitEdit}
+          >
+            OK
+          </div>
+        )}
+      </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">
-        <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] border rounded-full border-black" />
-        <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] border rounded-full border-black" />
+        <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
+        <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] border border-black rounded-full" />
       </div>
     </div>
   );

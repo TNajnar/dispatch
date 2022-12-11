@@ -58,9 +58,9 @@ const ManageTrains = () => {
         <h3 className="font-bold">Spoj</h3>
       </div>
 
-      {docRow.map((document: any) => (
+      {docRow.map((document: any, index: number) => (
         <div key={document.id} className="flex w-full items-center">
-          <VehicleRow document={document} />
+          <VehicleRow rowIndex={index} document={document} />
           <Button
             text="-"
             clasName="absolute right-8"
