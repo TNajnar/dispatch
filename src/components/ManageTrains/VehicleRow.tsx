@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ChangeEvent, EventHandler, useState } from "react";
 import Locomotive from "../Train/Locomotive";
 import Vehicle from "../Train/Vehicle";
 import {
@@ -12,11 +12,16 @@ import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 import PopUpMenu from "../ui/PopUpMenu";
-import clsx from "clsx";
+import { TManageTrainDoc } from "../types";
+
+interface IVehicleRowProps {
+  document: TManageTrainDoc;
+  rowIndex: number;
+}
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({ document, rowIndex }: any) => {
+const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   const [openMenuID, setOpenMenuID] = useState<string>();
   const [nameLine, setNameLine] = useState<string>();
 
@@ -47,7 +52,9 @@ const VehicleRow = ({ document, rowIndex }: any) => {
     }
   };
 
-  const handleOnChange = (event: any) => {
+  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+    event
+  ) => {
     setNameLine(event.target.value);
   };
 
@@ -59,7 +66,7 @@ const VehicleRow = ({ document, rowIndex }: any) => {
     });
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit: EventHandler<ChangeEvent<HTMLInputElement>> = (event) => {
     if (event && event.preventDefault) {
       event.preventDefault();
     }
@@ -76,7 +83,7 @@ const VehicleRow = ({ document, rowIndex }: any) => {
     <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray">
       <div className="flex col-span-2 items-center gap-4">
         <Button text="+" onClick={addVehicle} isRounded={true} />
-        {vehicles.map((vehicle: any) => (
+        {vehicles.map((vehicle) => (
           <div key={vehicle.id} className="flex flex-col items-center gap-6">
             <Vehicle
               id={vehicle.id}
@@ -93,7 +100,7 @@ const VehicleRow = ({ document, rowIndex }: any) => {
       <div className="flex gap-4">
         {linesLenght < 4 && <Button text="+" onClick={addLine} />}
         {lines.map(
-          (line: any) =>
+          (line) =>
             !!line.nameLine && (
               <div key={line.id} className="px-4 py-2 border border-black">
                 {line.nameLine}
@@ -109,7 +116,7 @@ const VehicleRow = ({ document, rowIndex }: any) => {
         context="Zde napiš nápiš název linky."
         label="Název linky"
         handleClose={handleCloseMenu}
-        handleOnSubmit={() => handleSubmit(this)}
+        handleOnSubmit={() => handleSubmit(this!)}
         handleOnChange={handleOnChange}
       />
     </div>

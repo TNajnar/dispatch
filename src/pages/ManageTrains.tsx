@@ -10,12 +10,13 @@ import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
 import Button from "../components/ui/Button";
+import { TManageTrainDoc } from "../components/types";
 
 const collectionRows = collection(database, "ManageTrains");
 
 const ManageTrains = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const [docRow, setDocRow] = useState<any>([]);
+  const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
   const id = nanoid();
 
   const addRow = async () => {
@@ -43,7 +44,7 @@ const ManageTrains = () => {
             ...doc.data(),
           };
         });
-        setDocRow(documents);
+        setDocRow(documents as TManageTrainDoc[]);
       }
     );
 
@@ -58,7 +59,7 @@ const ManageTrains = () => {
         <h3 className="font-bold">Spoj</h3>
       </div>
 
-      {docRow.map((document: any, index: number) => (
+      {docRow.map((document, index: number) => (
         <div key={document.id} className="flex w-full items-center">
           <VehicleRow rowIndex={index} document={document} />
           <Button

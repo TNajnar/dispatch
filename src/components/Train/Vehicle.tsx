@@ -2,7 +2,6 @@ import { ChangeEvent, EventHandler, MouseEvent, useRef, useState } from "react";
 import VehicleMenu from "../ui/VehicleMenu";
 import {
   arrayRemove,
-  arrayUnion,
   collection,
   doc,
   runTransaction,
@@ -10,6 +9,7 @@ import {
 } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
+import { TVehicleObject } from "../types";
 
 interface IVehicleProps {
   id?: string;
@@ -92,7 +92,7 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
         const data = sfDoc.data();
 
         const filterVehicles = [
-          ...data.vehicles.filter((v: any) => v.id !== id),
+          ...data.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
           newValues,
         ];
         transaction.update(docRefToUpdate, { vehicles: filterVehicles });

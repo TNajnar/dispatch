@@ -10,10 +10,15 @@ import database from "../../shared/firebaseconfig";
 import Vehicle from "../Train/Vehicle";
 import Button from "../ui/Button";
 import { nanoid } from "nanoid";
+import { TParkedVehicleDoc } from "../types";
+
+interface ITrainRailProps {
+  document: TParkedVehicleDoc;
+}
 
 const collectionRows = collection(database, "ParkedVehicles");
 
-const TrainRail = ({ document }: any) => {
+const TrainRail = ({ document }: ITrainRailProps) => {
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
   const id = nanoid();
@@ -49,7 +54,7 @@ const TrainRail = ({ document }: any) => {
           {nameRail}
         </h2>
       )}
-      {parkedVehicles.map((vehicle: any) => (
+      {parkedVehicles.map((vehicle) => (
         <div key={vehicle.id} className="relative flex justify-center">
           <Button
             text="-"

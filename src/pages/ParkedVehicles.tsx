@@ -6,17 +6,18 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { ChangeEvent, EventHandler, useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import database from "../shared/firebaseconfig";
 import TrainRail from "../components/ParkedVehicles/TrainRail";
 import PopUpMenu from "../components/ui/PopUpMenu";
+import { TParkedVehicleDoc } from "../components/types";
 
 const collectionRows = collection(database, "ParkedVehicles");
 
 const ParkedVagons = () => {
   const [openMenuID, setOpenMenuID] = useState<string>();
-  const [docRow, setDocRow] = useState<any>([]);
+  const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
   const [rowName, setRowName] = useState<string>();
 
   const addRow = async () => {
@@ -29,7 +30,10 @@ const ParkedVagons = () => {
     setOpenMenuID(newDoc.id);
   };
 
-  const handleSubmit = (rowID: string, event: any) => {
+  const handleSubmit = (
+    rowID: string,
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
     if (event && event.preventDefault) {
       event.preventDefault();
     }
@@ -38,7 +42,9 @@ const ParkedVagons = () => {
     setOpenMenuID(undefined);
   };
 
-  const handleOnChange = (event: any) => {
+  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+    event
+  ) => {
     setRowName(event.target.value);
   };
 
@@ -69,7 +75,7 @@ const ParkedVagons = () => {
             ...doc.data(),
           };
         });
-        setDocRow(documents);
+        setDocRow(documents as TParkedVehicleDoc[]);
       }
     );
     return () => unsub();
@@ -79,7 +85,7 @@ const ParkedVagons = () => {
     <div className="flex flex-col gap-4">
       <h2 className="w-full text-h2 font-bold border-b border-black">Kolej</h2>
 
-      {docRow.map((document: any) => (
+      {docRow.map((document) => (
         <div key={document.id} className="relative">
           <Button
             text="-"
@@ -97,7 +103,7 @@ const ParkedVagons = () => {
         context="Zde napiš nápiš název koleje na které budou vozy"
         label="Název koleje"
         handleClose={handleCloseMenu}
-        handleOnSubmit={() => handleSubmit(openMenuID!, this)}
+        handleOnSubmit={() => handleSubmit(openMenuID!, this!)}
         handleOnChange={handleOnChange}
       />
 
