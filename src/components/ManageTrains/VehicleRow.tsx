@@ -44,6 +44,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         const newVehicle = (sfDoc.data().vehicles = arrayUnion({
           id: id,
           spz: "",
+          class: "",
         }));
         transaction.update(docRefToUpdate, { vehicles: newVehicle });
       });
@@ -88,6 +89,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
             <Vehicle
               id={vehicle.id}
               vehicleSpz={vehicle.spz}
+              vehicleClass={vehicle.class}
               documentID={document.id}
               rowIndex={rowIndex}
             />

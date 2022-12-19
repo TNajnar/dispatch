@@ -2,6 +2,7 @@ import { ChangeEvent, EventHandler, MouseEvent, useRef, useState } from "react";
 import VehicleMenu from "../ui/VehicleMenu";
 import {
   arrayRemove,
+  arrayUnion,
   collection,
   doc,
   runTransaction,
@@ -14,6 +15,7 @@ import { TVehicleObject } from "../types";
 interface IVehicleProps {
   id?: string;
   vehicleSpz?: string;
+  vehicleClass?: string;
   documentID?: string;
   rowIndex?: number;
 }
@@ -25,7 +27,13 @@ type Position = {
 
 const collectionRows = collection(database, "ManageTrains");
 
-const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
+const Vehicle = ({
+  id,
+  vehicleSpz,
+  vehicleClass,
+  documentID,
+  rowIndex,
+}: IVehicleProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const initialPosition = useRef<Position>();
   const isMouseDown = useRef<boolean>();
@@ -77,29 +85,20 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
 
   const handleSumbitEdit = async () => {
     const docRefToUpdate = doc(collectionRows, documentID);
-
     const newValues = {
       id: id,
       spz: spzState,
+      class: vehicleClass,
     };
-
-    try {
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
-        const data = sfDoc.data();
-
-        const filterVehicles = [
-          ...data.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-          newValues,
-        ];
-        transaction.update(docRefToUpdate, { vehicles: filterVehicles });
-      });
-    } catch (e) {
-      console.log("Transaction failed: ", e);
-    }
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      const data = sfDoc.data();
+      const filterVehicles = [
+        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+        newValues,
+      ];
+      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+    });
     setIsEditable(false);
     setIsMenuOpen(false);
   };
@@ -113,8 +112,28 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
   const deleteVehicle = async () => {
     const getDocRef = doc(database, "ManageTrains", documentID!);
     await updateDoc(getDocRef, {
-      vehicles: arrayRemove({ id: id, spz: vehicleSpz }),
+      vehicles: arrayRemove({ id: id, spz: vehicleSpz, class: vehicleClass }),
     });
+  };
+
+  const handleClassColor = async (colors: string) => {
+    const docRefToUpdate = doc(collectionRows, documentID);
+    const newValues = {
+      id: id,
+      spz: vehicleSpz,
+      class: colors,
+    };
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      const data = sfDoc.data();
+      const filterVehicles = [
+        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+        newValues,
+      ];
+      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+    });
+
+    setIsMenuOpen(false);
   };
 
   return (
@@ -130,6 +149,7 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
           outsideClickRef={outsideClickRef}
           deleteVehicle={deleteVehicle}
           editVehicle={handleEditVehicle}
+          handleClassColor={handleClassColor}
           rowIndex={rowIndex}
         />
       )}
@@ -153,6 +173,7 @@ const Vehicle = ({ id, vehicleSpz, documentID, rowIndex }: IVehicleProps) => {
             OK
           </div>
         )}
+        <div className={`absolute right-0 w-1 h-full bg-${vehicleClass}`} />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">

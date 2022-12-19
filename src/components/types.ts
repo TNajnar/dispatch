@@ -2,7 +2,7 @@
 export type TParkedVehicleDoc = {
     id: string
     nameRail: string,
-    vehicles: TVehicleObject[]
+    vehicles: TVehicleObject[],
 }
 
 export type TManageTrainDoc = {
@@ -14,12 +14,13 @@ export type TManageTrainDoc = {
 
 export type TLineObject = {
     id: string,
-    nameLine: string
+    nameLine: string,
 }
 
 export type TVehicleObject = {
     id: string,
-    spz: string
+    spz: string,
+    class: string,
 }
 
 
