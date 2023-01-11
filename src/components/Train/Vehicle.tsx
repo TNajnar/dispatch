@@ -173,7 +173,7 @@ const Vehicle = ({
             OK
           </div>
         )}
-        <div className={`absolute right-0 w-1 h-full bg-${vehicleClass}`} />
+        <div className={clsx("absolute right-0 w-1 h-full", vehicleClass)} />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useState } from "react";
 
 interface IMultiClassMenu {
@@ -5,12 +6,12 @@ interface IMultiClassMenu {
 }
 
 const vehicleClasses = Object.freeze<Record<number, string | undefined>>({
-  0: "red-500",
-  1: "primary-yellow",
-  2: "gray-500",
-  3: "blue-400",
-  4: "pink-400",
-  5: "black",
+  0: "bg-red-500",
+  1: "bg-primary-yellow",
+  2: "bg-gray-500",
+  3: "bg-blue-400",
+  4: "bg-pink-400",
+  5: "bg-black",
 });
 
 const MultiClassMenu = ({ classColor }: IMultiClassMenu) => {
@@ -30,7 +31,7 @@ const MultiClassMenu = ({ classColor }: IMultiClassMenu) => {
           <div
             key={index}
             onClick={() => classColor?.(vehicleClasses[index]!)}
-            className={`w-4 h-4 bg-${vehicleClasses[index]} rounded-full hover:border border-secondary-yellow`}
+            className={clsx("w-4 h-4 rounded-full hover:border border-secondary-yellow", vehicleClasses[index])}
           />
         ))}
       </div>
