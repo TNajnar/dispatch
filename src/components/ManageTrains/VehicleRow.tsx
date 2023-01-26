@@ -13,6 +13,7 @@ import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 import PopUpMenu from "../ui/PopUpMenu";
 import { TManageTrainDoc } from "../types";
+import Line from "../Train/Line";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
@@ -110,7 +111,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           (line) =>
             !!line.nameLine && (
               <div key={line.id} className="px-4 py-2 border border-black">
-                {line.nameLine}
+                <Line nameLine={line.nameLine} />
               </div>
             )
         )}
