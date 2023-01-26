@@ -45,6 +45,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           id: id,
           spz: "",
           class: "",
+          repairDate: "",
         }));
         transaction.update(docRefToUpdate, { vehicles: newVehicle });
       });
@@ -85,11 +86,15 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
       <div className="flex col-span-2 items-center gap-4">
         <Button text="+" onClick={addVehicle} isRounded={true} />
         {vehicles.map((vehicle) => (
-          <div key={vehicle.id} className="flex flex-col items-center gap-6">
+          <div
+            key={`${vehicle.id}_${vehicle.spz}`}
+            className="flex flex-col items-center gap-6"
+          >
             <Vehicle
               id={vehicle.id}
               vehicleSpz={vehicle.spz}
               vehicleClass={vehicle.class}
+              vehicleRepairDate={vehicle.repairDate}
               documentID={document.id}
               rowIndex={rowIndex}
             />

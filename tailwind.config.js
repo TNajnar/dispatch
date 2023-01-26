@@ -13,10 +13,11 @@ module.exports = {
       colors: {
         primary: {
           yellow: "#fabb00",
-          gray: "#FFFFFF"
+          gray: "#FFFFFF",
         },
         secondary: {
-          yellow: '#FFE1A4'
+          yellow: '#FFE1A4',
+          gray: '#c4c4c4',
         }
       }
     },

@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore"
 
 export type TParkedVehicleDoc = {
     id: string
@@ -21,7 +22,5 @@ export type TVehicleObject = {
     id: string,
     spz: string,
     class: string,
+    repairDate: Timestamp,
 }
-
-
-

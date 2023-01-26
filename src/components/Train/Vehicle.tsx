@@ -2,10 +2,10 @@ import { ChangeEvent, EventHandler, MouseEvent, useRef, useState } from "react";
 import VehicleMenu from "../ui/VehicleMenu";
 import {
   arrayRemove,
-  arrayUnion,
   collection,
   doc,
   runTransaction,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
@@ -16,6 +16,7 @@ interface IVehicleProps {
   id?: string;
   vehicleSpz?: string;
   vehicleClass?: string;
+  vehicleRepairDate?: Timestamp;
   documentID?: string;
   rowIndex?: number;
 }
@@ -31,6 +32,7 @@ const Vehicle = ({
   id,
   vehicleSpz,
   vehicleClass,
+  vehicleRepairDate,
   documentID,
   rowIndex,
 }: IVehicleProps) => {
@@ -78,17 +80,18 @@ const Vehicle = ({
     }
   };
 
-  const handleEditVehicle = () => {
+  const handleEditSpzVehicle = () => {
     setIsEditable(true);
     setIsMenuOpen(false);
   };
 
-  const handleSumbitEdit = async () => {
+  const handleSumbitEditSpz = async () => {
     const docRefToUpdate = doc(collectionRows, documentID);
     const newValues = {
       id: id,
       spz: spzState,
       class: vehicleClass,
+      repairDate: vehicleRepairDate,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -103,16 +106,19 @@ const Vehicle = ({
     setIsMenuOpen(false);
   };
 
-  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
-    event
-  ) => {
+  const handleOnChangeSPZ = (event: ChangeEvent<HTMLInputElement>) => {
     setSpzState(event?.target.value);
   };
 
   const deleteVehicle = async () => {
     const getDocRef = doc(database, "ManageTrains", documentID!);
     await updateDoc(getDocRef, {
-      vehicles: arrayRemove({ id: id, spz: vehicleSpz, class: vehicleClass }),
+      vehicles: arrayRemove({
+        id: id,
+        spz: vehicleSpz,
+        class: vehicleClass,
+        repairDate: vehicleRepairDate,
+      }),
     });
   };
 
@@ -122,6 +128,7 @@ const Vehicle = ({
       id: id,
       spz: vehicleSpz,
       class: colors,
+      repairDate: vehicleRepairDate,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -136,6 +143,25 @@ const Vehicle = ({
     setIsMenuOpen(false);
   };
 
+  const handleVehicleRepairDate = async (repairD: Timestamp) => {
+    const docRefToUpdate = doc(collectionRows, documentID);
+    const newValues = {
+      id: id,
+      spz: vehicleSpz,
+      class: vehicleClass,
+      repairDate: repairD,
+    };
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      const data = sfDoc.data();
+      const filterVehicles = [
+        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+        newValues,
+      ];
+      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+    });
+  };
+
   return (
     <div
       className="relative"
@@ -146,11 +172,14 @@ const Vehicle = ({
     >
       {!isEditable && isMenuOpen && (
         <VehicleMenu
+          vehicleID={id}
+          vehicleRepairDate={vehicleRepairDate}
+          rowIndex={rowIndex}
           outsideClickRef={outsideClickRef}
           deleteVehicle={deleteVehicle}
-          editVehicle={handleEditVehicle}
+          editVehicle={handleEditSpzVehicle}
           handleClassColor={handleClassColor}
-          rowIndex={rowIndex}
+          handleVehicleRepairDate={handleVehicleRepairDate}
         />
       )}
 
@@ -163,12 +192,12 @@ const Vehicle = ({
             (!!isEditable || !!vehicleSpz?.length) && "border-b border-gray"
           )}
           disabled={!isEditable}
-          onChange={handleOnChange}
+          onChange={handleOnChangeSPZ}
         />
         {!!isEditable && (
           <div
             className="text-xs border border-black"
-            onClick={handleSumbitEdit}
+            onClick={handleSumbitEditSpz}
           >
             OK
           </div>

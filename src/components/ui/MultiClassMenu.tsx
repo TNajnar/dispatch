@@ -1,8 +1,12 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { Timestamp } from "firebase/firestore";
+import { ChangeEvent } from "react";
 
 interface IMultiClassMenu {
+  isColorClass?: boolean;
+  vehicleRepairDate?: Timestamp;
   classColor?: (colors: string) => void;
+  handleRepairDate?: (repairD: Timestamp) => void;
 }
 
 const vehicleClasses = Object.freeze<Record<number, string | undefined>>({
@@ -14,27 +18,52 @@ const vehicleClasses = Object.freeze<Record<number, string | undefined>>({
   5: "bg-black",
 });
 
-const MultiClassMenu = ({ classColor }: IMultiClassMenu) => {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-
+const MultiClassMenu = ({
+  isColorClass,
+  vehicleRepairDate,
+  classColor,
+  handleRepairDate,
+}: IMultiClassMenu) => {
   const colors = [0, 1, 2, 3, 4, 5];
 
+  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(event.target.value);
+    handleRepairDate?.(Timestamp.fromDate(selectedDate));
+  };
+
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="absolute -right-[168px] py-3 bg-primary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg"
-    >
-      Vyber barvu podle vozu
-      <div className="flex justify-center pt-1 gap-2">
-        {colors.slice(0, 6).map((_, index) => (
-          <div
-            key={index}
-            onClick={() => classColor?.(vehicleClasses[index]!)}
-            className={clsx("w-4 h-4 rounded-full hover:border border-secondary-yellow", vehicleClasses[index])}
+    <div className="absolute -right-[192px] p-3 w-48 bg-primary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg">
+      {isColorClass ? (
+        <div className="flex flex-col justify-center">
+          <p className="font-bold">Vyber barvu třídy:</p>
+          <div className="flex justify-center pt-1 gap-2">
+            {colors.slice(0, 6).map((_, index) => (
+              <div
+                key={index}
+                onClick={() => classColor?.(vehicleClasses[index]!)}
+                className={clsx(
+                  "w-4 h-4 rounded-full hover:border border-secondary-yellow",
+                  vehicleClasses[index]
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-1">
+          <label className="font-bold">Datum opravy:</label>
+          <input
+            type="date"
+            className="border border-secondary-gray rounded-sm hover:border-black"
+            value={
+              vehicleRepairDate
+                ? vehicleRepairDate.toDate().toISOString().substring(0, 10)
+                : ""
+            }
+            onChange={handleOnChange}
           />
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

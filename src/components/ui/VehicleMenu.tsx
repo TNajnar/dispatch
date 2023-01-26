@@ -6,23 +6,30 @@ import ConstructionIcon from "@mui/icons-material/Construction";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import clsx from "clsx";
 import MultiClassMenu from "./MultiClassMenu";
+import { Timestamp } from "firebase/firestore";
 
 interface IVehicleMenuProps {
+  vehicleID?: string;
+  vehicleRepairDate?: Timestamp;
+  rowIndex?: number;
   outsideClickRef?: RefObject<HTMLDivElement>;
   deleteVehicle?: () => void;
   editVehicle?: () => void;
   handleClassColor?: (colors: string) => void;
-  rowIndex?: number;
+  handleVehicleRepairDate?: (repairD: Timestamp) => void;
 }
 
 const VehicleMenu = ({
+  vehicleRepairDate,
+  rowIndex,
   outsideClickRef,
   deleteVehicle,
   editVehicle,
   handleClassColor,
-  rowIndex,
+  handleVehicleRepairDate,
 }: IVehicleMenuProps) => {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isHoveredClass, setIsHoveredClass] = useState<boolean>(false);
+  const [isHoveredRepair, setIsHoveredRepair] = useState<boolean>(false);
 
   return (
     <div
@@ -40,17 +47,33 @@ const VehicleMenu = ({
       </div>
 
       <div
-        className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="flex justify-between items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
+        onMouseEnter={() => setIsHoveredClass(true)}
+        onMouseLeave={() => setIsHoveredClass(false)}
       >
-        <FormatColorTextIcon sx={{ fontSize: "16px" }} /> Zvol třídu
+        <div className="flex items-center gap-4 ">
+          <FormatColorTextIcon sx={{ fontSize: "16px" }} />
+          Zvol třídu
+        </div>
         <KeyboardDoubleArrowRightIcon sx={{ fontSize: "16px" }} />
-        {isHovered && <MultiClassMenu classColor={handleClassColor} />}
+        {isHoveredClass && (
+          <MultiClassMenu isColorClass={true} classColor={handleClassColor} />
+        )}
       </div>
 
-      <div className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow">
+      <div
+        className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
+        onMouseEnter={() => setIsHoveredRepair(true)}
+        onMouseLeave={() => setIsHoveredRepair(false)}
+      >
         <ConstructionIcon sx={{ fontSize: "16px" }} /> Oprava Vozu
+        <KeyboardDoubleArrowRightIcon sx={{ fontSize: "16px" }} />
+        {isHoveredRepair && (
+          <MultiClassMenu
+            vehicleRepairDate={vehicleRepairDate}
+            handleRepairDate={handleVehicleRepairDate}
+          />
+        )}
       </div>
 
       <div

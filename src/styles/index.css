@@ -24,14 +24,13 @@
 /* Pop up menu */
 
 .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-    color: #fabb00 !important;
+    @apply text-primary-yellow  !important;
 } 
 
 .css-1a1fmpi-MuiInputBase-root-MuiInput-root:after {
-    border-bottom-color: #fabb00 !important;
+    @apply border-b-primary-yellow !important;
 }
 
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
-    background-color: #FFE1A4 !important;
+    @apply bg-secondary-yellow !important;
 }
-
