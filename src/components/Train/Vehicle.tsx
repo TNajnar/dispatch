@@ -1,4 +1,4 @@
-import { ChangeEvent, EventHandler, MouseEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import VehicleMenu from "../ui/VehicleMenu";
 import {
   arrayRemove,
@@ -11,6 +11,7 @@ import {
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import { TVehicleObject } from "../types";
+import useDragNDrop from "../../hooks/useDragNDrop";
 
 interface IVehicleProps {
   id?: string;
@@ -20,11 +21,6 @@ interface IVehicleProps {
   documentID?: string;
   rowIndex?: number;
 }
-
-type Position = {
-  x: number;
-  y: number;
-};
 
 const collectionRows = collection(database, "ManageTrains");
 
@@ -36,49 +32,15 @@ const Vehicle = ({
   documentID,
   rowIndex,
 }: IVehicleProps) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const initialPosition = useRef<Position>();
-  const isMouseDown = useRef<boolean>();
   const outsideClickRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
 
-  const onMouseDrag: EventHandler<MouseEvent> = (event) => {
-    if (!isMouseDown.current || !initialPosition.current || !wrapperRef.current)
-      return;
-    const translateY = event.clientY - initialPosition.current.y;
-    const translateX = event.clientX - initialPosition.current.x;
-    wrapperRef.current!.style.transform = `translate(${translateX}px,${translateY}px)`;
-    wrapperRef.current!.style.zIndex = "1000";
-  };
-
-  const onMouseDown: EventHandler<MouseEvent> = (event) => {
-    isMouseDown.current = true;
-    initialPosition.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-  };
-
-  const onMouseUp: EventHandler<MouseEvent> = (event) => {
-    isMouseDown.current = false;
-    if (!initialPosition.current || !wrapperRef.current) return;
-    wrapperRef.current!.style.transform = "";
-    wrapperRef.current!.style.zIndex = "";
-    if (
-      event.clientX === initialPosition.current.x &&
-      event.clientY === initialPosition.current.y
-    )
-      setIsMenuOpen(true);
-
-    if (
-      outsideClickRef.current &&
-      !outsideClickRef.current.contains(event.target as Node)
-    ) {
-      setIsMenuOpen(false);
-    }
-  };
+  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
+    outsideClickRef,
+    setIsMenuOpen
+  );
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
