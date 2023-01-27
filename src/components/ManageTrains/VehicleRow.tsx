@@ -23,8 +23,8 @@ interface IVehicleRowProps {
 const collectionRows = collection(database, "ManageTrains");
 
 const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
-  const [openMenuID, setOpenMenuID] = useState<string>();
-  const [nameLine, setNameLine] = useState<string>();
+  const [openMenuID, setOpenMenuID] = useState<string>("");
+  const [nameLine, setNameLine] = useState<string>("");
 
   const id = nanoid();
 
@@ -35,30 +35,20 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
-    try {
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
 
-        const newVehicle = (sfDoc.data().vehicles = arrayUnion({
-          id: id,
-          spz: "",
-          class: "",
-          repairDate: "",
-        }));
-        transaction.update(docRefToUpdate, { vehicles: newVehicle });
-      });
-    } catch (e) {
-      console.log("Transaction failed: ", e);
-    }
-  };
-
-  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
-    event
-  ) => {
-    setNameLine(event.target.value);
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      if (!sfDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const newVehicle = (sfDoc.data().vehicles = arrayUnion({
+        id: id,
+        spz: "",
+        class: "",
+        repairDate: "",
+      }));
+      transaction.update(docRefToUpdate, { vehicles: newVehicle });
+    });
   };
 
   const addLine = async () => {
@@ -69,17 +59,23 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     });
   };
 
-  const handleSubmit: EventHandler<ChangeEvent<HTMLInputElement>> = (event) => {
+  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+    event
+  ) => {
+    setNameLine(event.target.value);
+  };
+
+  const handleSubmit = (event: ChangeEvent<HTMLInputElement>) => {
     if (event && event.preventDefault) {
       event.preventDefault();
     }
     addLine();
-    setNameLine(undefined);
-    setOpenMenuID(undefined);
+    setNameLine("");
+    setOpenMenuID("");
   };
 
   const handleCloseMenu = () => {
-    setOpenMenuID(undefined);
+    setOpenMenuID("");
   };
 
   return (
@@ -106,12 +102,18 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         <Locomotive />
       </div>
       <div className="flex gap-4">
-        {linesLenght < 4 && <Button text="+" onClick={addLine} />}
+        {/* {linesLenght < 4 && <Button text="+" onClick={addLine} />} */}
+        <Button text="+" onClick={() => setOpenMenuID(document.id)} />
         {lines.map(
           (line) =>
             !!line.nameLine && (
-              <div key={line.id} className="px-4 py-2 border border-black">
-                <Line nameLine={line.nameLine} />
+              <div key={line.id}>
+                <Line
+                  id={line.id}
+                  nameLine={line.nameLine}
+                  documentID={document.id}
+                  rowIndex={rowIndex}
+                />
               </div>
             )
         )}

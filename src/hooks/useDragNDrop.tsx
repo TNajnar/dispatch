@@ -5,7 +5,7 @@ type Position = {
   y: number;
 };
 
-// The hook takes two parametres as input and then return an objects with for props
+// The hook takes two parametres as input and then return an objects with four props
 const useDragNDrop = (
   outsideClickRef: RefObject<HTMLDivElement>,
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>

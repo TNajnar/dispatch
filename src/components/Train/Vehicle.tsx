@@ -1,5 +1,4 @@
 import { ChangeEvent, useRef, useState } from "react";
-import VehicleMenu from "../ui/VehicleMenu";
 import {
   arrayRemove,
   collection,
@@ -12,6 +11,8 @@ import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import { TVehicleObject } from "../types";
 import useDragNDrop from "../../hooks/useDragNDrop";
+import Menu from "../ui/Menu/Menu";
+import EditableField from "../ui/EditableField";
 
 interface IVehicleProps {
   id?: string;
@@ -45,6 +46,7 @@ const Vehicle = ({
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
     setIsMenuOpen(false);
+    setSpzState("");
   };
 
   const handleSumbitEditSpz = async () => {
@@ -133,38 +135,26 @@ const Vehicle = ({
       onMouseUp={onMouseUp}
     >
       {!isEditable && isMenuOpen && (
-        <VehicleMenu
-          vehicleID={id}
+        <Menu
           vehicleRepairDate={vehicleRepairDate}
           rowIndex={rowIndex}
           outsideClickRef={outsideClickRef}
-          deleteVehicle={deleteVehicle}
-          editVehicle={handleEditSpzVehicle}
+          deleteItem={deleteVehicle}
+          editItem={handleEditSpzVehicle}
           handleClassColor={handleClassColor}
           handleVehicleRepairDate={handleVehicleRepairDate}
         />
       )}
 
-      <div className="relative flex justify-center items-center w-[100px] h-14 gap-3 overflow-hidden bg-white border border-black rounded-lg">
-        <input
-          type="text"
-          value={`${!!isEditable ? spzState : vehicleSpz}`}
-          className={clsx(
-            "w-12 text-center text-gray-600 bg-white",
-            (!!isEditable || !!vehicleSpz?.length) && "border-b border-gray"
-          )}
-          disabled={!isEditable}
-          onChange={handleOnChangeSPZ}
+      <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+        <EditableField
+          isEditable={isEditable}
+          state={spzState}
+          realData={vehicleSpz}
+          handleOnChange={handleOnChangeSPZ}
+          handleSubmit={handleSumbitEditSpz}
         />
-        {!!isEditable && (
-          <div
-            className="text-xs border border-black"
-            onClick={handleSumbitEditSpz}
-          >
-            OK
-          </div>
-        )}
-        <div className={clsx("absolute right-0 w-1 h-full", vehicleClass)} />
+        <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">
