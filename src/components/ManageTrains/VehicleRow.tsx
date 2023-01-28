@@ -81,7 +81,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   };
 
   return (
-    <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-gray">
+    <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-primary-gray">
       <div className="flex col-span-2 items-center gap-4">
         <Button text="+" onClick={addVehicle} isRounded={true} />
         {vehicles.map((vehicle) => (

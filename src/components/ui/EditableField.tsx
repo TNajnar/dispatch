@@ -40,9 +40,9 @@ const EditableField = ({
         value={isEditable ? state : realData}
         className={clsx(
           "text-center text-gray-600 bg-white",
-          border && "border-b border-secondary-gray rounded-sm",
+          border && "border-b border-primary-gray rounded-sm",
           width,
-          hover && "border border-secondary-gray hover:border-black"
+          hover && "border border-primary-gray hover:border-black"
         )}
         disabled={!isEditable}
         onChange={handleOnChange}

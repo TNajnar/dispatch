@@ -1,10 +1,8 @@
 import {
-  arrayRemove,
   arrayUnion,
   collection,
   doc,
   runTransaction,
-  updateDoc,
 } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import Vehicle from "../Train/Vehicle";
@@ -44,9 +42,9 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
   };
 
   return (
-    <div className="flex items-center py-4 gap-8 border-b border-gray h-full">
+    <div className="flex items-center py-4 gap-5 border-b border-primary-gray">
       {!!nameRail && (
-        <h2 className="pr-4 text-h3 font-bold border-r border-black">
+        <h2 className="w-20 text-h3 font-bold border-r border-black">
           {nameRail}
         </h2>
       )}
@@ -63,7 +61,7 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
           />
         </div>
       ))}
-
+      <div className="flex-1"></div>
       <Button text="+" onClick={addVehicle} isRounded={true} />
     </div>
   );
