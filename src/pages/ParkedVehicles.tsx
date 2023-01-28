@@ -50,7 +50,6 @@ const ParkedVagons = () => {
 
   const updateRowName = async (row: string) => {
     const rowRef = doc(collectionRows, row);
-
     await updateDoc(rowRef, {
       nameRail: rowName,
     });
@@ -85,14 +84,14 @@ const ParkedVagons = () => {
     <div className="flex flex-col gap-4">
       <h2 className="w-full text-h2 font-bold border-b border-black">Kolej</h2>
 
-      {docRow.map((document) => (
+      {docRow.map((document, index: number) => (
         <div key={document.id} className="relative">
           <Button
             text="-"
             clasName="absolute -right-10 inset-y-1/2"
             onClick={() => deleteRow(document.id)}
           />
-          <TrainRail document={document} />
+          <TrainRail rowIndex={index} document={document} />
         </div>
       ))}
 

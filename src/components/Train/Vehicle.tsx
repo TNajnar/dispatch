@@ -20,10 +20,9 @@ interface IVehicleProps {
   vehicleClass?: string;
   vehicleRepairDate?: Timestamp;
   documentID?: string;
+  collectionName?: string;
   rowIndex?: number;
 }
-
-const collectionRows = collection(database, "ManageTrains");
 
 const Vehicle = ({
   id,
@@ -31,12 +30,15 @@ const Vehicle = ({
   vehicleClass,
   vehicleRepairDate,
   documentID,
+  collectionName,
   rowIndex,
 }: IVehicleProps) => {
   const outsideClickRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
+
+  const collectionRows = collection(database, `${collectionName}`);
 
   const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
     outsideClickRef,
@@ -66,6 +68,7 @@ const Vehicle = ({
       ];
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
+
     setIsEditable(false);
     setIsMenuOpen(false);
   };
@@ -75,7 +78,7 @@ const Vehicle = ({
   };
 
   const deleteVehicle = async () => {
-    const getDocRef = doc(database, "ManageTrains", documentID!);
+    const getDocRef = doc(database, `${collectionName}`, documentID!);
     await updateDoc(getDocRef, {
       vehicles: arrayRemove({
         id: id,

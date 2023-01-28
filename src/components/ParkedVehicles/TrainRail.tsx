@@ -14,30 +14,33 @@ import { TParkedVehicleDoc } from "../types";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
+  rowIndex?: number;
 }
 
 const collectionRows = collection(database, "ParkedVehicles");
 
-const TrainRail = ({ document }: ITrainRailProps) => {
+const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
+  const collectionName = "ParkedVehicles";
+
   const id = nanoid();
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
-    try {
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
-
-        const newVehicle = (sfDoc.data().vehicles = arrayUnion({ id: id }));
-        transaction.update(docRefToUpdate, { vehicles: newVehicle });
-      });
-    } catch (e) {
-      console.log("Transaction failed: ", e);
-    }
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      if (!sfDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const newVehicle = (sfDoc.data().vehicles = arrayUnion({
+        id: id,
+        spz: "",
+        class: "",
+        repairDate: "",
+      }));
+      transaction.update(docRefToUpdate, { vehicles: newVehicle });
+    });
   };
 
   const deleteVehicle = async (vehicleID: string) => {
@@ -56,12 +59,15 @@ const TrainRail = ({ document }: ITrainRailProps) => {
       )}
       {parkedVehicles.map((vehicle) => (
         <div key={vehicle.id} className="relative flex justify-center">
-          <Button
-            text="-"
-            clasName="absolute bottom-16"
-            onClick={() => deleteVehicle(vehicle.id)}
+          <Vehicle
+            id={vehicle.id}
+            vehicleSpz={vehicle.spz}
+            vehicleClass={vehicle.class}
+            vehicleRepairDate={vehicle.repairDate}
+            documentID={document.id}
+            collectionName={collectionName}
+            rowIndex={rowIndex}
           />
-          <Vehicle />
         </div>
       ))}
 

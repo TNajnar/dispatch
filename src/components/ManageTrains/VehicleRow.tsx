@@ -26,6 +26,8 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   const [openMenuID, setOpenMenuID] = useState<string>("");
   const [nameLine, setNameLine] = useState<string>("");
 
+  const collectionName = "ManageTrains";
+
   const id = nanoid();
 
   const vehicles = document.vehicles;
@@ -36,7 +38,6 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
-
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {
@@ -60,13 +61,13 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     });
   };
 
-  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+  const handleOnChangeLine: EventHandler<ChangeEvent<HTMLInputElement>> = (
     event
   ) => {
     setNameLine(event.target.value);
   };
 
-  const handleSubmit = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSubmitLine = (event: ChangeEvent<HTMLInputElement>) => {
     if (event && event.preventDefault) {
       event.preventDefault();
     }
@@ -94,6 +95,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
               vehicleClass={vehicle.class}
               vehicleRepairDate={vehicle.repairDate}
               documentID={document.id}
+              collectionName={collectionName}
               rowIndex={rowIndex}
             />
           </div>
@@ -133,8 +135,8 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         context="Zde napiš nápiš název linky."
         label="Název linky"
         handleClose={handleCloseMenu}
-        handleOnSubmit={() => handleSubmit(this!)}
-        handleOnChange={handleOnChange}
+        handleOnSubmit={() => handleSubmitLine(this!)}
+        handleOnChange={handleOnChangeLine}
       />
     </div>
   );
