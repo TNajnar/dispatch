@@ -5,22 +5,22 @@ import MultiMenu from "./MultiMenu";
 
 interface ICarRepairMenuProps {
   isHoveredRepair?: boolean;
-  vehicleRepairDate?: Timestamp;
-  handleVehicleRepairDate?: (repairD: Timestamp) => void;
+  carRepairDate?: Timestamp;
+  handleRepairDate?: (repairD: Timestamp) => void;
 }
 
 const CarRepairMenu = ({
   isHoveredRepair,
-  vehicleRepairDate,
-  handleVehicleRepairDate,
+  carRepairDate,
+  handleRepairDate,
 }: ICarRepairMenuProps) => (
   <div className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow">
     <ConstructionIcon sx={{ fontSize: "16px" }} /> Oprava Vozu
     <KeyboardDoubleArrowRightIcon sx={{ fontSize: "16px" }} />
     {isHoveredRepair && (
       <MultiMenu
-        vehicleRepairDate={vehicleRepairDate}
-        handleRepairDate={handleVehicleRepairDate}
+        carRepairDate={carRepairDate}
+        handleRepairDate={handleRepairDate}
       />
     )}
   </div>

@@ -30,6 +30,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
 
   const vehicles = document.vehicles;
   const lines = document.line;
+  const locomotive = document.locomotives;
 
   const linesLenght = Object.keys(lines).length;
 
@@ -99,7 +100,13 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         ))}
       </div>
       <div>
-        <Locomotive />
+        <Locomotive
+          id={locomotive.id}
+          locomotiveSpz={locomotive.lSpz}
+          locomotiveRepairDate={locomotive.repairDate}
+          documentID={document.id}
+          rowIndex={rowIndex}
+        />
       </div>
       <div className="flex gap-4">
         {/* {linesLenght < 4 && <Button text="+" onClick={addLine} />} */}

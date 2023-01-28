@@ -22,7 +22,7 @@ const ManageTrains = () => {
   const addRow = async () => {
     await setDoc(doc(collectionRows), {
       vehicles: [],
-      locomotives: { locomotiveID: id },
+      locomotives: { id: id, lSpz: "", repairDate: "" },
       line: [],
     });
 

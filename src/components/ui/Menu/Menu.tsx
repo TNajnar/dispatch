@@ -7,25 +7,27 @@ import ChooseClassMenu from "./ChooseClassMenu";
 import CarRepairMenu from "./CarRepairMenu";
 
 interface IMenuProps {
-  vehicleRepairDate?: Timestamp;
+  carRepairDate?: Timestamp;
   rowIndex?: number;
   outsideClickRef?: RefObject<HTMLDivElement>;
   isLineMenu?: boolean;
+  isLocomotive?: boolean;
   editItem?: () => void;
   deleteItem?: () => void;
   handleClassColor?: (colors: string) => void;
-  handleVehicleRepairDate?: (repairD: Timestamp) => void;
+  handleRepairDate?: (repairD: Timestamp) => void;
 }
 
 const Menu = ({
-  vehicleRepairDate,
+  carRepairDate,
   rowIndex,
   outsideClickRef,
   isLineMenu,
+  isLocomotive,
   editItem,
   deleteItem,
   handleClassColor,
-  handleVehicleRepairDate,
+  handleRepairDate,
 }: IMenuProps) => {
   const [isHoveredClass, setIsHoveredClass] = useState<boolean>(false);
   const [isHoveredRepair, setIsHoveredRepair] = useState<boolean>(false);
@@ -47,7 +49,7 @@ const Menu = ({
         <EditIcon sx={{ fontSize: "16px" }} /> Edituj
       </div>
 
-      {!isLineMenu && (
+      {!isLineMenu && !isLocomotive && (
         <div
           onMouseEnter={() => setIsHoveredClass(true)}
           onMouseLeave={() => setIsHoveredClass(false)}
@@ -66,19 +68,21 @@ const Menu = ({
         >
           <CarRepairMenu
             isHoveredRepair={isHoveredRepair}
-            vehicleRepairDate={vehicleRepairDate}
-            handleVehicleRepairDate={handleVehicleRepairDate}
+            carRepairDate={carRepairDate}
+            handleRepairDate={handleRepairDate}
           />
         </div>
       )}
 
-      <div
-        className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
-        onClick={deleteItem}
-      >
-        <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
-        Odstraň
-      </div>
+      {!isLocomotive && (
+        <div
+          className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
+          onClick={deleteItem}
+        >
+          <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
+          Odstraň
+        </div>
+      )}
     </div>
   );
 };

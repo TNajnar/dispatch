@@ -4,7 +4,7 @@ import { ChangeEvent } from "react";
 
 interface IMultiClassMenu {
   isColorClass?: boolean;
-  vehicleRepairDate?: Timestamp;
+  carRepairDate?: Timestamp;
   classColor?: (colors: string) => void;
   handleRepairDate?: (repairD: Timestamp) => void;
 }
@@ -20,7 +20,7 @@ const vehicleClasses = Object.freeze<Record<number, string | undefined>>({
 
 const MultiClassMenu = ({
   isColorClass,
-  vehicleRepairDate,
+  carRepairDate,
   classColor,
   handleRepairDate,
 }: IMultiClassMenu) => {
@@ -56,9 +56,8 @@ const MultiClassMenu = ({
             type="date"
             className="border border-secondary-gray rounded-sm hover:border-black"
             value={
-              vehicleRepairDate
-                ? vehicleRepairDate.toDate().toISOString().substring(0, 10)
-                : ""
+              carRepairDate &&
+              carRepairDate.toDate().toISOString().substring(0, 10)
             }
             onChange={handleOnChange}
           />

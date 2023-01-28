@@ -49,7 +49,7 @@ const Vehicle = ({
     setSpzState("");
   };
 
-  const handleSumbitEditSpz = async () => {
+  const handleSumbitEditVehicleSpz = async () => {
     const docRefToUpdate = doc(collectionRows, documentID);
     const newValues = {
       id: id,
@@ -70,7 +70,7 @@ const Vehicle = ({
     setIsMenuOpen(false);
   };
 
-  const handleOnChangeSPZ = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
     setSpzState(event?.target.value);
   };
 
@@ -136,13 +136,13 @@ const Vehicle = ({
     >
       {!isEditable && isMenuOpen && (
         <Menu
-          vehicleRepairDate={vehicleRepairDate}
+          carRepairDate={vehicleRepairDate}
           rowIndex={rowIndex}
           outsideClickRef={outsideClickRef}
           deleteItem={deleteVehicle}
           editItem={handleEditSpzVehicle}
           handleClassColor={handleClassColor}
-          handleVehicleRepairDate={handleVehicleRepairDate}
+          handleRepairDate={handleVehicleRepairDate}
         />
       )}
 
@@ -151,15 +151,15 @@ const Vehicle = ({
           isEditable={isEditable}
           state={spzState}
           realData={vehicleSpz}
-          handleOnChange={handleOnChangeSPZ}
-          handleSubmit={handleSumbitEditSpz}
+          handleOnChange={handleOnChangeVehicleSPZ}
+          handleSubmit={handleSumbitEditVehicleSpz}
         />
         <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">
         <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
-        <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] border border-black rounded-full" />
+        <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] bg-white border border-black rounded-full" />
       </div>
     </div>
   );
