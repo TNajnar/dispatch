@@ -43,13 +43,6 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
     });
   };
 
-  const deleteVehicle = async (vehicleID: string) => {
-    const getDocRef = doc(database, "ParkedVehicles", document.id);
-    await updateDoc(getDocRef, {
-      vehicles: arrayRemove({ id: vehicleID }),
-    });
-  };
-
   return (
     <div className="flex items-center py-4 gap-8 border-b border-gray h-full">
       {!!nameRail && (
