@@ -9,6 +9,7 @@ import Vehicle from "../Train/Vehicle";
 import Button from "../ui/Button";
 import { nanoid } from "nanoid";
 import { TParkedVehicleDoc } from "../types";
+import Locomotive from "../Train/Locomotive";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
@@ -36,33 +37,66 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
         spz: "",
         class: "",
         repairDate: "",
+        isVehicle: true,
       }));
       transaction.update(docRefToUpdate, { vehicles: newVehicle });
     });
   };
 
+  const addLocomotive = async () => {
+    const docRefToUpdate = doc(collectionRows, document.id);
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      if (!sfDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const newLocomotive = (sfDoc.data().vehicles = arrayUnion({
+        id: id,
+        spz: "",
+        repairDate: "",
+        isVehicle: false,
+      }));
+      transaction.update(docRefToUpdate, { vehicles: newLocomotive });
+    });
+  };
+
   return (
-    <div className="flex items-center py-4 gap-5 border-b border-primary-gray">
+    <div className="flex items-center py-4 gap-4 border-b border-primary-gray">
       {!!nameRail && (
         <h2 className="w-20 text-h3 font-bold border-r border-black">
           {nameRail}
         </h2>
       )}
-      {parkedVehicles.map((vehicle) => (
-        <div key={vehicle.id} className="relative flex justify-center">
-          <Vehicle
-            id={vehicle.id}
-            vehicleSpz={vehicle.spz}
-            vehicleClass={vehicle.class}
-            vehicleRepairDate={vehicle.repairDate}
-            documentID={document.id}
-            collectionName={collectionName}
-            rowIndex={rowIndex}
-          />
+      {parkedVehicles.map((car) => (
+        <div key={car.id} className="relative flex justify-center">
+          {car.isVehicle ? (
+            <Vehicle
+              id={car.id}
+              vehicleSpz={car.spz}
+              vehicleClass={car.class}
+              vehicleRepairDate={car.repairDate}
+              documentID={document.id}
+              collectionName={collectionName}
+              rowIndex={rowIndex}
+            />
+          ) : (
+            <Locomotive
+              id={car.id}
+              locomotiveSpz={car.spz}
+              locomotiveRepairDate={car.repairDate}
+              documentID={document.id}
+              collectionName={collectionName}
+              isParked={true}
+              rowIndex={rowIndex}
+            />
+          )}
         </div>
       ))}
-      <div className="flex-1"></div>
-      <Button text="+" onClick={addVehicle} isRounded={true} />
+      <div className="flex-1" />
+      <div>
+        <Button text="L" onClick={addLocomotive} isRounded={true} />
+        <Button text="+" onClick={addVehicle} isRounded={true} />
+      </div>
     </div>
   );
 };

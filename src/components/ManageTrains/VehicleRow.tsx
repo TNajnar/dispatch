@@ -81,25 +81,31 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   };
 
   return (
-    <div className="grid grid-cols-4 pt-4 place-items-center pb-4 w-full border-b border-primary-gray">
-      <div className="flex col-span-2 items-center gap-4">
-        <Button text="+" onClick={addVehicle} isRounded={true} />
-        {vehicles.map((vehicle) => (
-          <div
-            key={`${vehicle.id}_${vehicle.spz}`}
-            className="flex flex-col items-center gap-6"
-          >
-            <Vehicle
-              id={vehicle.id}
-              vehicleSpz={vehicle.spz}
-              vehicleClass={vehicle.class}
-              vehicleRepairDate={vehicle.repairDate}
-              documentID={document.id}
-              collectionName={collectionName}
-              rowIndex={rowIndex}
-            />
-          </div>
-        ))}
+    <div className="grid grid-cols-4 place-items-center pt-4 pb-4 w-full border-b border-primary-gray">
+      {/* <div className="flex justify-end items-center col-span-2 mr-2 w-[99%] overflow-x-scroll overflow-y-hidden"> */}
+      <div className="flex justify-end items-center col-span-2 mr-2 w-[99%]">
+        <Button
+          clasName="absolute left-3 z-10"
+          text="+"
+          onClick={addVehicle}
+          isRounded={true}
+        />
+        {/* <div className="flex gap-4 overflow-x-auto overflow-y-hidden whitespace-nowrap"> */}
+        <div className="flex gap-4 justify-end">
+          {vehicles.map((vehicle) => (
+            <div key={`${vehicle.id}_${vehicle.spz}`}>
+              <Vehicle
+                id={vehicle.id}
+                vehicleSpz={vehicle.spz}
+                vehicleClass={vehicle.class}
+                vehicleRepairDate={vehicle.repairDate}
+                documentID={document.id}
+                collectionName={collectionName}
+                rowIndex={rowIndex}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <Locomotive
@@ -107,6 +113,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           locomotiveSpz={locomotive.lSpz}
           locomotiveRepairDate={locomotive.repairDate}
           documentID={document.id}
+          collectionName={collectionName}
           rowIndex={rowIndex}
         />
       </div>

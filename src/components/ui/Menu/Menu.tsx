@@ -12,6 +12,7 @@ interface IMenuProps {
   outsideClickRef?: RefObject<HTMLDivElement>;
   isLineMenu?: boolean;
   isLocomotive?: boolean;
+  isParked?: boolean;
   editItem?: () => void;
   deleteItem?: () => void;
   handleClassColor?: (colors: string) => void;
@@ -24,6 +25,7 @@ const Menu = ({
   outsideClickRef,
   isLineMenu,
   isLocomotive,
+  isParked,
   editItem,
   deleteItem,
   handleClassColor,
@@ -74,15 +76,16 @@ const Menu = ({
         </div>
       )}
 
-      {!isLocomotive && (
-        <div
-          className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
-          onClick={deleteItem}
-        >
-          <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
-          Odstraň
-        </div>
-      )}
+      <div
+        className={clsx(
+          "flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow",
+          !isParked && isLocomotive && "hidden"
+        )}
+        onClick={deleteItem}
+      >
+        <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
+        Odstraň
+      </div>
     </div>
   );
 };

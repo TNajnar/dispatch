@@ -58,6 +58,7 @@ const Vehicle = ({
       spz: spzState,
       class: vehicleClass,
       repairDate: vehicleRepairDate,
+      isVehicle: true,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -85,6 +86,7 @@ const Vehicle = ({
         spz: vehicleSpz,
         class: vehicleClass,
         repairDate: vehicleRepairDate,
+        isVehicle: true,
       }),
     });
   };
@@ -96,6 +98,7 @@ const Vehicle = ({
       spz: vehicleSpz,
       class: colors,
       repairDate: vehicleRepairDate,
+      isVehicle: true,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -117,6 +120,7 @@ const Vehicle = ({
       spz: vehicleSpz,
       class: vehicleClass,
       repairDate: repairD,
+      isVehicle: true,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -140,8 +144,8 @@ const Vehicle = ({
       {!isEditable && isMenuOpen && (
         <Menu
           carRepairDate={vehicleRepairDate}
-          rowIndex={rowIndex}
           outsideClickRef={outsideClickRef}
+          rowIndex={rowIndex}
           deleteItem={deleteVehicle}
           editItem={handleEditSpzVehicle}
           handleClassColor={handleClassColor}
