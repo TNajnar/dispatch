@@ -55,10 +55,10 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
 
   const addLine = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
-    setOpenMenuID(document.id);
     await updateDoc(docRefToUpdate, {
       line: arrayUnion({ id: id, nameLine: nameLine }),
     });
+    setOpenMenuID(document.id);
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {

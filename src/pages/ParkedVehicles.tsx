@@ -18,7 +18,7 @@ const newDoc = doc(collectionRows);
 const ParkedVagons = () => {
   const [openMenuName, setOpenMenuName] = useState<string>();
   const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
-  const [rowName, setRowName] = useState<string>();
+  const [rowName, setRowName] = useState<string>("");
 
   const addRow = async () => {
     await setDoc(newDoc, {
