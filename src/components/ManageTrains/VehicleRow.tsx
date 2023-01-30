@@ -77,6 +77,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   };
 
   const handleCloseMenu = () => {
+    setNameLine("");
     setOpenMenuID("");
   };
 

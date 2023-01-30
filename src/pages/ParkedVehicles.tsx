@@ -4,7 +4,6 @@ import {
   doc,
   onSnapshot,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { ChangeEvent, EventHandler, useEffect, useState } from "react";
 import Button from "../components/ui/Button";
@@ -14,53 +13,42 @@ import PopUpMenu from "../components/ui/PopUpMenu";
 import { TParkedVehicleDoc } from "../components/types";
 
 const collectionRows = collection(database, "ParkedVehicles");
+const newDoc = doc(collectionRows);
 
 const ParkedVagons = () => {
-  const [openMenuID, setOpenMenuID] = useState<string>();
+  const [openMenuName, setOpenMenuName] = useState<string>();
   const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
   const [rowName, setRowName] = useState<string>();
 
   const addRow = async () => {
-    const newDoc = doc(collectionRows);
     await setDoc(newDoc, {
-      nameRail: "",
+      nameRail: rowName,
       vehicles: [],
     });
-
-    setOpenMenuID(newDoc.id);
   };
 
-  const handleSubmit = (
-    rowID: string,
-    event: React.FormEvent<HTMLInputElement>
-  ) => {
-    if (event && event.preventDefault) {
-      event.preventDefault();
-    }
-    updateRowName(rowID);
-    setRowName(undefined);
-    setOpenMenuID(undefined);
-  };
-
-  const handleOnChange: EventHandler<ChangeEvent<HTMLInputElement>> = (
+  const handleOnChangeRow: EventHandler<ChangeEvent<HTMLInputElement>> = (
     event
   ) => {
     setRowName(event.target.value);
   };
 
-  const updateRowName = async (row: string) => {
-    const rowRef = doc(collectionRows, row);
-    await updateDoc(rowRef, {
-      nameRail: rowName,
-    });
+  const handleSubmitRow = async (event: React.FormEvent<HTMLInputElement>) => {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+    addRow();
+    setRowName("");
+    setOpenMenuName("");
+  };
+
+  const handleCloseMenuRow = () => {
+    setRowName("");
+    setOpenMenuName("");
   };
 
   const deleteRow = async (rowID: string) => {
     await deleteDoc(doc(database, "ParkedVehicles", rowID));
-  };
-
-  const handleCloseMenu = () => {
-    setOpenMenuID(undefined);
   };
 
   useEffect(() => {
@@ -95,22 +83,22 @@ const ParkedVagons = () => {
         </div>
       ))}
 
+      <Button
+        clasName="self-center"
+        text="+"
+        onClick={() => setOpenMenuName(newDoc.id)}
+        isRounded={true}
+      />
+
       <PopUpMenu
-        open={!!openMenuID}
+        open={!!openMenuName}
         value={rowName}
         title="Název koleje"
         context="Zde napiš nápiš název koleje na které budou vozy"
         label="Název koleje"
-        handleClose={handleCloseMenu}
-        handleOnSubmit={() => handleSubmit(openMenuID!, this!)}
-        handleOnChange={handleOnChange}
-      />
-
-      <Button
-        clasName="self-center"
-        text="+"
-        onClick={addRow}
-        isRounded={true}
+        handleClose={handleCloseMenuRow}
+        handleOnSubmit={() => handleSubmitRow(this!)}
+        handleOnChange={handleOnChangeRow}
       />
     </div>
   );
