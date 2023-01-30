@@ -27,9 +27,7 @@ const ParkedVagons = () => {
     });
   };
 
-  const handleOnChangeRow: EventHandler<ChangeEvent<HTMLInputElement>> = (
-    event
-  ) => {
+  const handleOnChangeRow = (event: ChangeEvent<HTMLInputElement>) => {
     setRowName(event.target.value);
   };
 

@@ -61,9 +61,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     });
   };
 
-  const handleOnChangeLine: EventHandler<ChangeEvent<HTMLInputElement>> = (
-    event
-  ) => {
+  const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
     setNameLine(event.target.value);
   };
 
