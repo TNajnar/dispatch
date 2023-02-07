@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   arrayRemove,
   collection,
@@ -22,6 +22,8 @@ interface IVehicleProps {
   documentID?: string;
   collectionName?: string;
   rowIndex?: number;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isMenuOpen?: string;
 }
 
 const Vehicle = ({
@@ -32,22 +34,19 @@ const Vehicle = ({
   documentID,
   collectionName,
   rowIndex,
+  setIsMenuOpen,
+  isMenuOpen,
 }: IVehicleProps) => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
 
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
-    outsideClickRef,
-    setIsMenuOpen
-  );
+  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
     setSpzState("");
   };
 
@@ -69,16 +68,15 @@ const Vehicle = ({
       ];
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
-
     setIsEditable(false);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
   };
 
   const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
     setSpzState(event?.target.value);
   };
 
-  const deleteVehicle = async () => {
+  const deleteVehicle = async (id: string) => {
     const getDocRef = doc(database, `${collectionName}`, documentID!);
     await updateDoc(getDocRef, {
       vehicles: arrayRemove({
@@ -110,7 +108,7 @@ const Vehicle = ({
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
 
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
   };
 
   const handleVehicleRepairDate = async (repairD: Timestamp) => {
@@ -141,27 +139,28 @@ const Vehicle = ({
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {!isEditable && isMenuOpen && (
-        <Menu
-          carRepairDate={vehicleRepairDate}
-          outsideClickRef={outsideClickRef}
-          rowIndex={rowIndex}
-          deleteItem={deleteVehicle}
-          editItem={handleEditSpzVehicle}
-          handleClassColor={handleClassColor}
-          handleRepairDate={handleVehicleRepairDate}
-        />
-      )}
+      <div>
+        {!isEditable && isMenuOpen === id && (
+          <Menu
+            carRepairDate={vehicleRepairDate}
+            rowIndex={rowIndex}
+            deleteItem={() => deleteVehicle(id!)}
+            editItem={handleEditSpzVehicle}
+            handleClassColor={handleClassColor}
+            handleRepairDate={handleVehicleRepairDate}
+          />
+        )}
 
-      <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
-        <EditableField
-          isEditable={isEditable}
-          state={spzState}
-          realData={vehicleSpz}
-          handleOnChange={handleOnChangeVehicleSPZ}
-          handleSubmit={handleSumbitEditVehicleSpz}
-        />
-        <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
+        <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+          <EditableField
+            isEditable={isEditable}
+            state={spzState}
+            realData={vehicleSpz}
+            handleOnChange={handleOnChangeVehicleSPZ}
+            handleSubmit={handleSumbitEditVehicleSpz}
+          />
+          <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
+        </div>
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">

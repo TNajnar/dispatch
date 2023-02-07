@@ -22,6 +22,8 @@ interface ILocomotiveProps {
   isParked?: boolean;
   rowIndex?: number;
   handleVehicleRepairDate?: (repairD: Timestamp) => void;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isMenuOpen?: string;
 }
 
 const Locomotive = ({
@@ -31,23 +33,19 @@ const Locomotive = ({
   documentID,
   collectionName,
   isParked,
-  rowIndex,
+  rowIndex, isMenuOpen, setIsMenuOpen 
 }: ILocomotiveProps) => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
 
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
-    outsideClickRef,
-    setIsMenuOpen
-  );
+  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditLocomotive = () => {
     setIsEditable(true);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
   };
 
   const handleSubmitEditLocomotive = async () => {
@@ -86,7 +84,7 @@ const Locomotive = ({
       });
     }
     setIsEditable(false);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
     setLocoStateSpz("");
   };
 
@@ -156,7 +154,6 @@ const Locomotive = ({
         <Menu
           carRepairDate={locomotiveRepairDate}
           rowIndex={rowIndex}
-          outsideClickRef={outsideClickRef}
           isLocomotive={true}
           isParked={isParked}
           editItem={handleEditLocomotive}
