@@ -1,4 +1,12 @@
-import { EventHandler, RefObject, MouseEvent, useRef } from "react";
+import { LogLevel } from "@firebase/logger";
+import {
+  EventHandler,
+  RefObject,
+  MouseEvent,
+  useRef,
+  useMemo,
+  useEffect,
+} from "react";
 
 type Position = {
   x: number;
@@ -6,10 +14,7 @@ type Position = {
 };
 
 // The hook takes two parametres as input and then return an objects with four props
-const useDragNDrop = (
-  outsideClickRef: RefObject<HTMLDivElement>,
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
-): {
+const useDragNDrop = (): {
   wrapperRef: RefObject<HTMLDivElement>;
   onMouseDrag: EventHandler<MouseEvent>;
   onMouseDown: EventHandler<MouseEvent>;
@@ -41,18 +46,6 @@ const useDragNDrop = (
     if (!initialPosition.current || !wrapperRef.current) return;
     wrapperRef.current.style.transform = "";
     wrapperRef.current.style.zIndex = "";
-    if (
-      event.clientX === initialPosition.current.x &&
-      event.clientY === initialPosition.current.y
-    )
-      setIsMenuOpen(true);
-
-    if (
-      outsideClickRef.current &&
-      !outsideClickRef.current.contains(event.target as Node)
-    ) {
-      setIsMenuOpen(false);
-    }
   };
 
   return { wrapperRef, onMouseDrag, onMouseDown, onMouseUp };

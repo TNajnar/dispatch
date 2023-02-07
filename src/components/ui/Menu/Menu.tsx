@@ -9,7 +9,6 @@ import CarRepairMenu from "./CarRepairMenu";
 interface IMenuProps {
   carRepairDate?: Timestamp;
   rowIndex?: number;
-  outsideClickRef?: RefObject<HTMLDivElement>;
   isLineMenu?: boolean;
   isLocomotive?: boolean;
   isParked?: boolean;
@@ -22,7 +21,6 @@ interface IMenuProps {
 const Menu = ({
   carRepairDate,
   rowIndex,
-  outsideClickRef,
   isLineMenu,
   isLocomotive,
   isParked,
@@ -36,8 +34,8 @@ const Menu = ({
 
   return (
     <div
-      ref={outsideClickRef}
       className={clsx(
+        "vehicleMenu",
         "absolute z-10 py-3 w-max h-max bg-secondary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg",
         !isLineMenu && rowIndex === 0 && "top-14 left-1/2",
         isLineMenu && rowIndex === 0 && "top-[41px] right-1/2",
