@@ -10,6 +10,8 @@ import Button from "../ui/Button";
 import { nanoid } from "nanoid";
 import { TParkedVehicleDoc } from "../types";
 import Locomotive from "../Train/Locomotive";
+import useClickAbleMenu from "../../hooks/useClickAbleMenu";
+import { useState } from "react";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
@@ -19,6 +21,8 @@ interface ITrainRailProps {
 const collectionRows = collection(database, "ParkedVehicles");
 
 const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
+  const [isMenuOpen, setIsMenuOpen] = useState<string>("");
+
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
   const collectionName = "ParkedVehicles";
@@ -60,6 +64,12 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
     });
   };
 
+  const handleOpenMenu = (id: string) => {
+    setIsMenuOpen(() => id);
+  };
+
+  useClickAbleMenu(id, setIsMenuOpen)
+
   return (
     <div className="flex items-center py-4 gap-4 border-b border-primary-gray">
       {!!nameRail && (
@@ -68,7 +78,7 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
         </h2>
       )}
       {parkedVehicles.map((car) => (
-        <div key={car.id} className="relative flex justify-center">
+        <div onClick={() => handleOpenMenu(car.id)} key={car.id} className="relative flex justify-center">
           {car.isVehicle ? (
             <Vehicle
               id={car.id}
@@ -78,6 +88,8 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
               documentID={document.id}
               collectionName={collectionName}
               rowIndex={rowIndex}
+              setIsMenuOpen={setIsMenuOpen}
+              isMenuOpen={isMenuOpen}
             />
           ) : (
             <Locomotive
@@ -88,6 +100,8 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
               collectionName={collectionName}
               isParked={true}
               rowIndex={rowIndex}
+              setIsMenuOpen={setIsMenuOpen}
+              isMenuOpen={isMenuOpen}
             />
           )}
         </div>

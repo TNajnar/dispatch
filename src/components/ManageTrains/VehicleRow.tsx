@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  EventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useState } from "react";
 import Locomotive from "../Train/Locomotive";
 import Vehicle from "../Train/Vehicle";
 import {
@@ -21,6 +14,7 @@ import Button from "../ui/Button";
 import PopUpMenu from "../ui/PopUpMenu";
 import { TManageTrainDoc } from "../types";
 import Line from "../Train/Line";
+import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragNDrop from "../../hooks/useDragNDrop";
 
 interface IVehicleRowProps {
@@ -31,8 +25,9 @@ interface IVehicleRowProps {
 const collectionRows = collection(database, "ManageTrains");
 
 const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
-  const [openMenuID, setOpenMenuID] = useState<string>("");
+  const [openPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [nameLine, setNameLine] = useState<string>("");
+  const [isMenuOpen, setIsMenuOpen] = useState<string>("");
 
   const collectionName = "ManageTrains";
 
@@ -66,7 +61,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     await updateDoc(docRefToUpdate, {
       line: arrayUnion({ id: id, nameLine: nameLine }),
     });
-    setOpenMenuID(document.id);
+    setOpenPopMenuID("");
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,41 +74,20 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     }
     addLine();
     setNameLine("");
-    setOpenMenuID("");
+    setOpenPopMenuID("");
   };
 
   const handleCloseMenu = () => {
     setNameLine("");
-    setOpenMenuID("");
+    setOpenPopMenuID("");
   };
-  const [isMenuOpen, setIsMenuOpen] = useState<string>("");
 
   const handleOpenMenu = (id: string) => {
+    console.log(id);
     setIsMenuOpen(() => id);
   };
 
-  const handleClickOutside = (event?: any) => {
-    const menuElements = window.document.getElementsByClassName("vehicleMenu");
-
-    const haveClickedMenu = [...menuElements].some((el) =>
-      el.contains(event.target)
-    );
-
-    if (haveClickedMenu) return;
-
-    if (haveClickedMenu) {
-      setIsMenuOpen?.("");
-    } else {
-      setIsMenuOpen?.(id!);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("mouseup", handleClickOutside);
-    return () => {
-      window.addEventListener("mouseup", handleClickOutside);
-    };
-  }, []);
+  useClickAbleMenu(id, setIsMenuOpen);
 
   return (
     <div className="grid grid-cols-4 place-items-center pt-4 pb-4 w-full border-b border-primary-gray">
@@ -147,7 +121,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           ))}
         </div>
       </div>
-      <div>
+      <div onClick={() => handleOpenMenu(locomotive.id)}>
         <Locomotive
           id={locomotive.id}
           locomotiveSpz={locomotive.lSpz}
@@ -155,20 +129,24 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           documentID={document.id}
           collectionName={collectionName}
           rowIndex={rowIndex}
+          setIsMenuOpen={setIsMenuOpen}
+          isMenuOpen={isMenuOpen}
         />
       </div>
       <div className="flex gap-4">
         {/* {linesLenght < 4 && <Button text="+" onClick={addLine} />} */}
-        <Button text="+" onClick={() => setOpenMenuID(document.id)} />
+        <Button text="+" onClick={() => setOpenPopMenuID(document.id)} />
         {lines.map(
           (line) =>
             !!line.nameLine && (
-              <div key={line.id}>
+              <div onClick={() => handleOpenMenu(line.id)} key={line.id}>
                 <Line
                   id={line.id}
                   nameLine={line.nameLine}
                   documentID={document.id}
                   rowIndex={rowIndex}
+                  setIsMenuOpen={setIsMenuOpen}
+                  isMenuOpen={isMenuOpen}
                 />
               </div>
             )
@@ -176,7 +154,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
       </div>
 
       <PopUpMenu
-        open={!!openMenuID}
+        open={!!openPopMenuID}
         value={nameLine}
         title="Název linky"
         context="Zde napiš nápiš název linky."

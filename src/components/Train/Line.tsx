@@ -13,29 +13,27 @@ import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
 interface ILineprops {
-  id?: string;
+  id: string;
   nameLine?: string;
   stateLinzk?: string;
   documentID?: string;
   rowIndex?: number;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isMenuOpen?: string;
 }
 
 const collectionRows = collection(database, "ManageTrains");
 
-const Line = ({ id, nameLine, documentID, rowIndex }: ILineprops) => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+const Line = ({ id, nameLine, documentID, rowIndex, isMenuOpen, setIsMenuOpen }: ILineprops) => {
+  const [isOpenPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [lineState, setLineState] = useState<string>("");
 
-  const { wrapperRef, onMouseDown, onMouseUp } = useDragNDrop(
-    outsideClickRef,
-    setIsMenuOpen
-  );
+  const { wrapperRef, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditLine = () => {
     setIsEditable(true);
-    setIsMenuOpen(false);
+    setOpenPopMenuID("");
   };
 
   const handleSubmitEditLine = async () => {
@@ -54,8 +52,9 @@ const Line = ({ id, nameLine, documentID, rowIndex }: ILineprops) => {
       transaction.update(docRefToUpdate, { line: filterLines });
     });
     setIsEditable(false);
-    setIsMenuOpen(false);
+    setOpenPopMenuID("");
     setLineState("");
+    setIsMenuOpen("")
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,9 +78,8 @@ const Line = ({ id, nameLine, documentID, rowIndex }: ILineprops) => {
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {!isEditable && isMenuOpen && (
+      {!isEditable && isMenuOpen === id && (
         <Menu
-          outsideClickRef={outsideClickRef}
           editItem={handleEditLine}
           deleteItem={handleDeleteLine}
           isLineMenu={true}
