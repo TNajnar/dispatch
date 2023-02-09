@@ -15,7 +15,6 @@ import PopUpMenu from "../ui/PopUpMenu";
 import { TManageTrainDoc } from "../types";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
-import useDragNDrop from "../../hooks/useDragNDrop";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
@@ -51,6 +50,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         spz: "",
         class: "",
         repairDate: "",
+        isVehicle: true,
       }));
       transaction.update(docRefToUpdate, { vehicles: newVehicle });
     });
@@ -83,7 +83,6 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
   };
 
   const handleOpenMenu = (id: string) => {
-    console.log(id);
     setIsMenuOpen(() => id);
   };
 
@@ -121,7 +120,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
           ))}
         </div>
       </div>
-      <div onClick={() => handleOpenMenu(locomotive.id)}>
+      <div onClick={() => setIsMenuOpen(locomotive.id)}>
         <Locomotive
           id={locomotive.id}
           locomotiveSpz={locomotive.lSpz}

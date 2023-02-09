@@ -6,7 +6,7 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import useDragNDrop from "../../hooks/useDragNDrop";
 import database from "../../shared/firebaseconfig";
 import { TVehicleObject } from "../types";
@@ -22,8 +22,8 @@ interface ILocomotiveProps {
   isParked?: boolean;
   rowIndex?: number;
   handleVehicleRepairDate?: (repairD: Timestamp) => void;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
   isMenuOpen?: string;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Locomotive = ({
@@ -33,9 +33,10 @@ const Locomotive = ({
   documentID,
   collectionName,
   isParked,
-  rowIndex, isMenuOpen, setIsMenuOpen 
+  rowIndex,
+  isMenuOpen,
+  setIsMenuOpen,
 }: ILocomotiveProps) => {
-  // const [isMenuOpen, setIsMenuOpen] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
 
@@ -150,7 +151,7 @@ const Locomotive = ({
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {!isEditable && isMenuOpen && (
+      {!isEditable && isMenuOpen === id && (
         <Menu
           carRepairDate={locomotiveRepairDate}
           rowIndex={rowIndex}

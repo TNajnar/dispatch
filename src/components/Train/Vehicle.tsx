@@ -76,19 +76,6 @@ const Vehicle = ({
     setSpzState(event?.target.value);
   };
 
-  const deleteVehicle = async (id: string) => {
-    const getDocRef = doc(database, `${collectionName}`, documentID!);
-    await updateDoc(getDocRef, {
-      vehicles: arrayRemove({
-        id: id,
-        spz: vehicleSpz,
-        class: vehicleClass,
-        repairDate: vehicleRepairDate,
-        isVehicle: true,
-      }),
-    });
-  };
-
   const handleClassColor = async (colors: string) => {
     const docRefToUpdate = doc(collectionRows, documentID);
     const newValues = {
@@ -131,6 +118,19 @@ const Vehicle = ({
     });
   };
 
+  const deleteVehicle = async () => {
+    const getDocRef = doc(database, `${collectionName}`, documentID!);
+    await updateDoc(getDocRef, {
+      vehicles: arrayRemove({
+        id: id,
+        spz: vehicleSpz,
+        class: vehicleClass,
+        repairDate: vehicleRepairDate,
+        isVehicle: true,
+      }),
+    });
+  };
+
   return (
     <div
       className="relative"
@@ -144,7 +144,7 @@ const Vehicle = ({
           <Menu
             carRepairDate={vehicleRepairDate}
             rowIndex={rowIndex}
-            deleteItem={() => deleteVehicle(id!)}
+            deleteItem={deleteVehicle}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
             handleRepairDate={handleVehicleRepairDate}

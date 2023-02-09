@@ -62,13 +62,14 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
       }));
       transaction.update(docRefToUpdate, { vehicles: newLocomotive });
     });
+    setIsMenuOpen("");
   };
 
   const handleOpenMenu = (id: string) => {
     setIsMenuOpen(() => id);
   };
 
-  useClickAbleMenu(id, setIsMenuOpen)
+  useClickAbleMenu(id, setIsMenuOpen);
 
   return (
     <div className="flex items-center py-4 gap-4 border-b border-primary-gray">
@@ -78,7 +79,11 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
         </h2>
       )}
       {parkedVehicles.map((car) => (
-        <div onClick={() => handleOpenMenu(car.id)} key={car.id} className="relative flex justify-center">
+        <div
+          onClick={() => handleOpenMenu(car.id)}
+          key={car.id}
+          className="relative flex justify-center"
+        >
           {car.isVehicle ? (
             <Vehicle
               id={car.id}
