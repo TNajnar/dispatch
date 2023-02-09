@@ -7,11 +7,11 @@ const HomePage = () => {
       <h1 className="text-2xl pb-6">Instrukce do aplikace</h1>
       <div className="flex pb-10 gap-6">
         Lokomotiva =
-        <Locomotive />
+        {/* <Locomotive /> */}
       </div>
       <div className="flex gap-14">
         Vagon =
-        <Vehicle />
+        {/* <Vehicle /> */}
       </div>
     </div>
   );

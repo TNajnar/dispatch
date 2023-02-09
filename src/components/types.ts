@@ -13,20 +13,22 @@ export type TManageTrainDoc = {
     vehicles: TVehicleObject[];
 }
 
-export type TLineObject = {
-    id: string;
-    nameLine: string;
-}
-
 export type TVehicleObject = {
     id: string;
     spz: string;
     class: string;
     repairDate: Timestamp;
+    isVehicle: boolean;
+}
+
+export type TLineObject = {
+    id: string;
+    nameLine: string;
 }
 
 export type TLocomotiveObject = {
     id: string;
     lSpz: string;
     repairDate: Timestamp;
+    isVehicle: boolean;
 }

@@ -1,7 +1,15 @@
-import { collection, doc, runTransaction, Timestamp } from "firebase/firestore";
-import { ChangeEvent, useRef, useState } from "react";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  runTransaction,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { ChangeEvent, useState } from "react";
 import useDragNDrop from "../../hooks/useDragNDrop";
 import database from "../../shared/firebaseconfig";
+import { TVehicleObject } from "../types";
 import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
@@ -10,52 +18,74 @@ interface ILocomotiveProps {
   locomotiveSpz?: string;
   locomotiveRepairDate?: Timestamp;
   documentID?: string;
+  collectionName?: string;
+  isParked?: boolean;
   rowIndex?: number;
   handleVehicleRepairDate?: (repairD: Timestamp) => void;
+  isMenuOpen?: string;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
 }
-
-const collectionRows = collection(database, "ManageTrains");
 
 const Locomotive = ({
   id,
   locomotiveSpz,
   locomotiveRepairDate,
   documentID,
+  collectionName,
+  isParked,
   rowIndex,
+  isMenuOpen,
+  setIsMenuOpen,
 }: ILocomotiveProps) => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
 
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
-    outsideClickRef,
-    setIsMenuOpen
-  );
+  const collectionRows = collection(database, `${collectionName}`);
+
+  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditLocomotive = () => {
     setIsEditable(true);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
   };
 
   const handleSubmitEditLocomotive = async () => {
     const docRefToUpdate = doc(collectionRows, documentID);
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      if (!sfDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const newLocomotiveSpz = (sfDoc.data().lSpz = locoStateSpz);
-      transaction.update(docRefToUpdate, {
-        locomotives: {
-          id: id,
-          lSpz: newLocomotiveSpz,
-          repairDate: locomotiveRepairDate,
-        },
+    if (!isParked) {
+      await runTransaction(database, async (transaction) => {
+        const sfDoc = await transaction.get(docRefToUpdate);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        const newLocomotiveSpz = (sfDoc.data().lSpz = locoStateSpz);
+        transaction.update(docRefToUpdate, {
+          locomotives: {
+            id: id,
+            lSpz: newLocomotiveSpz,
+            repairDate: locomotiveRepairDate,
+            isVehicle: false,
+          },
+        });
       });
-    });
+    } else {
+      const newValues = {
+        id: id,
+        spz: locoStateSpz,
+        repairDate: locomotiveRepairDate,
+        isVehicle: false,
+      };
+      await runTransaction(database, async (transaction) => {
+        const sfDoc = await transaction.get(docRefToUpdate);
+        const data = sfDoc.data();
+        const filterCars = [
+          ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+          newValues,
+        ];
+        transaction.update(docRefToUpdate, { vehicles: filterCars });
+      });
+    }
     setIsEditable(false);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
     setLocoStateSpz("");
   };
 
@@ -65,19 +95,51 @@ const Locomotive = ({
 
   const handleLocomotiveRepairDate = async (repairD: Timestamp) => {
     const docRefToUpdate = doc(collectionRows, documentID);
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      if (!sfDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const locomotiveDate = (sfDoc.data().repairDate = repairD);
-      transaction.update(docRefToUpdate, {
-        locomotives: {
-          id: id,
-          lSpz: locomotiveSpz,
-          repairDate: locomotiveDate,
-        },
+
+    if (!isParked) {
+      await runTransaction(database, async (transaction) => {
+        const sfDoc = await transaction.get(docRefToUpdate);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        const locomotiveDate = (sfDoc.data().repairDate = repairD);
+        transaction.update(docRefToUpdate, {
+          locomotives: {
+            id: id,
+            lSpz: locomotiveSpz,
+            repairDate: locomotiveDate,
+            isVehicle: false,
+          },
+        });
       });
+    } else {
+      const newValues = {
+        id: id,
+        spz: locomotiveSpz,
+        repairDate: repairD,
+        isVehicle: false,
+      };
+      await runTransaction(database, async (transaction) => {
+        const sfDoc = await transaction.get(docRefToUpdate);
+        const data = sfDoc.data();
+        const filterCars = [
+          ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+          newValues,
+        ];
+        transaction.update(docRefToUpdate, { vehicles: filterCars });
+      });
+    }
+  };
+
+  const deleteLocomotive = async () => {
+    const getDocRef = doc(database, `${collectionName}`, documentID!);
+    await updateDoc(getDocRef, {
+      vehicles: arrayRemove({
+        id: id,
+        spz: locomotiveSpz,
+        repairDate: locomotiveRepairDate,
+        isVehicle: false,
+      }),
     });
   };
 
@@ -89,13 +151,14 @@ const Locomotive = ({
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {!isEditable && isMenuOpen && (
+      {!isEditable && isMenuOpen === id && (
         <Menu
           carRepairDate={locomotiveRepairDate}
           rowIndex={rowIndex}
-          outsideClickRef={outsideClickRef}
           isLocomotive={true}
+          isParked={isParked}
           editItem={handleEditLocomotive}
+          deleteItem={deleteLocomotive}
           handleRepairDate={handleLocomotiveRepairDate}
         />
       )}

@@ -1,4 +1,4 @@
-import { RefObject, useState } from "react";
+import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
@@ -9,9 +9,9 @@ import CarRepairMenu from "./CarRepairMenu";
 interface IMenuProps {
   carRepairDate?: Timestamp;
   rowIndex?: number;
-  outsideClickRef?: RefObject<HTMLDivElement>;
   isLineMenu?: boolean;
   isLocomotive?: boolean;
+  isParked?: boolean;
   editItem?: () => void;
   deleteItem?: () => void;
   handleClassColor?: (colors: string) => void;
@@ -21,9 +21,9 @@ interface IMenuProps {
 const Menu = ({
   carRepairDate,
   rowIndex,
-  outsideClickRef,
   isLineMenu,
   isLocomotive,
+  isParked,
   editItem,
   deleteItem,
   handleClassColor,
@@ -34,9 +34,9 @@ const Menu = ({
 
   return (
     <div
-      ref={outsideClickRef}
       className={clsx(
-        "absolute z-10 py-3 w-max h-max bg-primary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg",
+        "vehicleMenu",
+        "absolute z-10 py-3 w-max h-max bg-secondary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg",
         !isLineMenu && rowIndex === 0 && "top-14 left-1/2",
         isLineMenu && rowIndex === 0 && "top-[41px] right-1/2",
         isLineMenu ? "bottom-[41px] right-1/2" : "bottom-[69px] left-1/2"
@@ -74,15 +74,16 @@ const Menu = ({
         </div>
       )}
 
-      {!isLocomotive && (
-        <div
-          className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
-          onClick={deleteItem}
-        >
-          <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
-          Odstraň
-        </div>
-      )}
+      <div
+        className={clsx(
+          "flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow",
+          !isParked && isLocomotive && "hidden"
+        )}
+        onClick={deleteItem}
+      >
+        <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
+        Odstraň
+      </div>
     </div>
   );
 };

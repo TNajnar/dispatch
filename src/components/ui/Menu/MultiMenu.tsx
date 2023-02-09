@@ -32,7 +32,7 @@ const MultiClassMenu = ({
   };
 
   return (
-    <div className="absolute -right-[192px] p-3 w-48 bg-primary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg">
+    <div className="absolute -right-[192px] p-3 w-48 bg-secondary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg">
       {isColorClass ? (
         <div className="flex flex-col justify-center">
           <p className="font-bold">Vyber barvu třídy:</p>
@@ -42,7 +42,7 @@ const MultiClassMenu = ({
                 key={index}
                 onClick={() => classColor?.(vehicleClasses[index]!)}
                 className={clsx(
-                  "w-4 h-4 rounded-full hover:border border-secondary-yellow",
+                  "w-4 h-4 hover:border border-secondary-yellow rounded-full",
                   vehicleClasses[index]
                 )}
               />
@@ -54,7 +54,7 @@ const MultiClassMenu = ({
           <label className="font-bold">Datum opravy:</label>
           <input
             type="date"
-            className="border border-secondary-gray rounded-sm hover:border-black"
+            className="border border-primary-gray rounded-sm hover:border-black"
             value={
               carRepairDate &&
               carRepairDate.toDate().toISOString().substring(0, 10)

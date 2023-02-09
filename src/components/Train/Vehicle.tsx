@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   arrayRemove,
   collection,
@@ -22,6 +22,8 @@ interface IVehicleProps {
   documentID?: string;
   collectionName?: string;
   rowIndex?: number;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isMenuOpen?: string;
 }
 
 const Vehicle = ({
@@ -32,22 +34,19 @@ const Vehicle = ({
   documentID,
   collectionName,
   rowIndex,
+  setIsMenuOpen,
+  isMenuOpen,
 }: IVehicleProps) => {
-  const outsideClickRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
 
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop(
-    outsideClickRef,
-    setIsMenuOpen
-  );
+  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
     setSpzState("");
   };
 
@@ -58,6 +57,33 @@ const Vehicle = ({
       spz: spzState,
       class: vehicleClass,
       repairDate: vehicleRepairDate,
+      isVehicle: true,
+    };
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      const data = sfDoc.data();
+      const filterVehicles = [
+        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+        newValues,
+      ];
+      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+    });
+    setIsEditable(false);
+    setIsMenuOpen("");
+  };
+
+  const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
+    setSpzState(event?.target.value);
+  };
+
+  const handleClassColor = async (colors: string) => {
+    const docRefToUpdate = doc(collectionRows, documentID);
+    const newValues = {
+      id: id,
+      spz: vehicleSpz,
+      class: colors,
+      repairDate: vehicleRepairDate,
+      isVehicle: true,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -69,12 +95,27 @@ const Vehicle = ({
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
 
-    setIsEditable(false);
-    setIsMenuOpen(false);
+    setIsMenuOpen("");
   };
 
-  const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
-    setSpzState(event?.target.value);
+  const handleVehicleRepairDate = async (repairD: Timestamp) => {
+    const docRefToUpdate = doc(collectionRows, documentID);
+    const newValues = {
+      id: id,
+      spz: vehicleSpz,
+      class: vehicleClass,
+      repairDate: repairD,
+      isVehicle: true,
+    };
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      const data = sfDoc.data();
+      const filterVehicles = [
+        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
+        newValues,
+      ];
+      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
+    });
   };
 
   const deleteVehicle = async () => {
@@ -85,47 +126,8 @@ const Vehicle = ({
         spz: vehicleSpz,
         class: vehicleClass,
         repairDate: vehicleRepairDate,
+        isVehicle: true,
       }),
-    });
-  };
-
-  const handleClassColor = async (colors: string) => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      spz: vehicleSpz,
-      class: colors,
-      repairDate: vehicleRepairDate,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
-    });
-
-    setIsMenuOpen(false);
-  };
-
-  const handleVehicleRepairDate = async (repairD: Timestamp) => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      spz: vehicleSpz,
-      class: vehicleClass,
-      repairDate: repairD,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
   };
 
@@ -137,27 +139,28 @@ const Vehicle = ({
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >
-      {!isEditable && isMenuOpen && (
-        <Menu
-          carRepairDate={vehicleRepairDate}
-          rowIndex={rowIndex}
-          outsideClickRef={outsideClickRef}
-          deleteItem={deleteVehicle}
-          editItem={handleEditSpzVehicle}
-          handleClassColor={handleClassColor}
-          handleRepairDate={handleVehicleRepairDate}
-        />
-      )}
+      <div>
+        {!isEditable && isMenuOpen === id && (
+          <Menu
+            carRepairDate={vehicleRepairDate}
+            rowIndex={rowIndex}
+            deleteItem={deleteVehicle}
+            editItem={handleEditSpzVehicle}
+            handleClassColor={handleClassColor}
+            handleRepairDate={handleVehicleRepairDate}
+          />
+        )}
 
-      <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
-        <EditableField
-          isEditable={isEditable}
-          state={spzState}
-          realData={vehicleSpz}
-          handleOnChange={handleOnChangeVehicleSPZ}
-          handleSubmit={handleSumbitEditVehicleSpz}
-        />
-        <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
+        <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+          <EditableField
+            isEditable={isEditable}
+            state={spzState}
+            realData={vehicleSpz}
+            handleOnChange={handleOnChangeVehicleSPZ}
+            handleSubmit={handleSumbitEditVehicleSpz}
+          />
+          <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
+        </div>
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">

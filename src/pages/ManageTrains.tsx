@@ -25,7 +25,6 @@ const ManageTrains = () => {
       locomotives: { id: id, lSpz: "", repairDate: "" },
       line: [],
     });
-
     setIsClicked(true);
   };
 
