@@ -1,3 +1,7 @@
+import { useContext } from "react";
+import { KeycloakContext } from "../../helpers/KeycloakContext";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 const NavItems = [
   {
     name: "Domů",
@@ -17,6 +21,8 @@ const NavItems = [
 ];
 
 const Navbar = () => {
+  const { logout } = useContext(KeycloakContext);
+
   return (
     <nav className="flex items-center justify-around bg-primary-yellow text-black">
       <div className="flex">
@@ -30,7 +36,13 @@ const Navbar = () => {
           </a>
         ))}
       </div>
-      <div className="text-black">StudentAgencyLOGO</div>
+      <div
+        onClick={() => logout()}
+        className="flex justify-center items-center py-4 w-[148px] gap-2 hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm"
+      >
+        <LogoutIcon sx={{ fontSize: "19px" }} />
+        <button>Odhlasit se</button>
+      </div>
     </nav>
   );
 };
