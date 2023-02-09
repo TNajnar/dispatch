@@ -9,28 +9,20 @@
 }
 
 .pageLayout {
-    width: 100%;
-    margin: auto
+    @apply w-full m-auto;
 }
 
 .contentLayout {
-    background: white;
-    width: 100%;
-    max-width: 90%; /* prevent too wide texts on large screens */
-    margin: auto;
-    padding-top: 2rem;  /*prevent hiding content behind navbar */
+    @apply bg-white;
+    @apply w-full max-w-[90%];     /* max-w prevent too wide texts on large screens  */
+    @apply m-auto pt-8;         /* pt prevent hiding content behind navbar */
 }
 
 /* Pop up menu */
-
-.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-    @apply text-primary-yellow  !important;
-} 
-
-.css-1a1fmpi-MuiInputBase-root-MuiInput-root:after {
-    @apply border-b-primary-yellow !important;
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root.button {
+    @apply text-black;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
-    @apply bg-secondary-yellow !important;
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.buttonHover {
+    @apply bg-secondary-yellow;
 }

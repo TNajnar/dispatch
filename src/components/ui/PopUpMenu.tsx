@@ -47,20 +47,10 @@ const PopUpMenu = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button
-          style={{
-            color: "black",
-          }}
-          onClick={handleClose}
-        >
+        <Button className="button buttonHover" onClick={handleClose}>
           Zavři
         </Button>
-        <Button
-          style={{
-            color: "black",
-          }}
-          onClick={handleOnSubmit}
-        >
+        <Button className="button buttonHover" onClick={handleOnSubmit}>
           Potvrď
         </Button>
       </DialogActions>
