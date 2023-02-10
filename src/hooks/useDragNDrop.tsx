@@ -1,12 +1,4 @@
-import { LogLevel } from "@firebase/logger";
-import {
-  EventHandler,
-  RefObject,
-  MouseEvent,
-  useRef,
-  useMemo,
-  useEffect,
-} from "react";
+import { EventHandler, RefObject, MouseEvent, useRef } from "react";
 
 type Position = {
   x: number;

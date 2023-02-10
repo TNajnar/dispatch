@@ -5,7 +5,7 @@ import {
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
-import { ChangeEvent, EventHandler, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import database from "../shared/firebaseconfig";
 import TrainRail from "../components/ParkedVehicles/TrainRail";

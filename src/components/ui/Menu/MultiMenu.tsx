@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Timestamp } from "firebase/firestore";
 import { ChangeEvent } from "react";
 
-interface IMultiClassMenu {
+interface IMultiClassMenuProps {
   isColorClass?: boolean;
   carRepairDate?: Timestamp;
   classColor?: (colors: string) => void;
@@ -23,7 +23,7 @@ const MultiClassMenu = ({
   carRepairDate,
   classColor,
   handleRepairDate,
-}: IMultiClassMenu) => {
+}: IMultiClassMenuProps) => {
   const colors = [0, 1, 2, 3, 4, 5];
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {

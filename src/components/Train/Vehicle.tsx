@@ -13,6 +13,7 @@ import { TVehicleObject } from "../types";
 import useDragNDrop from "../../hooks/useDragNDrop";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
+import CarRepairSign from "../ui/CarRepairSign";
 
 interface IVehicleProps {
   id?: string;
@@ -94,7 +95,6 @@ const Vehicle = ({
       ];
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
-
     setIsMenuOpen("");
   };
 
@@ -116,6 +116,7 @@ const Vehicle = ({
       ];
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
+    setIsMenuOpen("");
   };
 
   const deleteVehicle = async () => {
@@ -160,10 +161,15 @@ const Vehicle = ({
             handleSubmit={handleSumbitEditVehicleSpz}
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
+
+          <CarRepairSign carRepairDate={vehicleRepairDate} />
         </div>
       </div>
       {/* Wheels */}
-      <div className="relative overflow-hidden w-30 h-3">
+      <div
+        className="relative overflow-hidden w-30 h-3"
+        onClick={() => console.log(vehicleRepairDate)}
+      >
         <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
         <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] bg-white border border-black rounded-full" />
       </div>

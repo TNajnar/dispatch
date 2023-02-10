@@ -10,6 +10,7 @@ import { ChangeEvent, useState } from "react";
 import useDragNDrop from "../../hooks/useDragNDrop";
 import database from "../../shared/firebaseconfig";
 import { TVehicleObject } from "../types";
+import CarRepairSign from "../ui/CarRepairSign";
 import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
@@ -129,6 +130,7 @@ const Locomotive = ({
         transaction.update(docRefToUpdate, { vehicles: filterCars });
       });
     }
+    setIsMenuOpen("");
   };
 
   const deleteLocomotive = async () => {
@@ -172,7 +174,7 @@ const Locomotive = ({
           handleOnChange={handleOnChangeLocomotive}
           handleSubmit={handleSubmitEditLocomotive}
         />
-
+        <CarRepairSign carRepairDate={locomotiveRepairDate} />
         <div className="absolute -top-[1px] left-20 w-16 h-8  border rounded-l-xl border-black" />
         <div className="absolute -bottom-5 -left-5 w-20 h-8 border rounded-md border-black" />
       </div>
