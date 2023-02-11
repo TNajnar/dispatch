@@ -13,8 +13,6 @@ const today = new Date(
   )
 );
 const todayTimestamp = Timestamp.fromDate(today);
-const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-const tomorrowTimestamp = Timestamp.fromDate(tomorrow);
 
 const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
   let carRepairTomorrowDateTimestamp;
@@ -27,12 +25,6 @@ const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
     carRepairTomorrowDateTimestamp = Timestamp.fromDate(carTomorrow);
   }
 
-  console.log(
-    carRepairTomorrowDateTimestamp?.seconds,
-    " || ",
-    todayTimestamp.seconds
-  );
-
   return (
     <div>
       <div
@@ -41,10 +33,6 @@ const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
           !carRepairDate && "hidden",
           carRepairTomorrowDateTimestamp?.seconds === todayTimestamp.seconds &&
             "hidden",
-          // carRepairDate &&
-          //   carRepairDate?.seconds + 24 * 60 * 60 * 1000 ===
-          //     tomorrowTimestamp.seconds &&
-          //   "hidden",
           carRepairDate?.seconds !== todayTimestamp.seconds && "bg-red-600",
           carRepairDate?.seconds === todayTimestamp.seconds && "bg-green-600"
         )}
