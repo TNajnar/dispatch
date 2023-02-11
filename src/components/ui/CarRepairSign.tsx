@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { Timestamp } from "firebase/firestore";
-import { useState } from "react";
 
 interface ICarRepairSignProps {
   carRepairDate?: Timestamp;
