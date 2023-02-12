@@ -32,4 +32,5 @@ export type TLocomotiveObject = {
     lSpz: string;
     repairDate: Timestamp;
     isVehicle: boolean;
+    vehicleDoc: string;
 }

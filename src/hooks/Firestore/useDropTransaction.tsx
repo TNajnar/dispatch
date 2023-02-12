@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 
-const DropTransaction = (
+const useDropTransaction = (
   id: string,
   spz: string,
   repairDate: Timestamp,
@@ -58,4 +58,4 @@ const DropTransaction = (
   return { updateDropVehicle, updateDropLocomotive };
 };
 
-export default DropTransaction;
+export default useDropTransaction;

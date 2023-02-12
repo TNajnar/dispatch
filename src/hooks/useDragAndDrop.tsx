@@ -1,8 +1,8 @@
 import { arrayRemove, collection, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { TVehicleObject } from "../components/types";
-import DropTransaction from "./Firestore/Transaction";
 import database from "../shared/firebaseconfig";
+import DropTransaction from "./Firestore/useDropTransaction";
 
 const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
   const [isDragging, setIsDragging] = useState(false);

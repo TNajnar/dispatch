@@ -25,9 +25,16 @@ const ManageTrains = () => {
   });
 
   const addRow = async () => {
-    await setDoc(doc(collectionRows), {
+    const currentDoc = doc(collectionRows);
+    await setDoc(currentDoc, {
       vehicles: [],
-      locomotives: { id: id, lSpz: "", repairDate: "" },
+      locomotives: {
+        id: id,
+        lSpz: "",
+        repairDate: "",
+        isVehicle: false,
+        vehicleDoc: currentDoc.id,
+      },
       line: [],
     });
     setIsClicked(true);

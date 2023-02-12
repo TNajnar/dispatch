@@ -151,6 +151,7 @@ const VehicleRow = ({
           id={locomotive.id}
           locomotiveSpz={locomotive.lSpz}
           locomotiveRepairDate={locomotive.repairDate}
+          locomotiveDoc={locomotive.vehicleDoc}
           documentID={document.id}
           collectionName={collectionName}
           rowIndex={rowIndex}

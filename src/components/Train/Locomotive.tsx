@@ -1,14 +1,9 @@
-import {
-  arrayRemove,
-  collection,
-  doc,
-  runTransaction,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc, Timestamp } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
+import useLocFilterTrans from "../../hooks/Firestore/Locomotive/useLocFilterTrans";
+import useLocTransaction from "../../hooks/Firestore/Locomotive/useLocFilterTrans";
+import useLocTrans from "../../hooks/Firestore/Locomotive/useLocTrans";
 import database from "../../shared/firebaseconfig";
-import { TVehicleObject } from "../types";
 import CarRepairSign from "../ui/CarRepairSign";
 import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
@@ -17,7 +12,7 @@ interface ILocomotiveProps {
   id: string;
   locomotiveSpz: string;
   locomotiveRepairDate: Timestamp;
-  locomotiveDoc?: string;
+  locomotiveDoc: string;
   documentID: string;
   collectionName?: string;
   rowIndex: number;
@@ -47,6 +42,17 @@ const Locomotive = ({
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
+  const docRefToUpdate = doc(collectionRows, documentID);
+
+  const { editTransaction, dateTransaction, deleteLoc } = useLocTrans(
+    locomotiveDoc,
+    docRefToUpdate
+  );
+
+  const { editTransactionF, dateFilterTransaction } = useLocFilterTrans(
+    locomotiveDoc,
+    docRefToUpdate
+  );
 
   const handleEditLocomotive = () => {
     setIsEditable(true);
@@ -54,43 +60,13 @@ const Locomotive = ({
   };
 
   const handleSubmitEditLocomotive = async () => {
-    const docRefToUpdate = doc(collectionRows, documentID);
     if (!isParked) {
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
-        const newLocomotiveSpz = (sfDoc.data().lSpz = locoStateSpz);
-        transaction.update(docRefToUpdate, {
-          locomotives: {
-            id: id,
-            lSpz: newLocomotiveSpz,
-            repairDate: locomotiveRepairDate,
-            isVehicle: false,
-          },
-        });
-      });
+      editTransaction(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen);
     } else {
-      const newValues = {
-        id: id,
-        spz: locoStateSpz,
-        repairDate: locomotiveRepairDate,
-        isVehicle: false,
-        vehicleDoc: locomotiveDoc,
-      };
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        const data = sfDoc.data();
-        const filterCars = [
-          ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-          newValues,
-        ];
-        transaction.update(docRefToUpdate, { vehicles: filterCars });
-      });
+      editTransactionF(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen);
     }
-    setIsEditable(false);
     setIsMenuOpen("");
+    setIsEditable(false);
     setLocoStateSpz("");
   };
 
@@ -99,56 +75,16 @@ const Locomotive = ({
   };
 
   const handleLocomotiveRepairDate = async (repairD: Timestamp) => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-
     if (!isParked) {
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
-        const locomotiveDate = (sfDoc.data().repairDate = repairD);
-        transaction.update(docRefToUpdate, {
-          locomotives: {
-            id: id,
-            lSpz: locomotiveSpz,
-            repairDate: locomotiveDate,
-            isVehicle: false,
-          },
-        });
-      });
+      dateTransaction(id, locomotiveSpz, repairD, setIsMenuOpen);
     } else {
-      const newValues = {
-        id: id,
-        spz: locomotiveSpz,
-        repairDate: repairD,
-        isVehicle: false,
-        vehicleDoc: locomotiveDoc,
-      };
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        const data = sfDoc.data();
-        const filterCars = [
-          ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-          newValues,
-        ];
-        transaction.update(docRefToUpdate, { vehicles: filterCars });
-      });
+      dateFilterTransaction(id, locomotiveSpz, repairD, setIsMenuOpen);
     }
     setIsMenuOpen("");
   };
 
   const deleteLocomotive = async () => {
-    const getDocRef = doc(database, `${collectionName}`, documentID!);
-    await updateDoc(getDocRef, {
-      vehicles: arrayRemove({
-        id: id,
-        spz: locomotiveSpz,
-        repairDate: locomotiveRepairDate,
-        isVehicle: false,
-        vehicleDoc: locomotiveDoc,
-      }),
-    });
+    deleteLoc(id, locomotiveSpz, locomotiveRepairDate);
   };
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
