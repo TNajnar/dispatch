@@ -1,11 +1,4 @@
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  doc,
-  runTransaction,
-  updateDoc,
-} from "firebase/firestore";
+import { arrayRemove, collection, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { TVehicleObject } from "../components/types";
 import DropTransaction from "../helpers/Transaction";
