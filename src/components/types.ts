@@ -19,6 +19,7 @@ export type TVehicleObject = {
     class: string;
     repairDate: Timestamp;
     isVehicle: boolean;
+    vehicleDoc: string;
 }
 
 export type TLineObject = {

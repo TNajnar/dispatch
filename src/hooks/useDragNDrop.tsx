@@ -33,7 +33,7 @@ const useDragNDrop = (): {
     };
   };
 
-  const onMouseUp: EventHandler<MouseEvent> = (event) => {
+  const onMouseUp: EventHandler<MouseEvent> = () => {
     isMouseDown.current = false;
     if (!initialPosition.current || !wrapperRef.current) return;
     wrapperRef.current.style.transform = "";

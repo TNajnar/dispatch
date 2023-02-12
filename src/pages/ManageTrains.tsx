@@ -50,6 +50,10 @@ const ManageTrains = () => {
     return () => unsub();
   }, []);
 
+  const filteredVeh = docRow.map(function (veh) {
+    return veh.vehicles;
+  });
+
   return (
     <div className="flex flex-col justify-center items-center gap-8">
       <div className="grid grid-cols-4 text-center font-bold border-b border-black w-full">
@@ -60,7 +64,11 @@ const ManageTrains = () => {
 
       {docRow.map((document, index: number) => (
         <div key={document.id} className="flex w-full items-center">
-          <VehicleRow rowIndex={index} document={document} />
+          <VehicleRow
+            rowIndex={index}
+            document={document}
+            filteredVehicles={filteredVeh}
+          />
           <Button
             text="-"
             clasName="absolute right-8"

@@ -15,7 +15,7 @@ import { useState } from "react";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
-  rowIndex?: number;
+  rowIndex: number;
 }
 
 const collectionRows = collection(database, "ParkedVehicles");

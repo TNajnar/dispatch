@@ -10,21 +10,23 @@ import {
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import { TVehicleObject } from "../types";
-import useDragNDrop from "../../hooks/useDragNDrop";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
 import CarRepairSign from "../ui/CarRepairSign";
 
 interface IVehicleProps {
-  id?: string;
-  vehicleSpz?: string;
-  vehicleClass?: string;
-  vehicleRepairDate?: Timestamp;
-  documentID?: string;
-  collectionName?: string;
-  rowIndex?: number;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  id: string;
+  vehicleSpz: string;
+  vehicleClass: string;
+  vehicleRepairDate: Timestamp;
+  documentID: string;
+  collectionName: string;
+  rowIndex: number;
   isMenuOpen?: string;
+  isDragging?: boolean;
+  vehicleDoc?: string;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  handleDragging?: (dragging: boolean) => void;
 }
 
 const Vehicle = ({
@@ -35,15 +37,16 @@ const Vehicle = ({
   documentID,
   collectionName,
   rowIndex,
-  setIsMenuOpen,
   isMenuOpen,
+  vehicleDoc,
+  isDragging,
+  setIsMenuOpen,
+  handleDragging,
 }: IVehicleProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
-
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -59,6 +62,7 @@ const Vehicle = ({
       class: vehicleClass,
       repairDate: vehicleRepairDate,
       isVehicle: true,
+      vehicleDoc: vehicleDoc,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -85,6 +89,7 @@ const Vehicle = ({
       class: colors,
       repairDate: vehicleRepairDate,
       isVehicle: true,
+      vehicleDoc: vehicleDoc,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -106,6 +111,7 @@ const Vehicle = ({
       class: vehicleClass,
       repairDate: repairD,
       isVehicle: true,
+      vehicleDoc: vehicleDoc,
     };
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -128,17 +134,50 @@ const Vehicle = ({
         class: vehicleClass,
         repairDate: vehicleRepairDate,
         isVehicle: true,
+        vehicleDoc: vehicleDoc,
       }),
     });
+  };
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData("id", id!);
+    handleDragging?.(true);
+
+    const dropArea = window.document.getElementsByClassName("dropArea");
+    for (let i = 0; i < dropArea.length; i++) {
+      const divElement = dropArea[i] as HTMLElement;
+
+      if (!isDragging) {
+        divElement.classList.add(
+          "border-1",
+          "border-dashed",
+          "border-primary-gray"
+        );
+      }
+    }
+  };
+
+  const handleDragEnd = () => {
+    handleDragging?.(false);
+
+    const dropArea = window.document.getElementsByClassName("dropArea");
+    for (let i = 0; i < dropArea.length; i++) {
+      const divElement = dropArea[i] as HTMLElement;
+
+      divElement.classList.remove(
+        "border-1",
+        "border-dashed",
+        "border-primary-gray"
+      );
+    }
   };
 
   return (
     <div
       className="relative"
-      ref={wrapperRef}
-      onMouseMove={onMouseDrag}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       <div>
         {!isEditable && isMenuOpen === id && (

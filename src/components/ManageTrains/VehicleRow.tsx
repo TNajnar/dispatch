@@ -12,25 +12,36 @@ import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
 import PopUpMenu from "../ui/PopUpMenu";
-import { TManageTrainDoc } from "../types";
+import { TManageTrainDoc, TVehicleObject } from "../types";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
+  filteredVehicles: TVehicleObject[][];
   rowIndex: number;
 }
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
+const VehicleRow = ({
+  document,
+  filteredVehicles,
+  rowIndex,
+}: IVehicleRowProps) => {
   const [openPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [nameLine, setNameLine] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
 
-  const collectionName = "ManageTrains";
-
   const id = nanoid();
+
+  const { isDragging, handleDragging, handleUpdateList } =
+    useDragAndDrop(filteredVehicles);
+
+  useClickAbleMenu(id, setIsMenuOpen);
+
+  const collectionName = "ManageTrains";
 
   const vehicles = document.vehicles;
   const lines = document.line;
@@ -51,6 +62,7 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
         class: "",
         repairDate: "",
         isVehicle: true,
+        vehicleDoc: document.id,
       }));
       transaction.update(docRefToUpdate, { vehicles: newVehicle });
     });
@@ -77,21 +89,43 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
     setOpenPopMenuID("");
   };
 
+  const handleOpenMenu = (id: string) => {
+    setIsMenuOpen(() => id);
+  };
+
   const handleCloseMenu = () => {
     setNameLine("");
     setOpenPopMenuID("");
   };
 
-  const handleOpenMenu = (id: string) => {
-    setIsMenuOpen(() => id);
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event?.preventDefault();
+    handleUpdateList(event.dataTransfer.getData("id")!, document.id!);
+    handleDragging(false);
+
+    const dropArea = window.document.getElementsByClassName("dropArea");
+    for (let i = 0; i < dropArea.length; i++) {
+      const divElement = dropArea[i] as HTMLElement;
+
+      divElement.classList.remove(
+        "border-1",
+        "border-dashed",
+        "border-primary-gray"
+      );
+    }
   };
 
-  useClickAbleMenu(id, setIsMenuOpen);
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) =>
+    event.preventDefault();
 
   return (
-    <div className="grid grid-cols-4 place-items-center pt-4 pb-4 w-full border-b border-primary-gray">
+    <div className="grid grid-cols-4 place-items-center pb-2 w-full h-[101px] border-b border-primary-gray">
       {/* <div className="flex justify-end items-center col-span-2 mr-2 w-[99%] overflow-x-scroll overflow-y-hidden"> */}
-      <div className="flex justify-end items-center col-span-2 mr-2 w-[99%]">
+      <div
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        className="dropArea flex justify-end items-center col-span-2 pb-2 w-[98%] h-full"
+      >
         <Button
           clasName="absolute left-3 z-10"
           text="+"
@@ -111,10 +145,13 @@ const VehicleRow = ({ document, rowIndex }: IVehicleRowProps) => {
                 vehicleClass={vehicle.class}
                 vehicleRepairDate={vehicle.repairDate}
                 documentID={document.id}
+                vehicleDoc={vehicle.vehicleDoc}
                 collectionName={collectionName}
                 rowIndex={rowIndex}
-                setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
+                isDragging={isDragging}
+                setIsMenuOpen={setIsMenuOpen}
+                handleDragging={handleDragging}
               />
             </div>
           ))}
