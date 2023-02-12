@@ -5,8 +5,7 @@ import {
   runTransaction,
   updateDoc,
 } from "firebase/firestore";
-import { ChangeEvent, useRef, useState } from "react";
-import useDragNDrop from "../../hooks/useDragNDrop";
+import { ChangeEvent, useState } from "react";
 import database from "../../shared/firebaseconfig";
 import { TLineObject } from "../types";
 import EditableField from "../ui/EditableField";
@@ -14,8 +13,7 @@ import Menu from "../ui/Menu/Menu";
 
 interface ILineprops {
   id: string;
-  nameLine?: string;
-  stateLinzk?: string;
+  nameLine: string;
   documentID?: string;
   rowIndex?: number;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
@@ -24,12 +22,17 @@ interface ILineprops {
 
 const collectionRows = collection(database, "ManageTrains");
 
-const Line = ({ id, nameLine, documentID, rowIndex, isMenuOpen, setIsMenuOpen }: ILineprops) => {
+const Line = ({
+  id,
+  nameLine,
+  documentID,
+  rowIndex,
+  isMenuOpen,
+  setIsMenuOpen,
+}: ILineprops) => {
   const [isOpenPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [lineState, setLineState] = useState<string>("");
-
-  const { wrapperRef, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditLine = () => {
     setIsEditable(true);
@@ -54,7 +57,7 @@ const Line = ({ id, nameLine, documentID, rowIndex, isMenuOpen, setIsMenuOpen }:
     setIsEditable(false);
     setOpenPopMenuID("");
     setLineState("");
-    setIsMenuOpen("")
+    setIsMenuOpen("");
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
@@ -72,12 +75,7 @@ const Line = ({ id, nameLine, documentID, rowIndex, isMenuOpen, setIsMenuOpen }:
   };
 
   return (
-    <div
-      className="relative py-2 w-[70px] border border-black cursor-default"
-      ref={wrapperRef}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-    >
+    <div className="relative py-2 w-[70px] border border-black cursor-default">
       {!isEditable && isMenuOpen === id && (
         <Menu
           editItem={handleEditLine}

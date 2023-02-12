@@ -8,16 +8,16 @@ import {
 } from "firebase/firestore";
 import { useState } from "react";
 import { TVehicleObject } from "../components/types";
+import DropTransaction from "../helpers/Transaction";
 import database from "../shared/firebaseconfig";
 
-const collectionRows = collection(database, `ManageTrains`);
-
-const useDragAndDrop = (data: TVehicleObject[][]) => {
+const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
   const [isDragging, setIsDragging] = useState(false);
-  const flatCars = data.flat();
+
+  const collectionRows = collection(database, `${collectionName}`);
 
   const handleUpdateList = async (id: string, docID: string) => {
-    let findDraggedCar = flatCars.filter((car) => {
+    let findDraggedCar = data.filter((car) => {
       if (car.id === id) {
         return car;
       }
@@ -25,39 +25,47 @@ const useDragAndDrop = (data: TVehicleObject[][]) => {
 
     let draggedCar = findDraggedCar[0];
     let draggedCarDoc = draggedCar.vehicleDoc;
+    let updatedDoc: string;
+
+    const { updateDropVehicle, updateDropLocomotive } = DropTransaction(
+      draggedCar.id,
+      draggedCar.spz,
+      draggedCar.repairDate,
+      draggedCar.isVehicle
+    );
 
     if (draggedCar && draggedCar.vehicleDoc !== docID) {
-      let updatedDoc = (draggedCar.vehicleDoc = docID);
+      updatedDoc = draggedCar.vehicleDoc = docID;
 
       const docRefToUpdate = doc(collectionRows, docID);
       const docRefToRemove = doc(collectionRows, draggedCarDoc);
 
-      await runTransaction(database, async (transaction) => {
-        const sfDoc = await transaction.get(docRefToUpdate);
-        if (!sfDoc.exists()) {
-          throw "Document does not exist!";
-        }
-        const newCar = (sfDoc.data().vehicles = arrayUnion({
-          id: id,
-          spz: draggedCar.spz,
-          class: draggedCar.class,
-          repairDate: draggedCar.repairDate,
-          isVehicle: true,
-          vehicleDoc: updatedDoc,
-        }));
-        transaction.update(docRefToUpdate, { vehicles: newCar });
-      });
+      if (draggedCar.isVehicle) {
+        updateDropVehicle(draggedCar.class, docRefToUpdate, updatedDoc);
 
-      await updateDoc(docRefToRemove, {
-        vehicles: arrayRemove({
-          id: draggedCar.id,
-          spz: draggedCar.spz,
-          class: draggedCar.class,
-          repairDate: draggedCar.repairDate,
-          isVehicle: true,
-          vehicleDoc: draggedCarDoc,
-        }),
-      });
+        await updateDoc(docRefToRemove, {
+          vehicles: arrayRemove({
+            id: draggedCar.id,
+            spz: draggedCar.spz,
+            class: draggedCar.class,
+            repairDate: draggedCar.repairDate,
+            isVehicle: true,
+            vehicleDoc: draggedCarDoc,
+          }),
+        });
+      } else {
+        updateDropLocomotive(docRefToUpdate, updatedDoc);
+
+        await updateDoc(docRefToRemove, {
+          vehicles: arrayRemove({
+            id: draggedCar.id,
+            spz: draggedCar.spz,
+            repairDate: draggedCar.repairDate,
+            isVehicle: false,
+            vehicleDoc: draggedCarDoc,
+          }),
+        });
+      }
     }
   };
 

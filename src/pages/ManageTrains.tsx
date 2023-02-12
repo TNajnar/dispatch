@@ -17,7 +17,12 @@ const collectionRows = collection(database, "ManageTrains");
 const ManageTrains = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
+
   const id = nanoid();
+
+  const getAllVehicles = docRow.map((veh) => {
+    return veh.vehicles;
+  });
 
   const addRow = async () => {
     await setDoc(doc(collectionRows), {
@@ -50,10 +55,6 @@ const ManageTrains = () => {
     return () => unsub();
   }, []);
 
-  const filteredVeh = docRow.map(function (veh) {
-    return veh.vehicles;
-  });
-
   return (
     <div className="flex flex-col justify-center items-center gap-8">
       <div className="grid grid-cols-4 text-center font-bold border-b border-black w-full">
@@ -67,7 +68,7 @@ const ManageTrains = () => {
           <VehicleRow
             rowIndex={index}
             document={document}
-            filteredVehicles={filteredVeh}
+            getAllVehicles={getAllVehicles}
           />
           <Button
             text="-"

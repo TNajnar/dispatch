@@ -8,26 +8,37 @@ import database from "../../shared/firebaseconfig";
 import Vehicle from "../Train/Vehicle";
 import Button from "../ui/Button";
 import { nanoid } from "nanoid";
-import { TParkedVehicleDoc } from "../types";
+import { TParkedVehicleDoc, TVehicleObject } from "../types";
 import Locomotive from "../Train/Locomotive";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import { useState } from "react";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
+  getAllCars: TVehicleObject[][];
   rowIndex: number;
 }
 
 const collectionRows = collection(database, "ParkedVehicles");
 
-const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
+const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
 
+  const id = nanoid();
+
+  const collectionName = "ParkedVehicles";
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
-  const collectionName = "ParkedVehicles";
 
-  const id = nanoid();
+  const transferredCars = getAllCars.flat();
+
+  useClickAbleMenu(id, setIsMenuOpen);
+
+  const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(
+    transferredCars,
+    collectionName
+  );
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);
@@ -42,6 +53,7 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
         class: "",
         repairDate: "",
         isVehicle: true,
+        vehicleDoc: document.id,
       }));
       transaction.update(docRefToUpdate, { vehicles: newVehicle });
     });
@@ -59,6 +71,7 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
         spz: "",
         repairDate: "",
         isVehicle: false,
+        vehicleDoc: document.id,
       }));
       transaction.update(docRefToUpdate, { vehicles: newLocomotive });
     });
@@ -69,7 +82,14 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
     setIsMenuOpen(() => id);
   };
 
-  useClickAbleMenu(id, setIsMenuOpen);
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event?.preventDefault();
+    handleUpdateList(event.dataTransfer.getData("id"), document.id);
+    handleDragging(false);
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) =>
+    event.preventDefault();
 
   return (
     <div className="flex items-center py-4 gap-4 border-b border-primary-gray">
@@ -78,39 +98,43 @@ const TrainRail = ({ document, rowIndex }: ITrainRailProps) => {
           {nameRail}
         </h2>
       )}
-      {parkedVehicles.map((car) => (
-        <div
-          onClick={() => handleOpenMenu(car.id)}
-          key={car.id}
-          className="relative flex justify-center"
-        >
-          {car.isVehicle ? (
-            <Vehicle
-              id={car.id}
-              vehicleSpz={car.spz}
-              vehicleClass={car.class}
-              vehicleRepairDate={car.repairDate}
-              documentID={document.id}
-              collectionName={collectionName}
-              rowIndex={rowIndex}
-              setIsMenuOpen={setIsMenuOpen}
-              isMenuOpen={isMenuOpen}
-            />
-          ) : (
-            <Locomotive
-              id={car.id}
-              locomotiveSpz={car.spz}
-              locomotiveRepairDate={car.repairDate}
-              documentID={document.id}
-              collectionName={collectionName}
-              isParked={true}
-              rowIndex={rowIndex}
-              setIsMenuOpen={setIsMenuOpen}
-              isMenuOpen={isMenuOpen}
-            />
-          )}
-        </div>
-      ))}
+      <div
+        className="flex gap-5 w-full"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
+        {parkedVehicles.map((car) => (
+          <div key={car.id} onClick={() => handleOpenMenu(car.id)}>
+            {car.isVehicle ? (
+              <Vehicle
+                id={car.id}
+                vehicleSpz={car.spz}
+                vehicleClass={car.class}
+                vehicleRepairDate={car.repairDate}
+                vehicleDoc={car.vehicleDoc}
+                documentID={document.id}
+                rowIndex={rowIndex}
+                collectionName={collectionName}
+                setIsMenuOpen={setIsMenuOpen}
+                isMenuOpen={isMenuOpen}
+              />
+            ) : (
+              <Locomotive
+                id={car.id}
+                locomotiveSpz={car.spz}
+                locomotiveRepairDate={car.repairDate}
+                locomotiveDoc={car.vehicleDoc}
+                documentID={document.id}
+                collectionName={collectionName}
+                isParked={true}
+                rowIndex={rowIndex}
+                setIsMenuOpen={setIsMenuOpen}
+                isMenuOpen={isMenuOpen}
+              />
+            )}
+          </div>
+        ))}
+      </div>
       <div className="flex-1" />
       <div>
         <Button text="L" onClick={addLocomotive} isRounded={true} />

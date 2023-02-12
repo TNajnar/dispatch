@@ -19,7 +19,7 @@ import useDragAndDrop from "../../hooks/useDragAndDrop";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
-  filteredVehicles: TVehicleObject[][];
+  getAllVehicles: TVehicleObject[][];
   rowIndex: number;
 }
 
@@ -27,7 +27,7 @@ const collectionRows = collection(database, "ManageTrains");
 
 const VehicleRow = ({
   document,
-  filteredVehicles,
+  getAllVehicles,
   rowIndex,
 }: IVehicleRowProps) => {
   const [openPopMenuID, setOpenPopMenuID] = useState<string>("");
@@ -36,18 +36,20 @@ const VehicleRow = ({
 
   const id = nanoid();
 
-  const { isDragging, handleDragging, handleUpdateList } =
-    useDragAndDrop(filteredVehicles);
-
-  useClickAbleMenu(id, setIsMenuOpen);
-
   const collectionName = "ManageTrains";
-
   const vehicles = document.vehicles;
   const lines = document.line;
   const locomotive = document.locomotives;
+  const transferredVehicles = getAllVehicles.flat();
 
   const linesLenght = Object.keys(lines).length;
+
+  useClickAbleMenu(id, setIsMenuOpen);
+
+  const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(
+    transferredVehicles,
+    collectionName
+  );
 
   const addVehicle = async () => {
     const docRefToUpdate = doc(collectionRows, document.id);

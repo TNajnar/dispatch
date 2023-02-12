@@ -7,7 +7,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
-import useDragNDrop from "../../hooks/useDragNDrop";
 import database from "../../shared/firebaseconfig";
 import { TVehicleObject } from "../types";
 import CarRepairSign from "../ui/CarRepairSign";
@@ -15,35 +14,39 @@ import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
 interface ILocomotiveProps {
-  id?: string;
-  locomotiveSpz?: string;
-  locomotiveRepairDate?: Timestamp;
-  documentID?: string;
+  id: string;
+  locomotiveSpz: string;
+  locomotiveRepairDate: Timestamp;
+  locomotiveDoc?: string;
+  documentID: string;
   collectionName?: string;
+  rowIndex: number;
   isParked?: boolean;
-  rowIndex?: number;
-  handleVehicleRepairDate?: (repairD: Timestamp) => void;
   isMenuOpen?: string;
+  isDragging?: boolean;
+  handleVehicleRepairDate?: (repairD: Timestamp) => void;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  handleDragging?: (dragging: boolean) => void;
 }
 
 const Locomotive = ({
   id,
   locomotiveSpz,
   locomotiveRepairDate,
+  locomotiveDoc,
   documentID,
   collectionName,
-  isParked,
   rowIndex,
+  isParked,
   isMenuOpen,
+  isDragging,
   setIsMenuOpen,
+  handleDragging,
 }: ILocomotiveProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
-
-  const { wrapperRef, onMouseDrag, onMouseDown, onMouseUp } = useDragNDrop();
 
   const handleEditLocomotive = () => {
     setIsEditable(true);
@@ -74,6 +77,7 @@ const Locomotive = ({
         spz: locoStateSpz,
         repairDate: locomotiveRepairDate,
         isVehicle: false,
+        vehicleDoc: locomotiveDoc,
       };
       await runTransaction(database, async (transaction) => {
         const sfDoc = await transaction.get(docRefToUpdate);
@@ -119,6 +123,7 @@ const Locomotive = ({
         spz: locomotiveSpz,
         repairDate: repairD,
         isVehicle: false,
+        vehicleDoc: locomotiveDoc,
       };
       await runTransaction(database, async (transaction) => {
         const sfDoc = await transaction.get(docRefToUpdate);
@@ -141,17 +146,26 @@ const Locomotive = ({
         spz: locomotiveSpz,
         repairDate: locomotiveRepairDate,
         isVehicle: false,
+        vehicleDoc: locomotiveDoc,
       }),
     });
+  };
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData("id", id!);
+    handleDragging?.(true);
+  };
+
+  const handleDragEnd = () => {
+    handleDragging?.(false);
   };
 
   return (
     <div
       className="relative"
-      ref={wrapperRef}
-      onMouseMove={onMouseDrag}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       {!isEditable && isMenuOpen === id && (
         <Menu

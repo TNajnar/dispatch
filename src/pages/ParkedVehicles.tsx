@@ -20,6 +20,10 @@ const ParkedVagons = () => {
   const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
   const [rowName, setRowName] = useState<string>("");
 
+  const getAllCars = docRow.map((car) => {
+    return car.vehicles;
+  });
+
   const addRow = async () => {
     const newDoc = setDoc(doc(collectionRows), {
       nameRail: rowName,
@@ -78,7 +82,11 @@ const ParkedVagons = () => {
             clasName="absolute -right-10 inset-y-1/2"
             onClick={() => deleteRow(document.id)}
           />
-          <TrainRail rowIndex={index} document={document} />
+          <TrainRail
+            document={document}
+            getAllCars={getAllCars}
+            rowIndex={index}
+          />
         </div>
       ))}
 

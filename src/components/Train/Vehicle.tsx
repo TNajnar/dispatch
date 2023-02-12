@@ -19,12 +19,12 @@ interface IVehicleProps {
   vehicleSpz: string;
   vehicleClass: string;
   vehicleRepairDate: Timestamp;
+  vehicleDoc: string;
   documentID: string;
   collectionName: string;
   rowIndex: number;
   isMenuOpen?: string;
   isDragging?: boolean;
-  vehicleDoc?: string;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
 }
