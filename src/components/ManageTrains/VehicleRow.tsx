@@ -48,11 +48,7 @@ const VehicleRow = ({
     collectionName
   );
 
-  const { addVehicleTransaction } = useFirestore(
-    true,
-    document.id,
-    docRefToUpdate
-  );
+  const { addVehicleTransaction } = useFirestore(document.id, docRefToUpdate);
 
   const addVehicle = async () => {
     addVehicleTransaction(id, "", "", "");

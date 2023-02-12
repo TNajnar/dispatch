@@ -1,9 +1,4 @@
-import {
-  arrayUnion,
-  collection,
-  doc,
-  runTransaction,
-} from "firebase/firestore";
+import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import Vehicle from "../Train/Vehicle";
 import Button from "../ui/Button";
@@ -13,6 +8,8 @@ import Locomotive from "../Train/Locomotive";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import { useState } from "react";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
+import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
+import useLocTrans from "../../hooks/Firestore/Locomotive/useLocTrans";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
@@ -27,6 +24,8 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
 
   const id = nanoid();
 
+  const docRefToUpdate = doc(collectionRows, document.id);
+
   const collectionName = "ParkedVehicles";
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
@@ -40,41 +39,19 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
     collectionName
   );
 
+  const { addVehicleTransaction } = useVehTransaction(
+    document.id,
+    docRefToUpdate
+  );
+
+  const { addLocTransaction } = useLocTrans(document.id, docRefToUpdate);
+
   const addVehicle = async () => {
-    const docRefToUpdate = doc(collectionRows, document.id);
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      if (!sfDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const newVehicle = (sfDoc.data().vehicles = arrayUnion({
-        id: id,
-        spz: "",
-        class: "",
-        repairDate: "",
-        isVehicle: true,
-        vehicleDoc: document.id,
-      }));
-      transaction.update(docRefToUpdate, { vehicles: newVehicle });
-    });
+    addVehicleTransaction(id, "", "", "");
   };
 
   const addLocomotive = async () => {
-    const docRefToUpdate = doc(collectionRows, document.id);
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      if (!sfDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const newLocomotive = (sfDoc.data().vehicles = arrayUnion({
-        id: id,
-        spz: "",
-        repairDate: "",
-        isVehicle: false,
-        vehicleDoc: document.id,
-      }));
-      transaction.update(docRefToUpdate, { vehicles: newLocomotive });
-    });
+    addLocTransaction(id, "", "");
     setIsMenuOpen("");
   };
 

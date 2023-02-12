@@ -50,11 +50,7 @@ const Vehicle = ({
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editVehTransaction } = useVehTransaction(
-    true,
-    vehicleDoc,
-    docRefToUpdate
-  );
+  const { editVehTransaction } = useVehTransaction(vehicleDoc, docRefToUpdate);
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -65,7 +61,7 @@ const Vehicle = ({
   const handleSumbitEditVehicleSpz = async () => {
     editVehTransaction(
       id,
-      vehicleSpz,
+      spzState,
       vehicleClass,
       vehicleRepairDate,
       setIsMenuOpen

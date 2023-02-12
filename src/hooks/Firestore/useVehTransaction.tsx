@@ -9,7 +9,6 @@ import { TVehicleObject } from "../../components/types";
 import database from "../../shared/firebaseconfig";
 
 const useVehTransaction = (
-  isVehicle: boolean,
   vehicleDoc: string,
   docRefToUpdate: DocumentReference<DocumentData>
 ) => {
@@ -29,7 +28,7 @@ const useVehTransaction = (
         spz: spz,
         class: classColor,
         repairDate: repairDate,
-        isVehicle: isVehicle,
+        isVehicle: true,
         vehicleDoc: vehicleDoc,
       }));
       transaction.update(docRefToUpdate, { vehicles: newCar });
