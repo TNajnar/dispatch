@@ -41,6 +41,7 @@ const PopUpMenu = ({
           margin="dense"
           id="name"
           label={label}
+          inputProps={{ maxLength: 7 }}
           type="text"
           fullWidth
           variant="standard"

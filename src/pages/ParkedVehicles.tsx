@@ -21,10 +21,11 @@ const ParkedVagons = () => {
   const [rowName, setRowName] = useState<string>("");
 
   const addRow = async () => {
-    await setDoc(newDoc, {
+    const newDoc = setDoc(doc(collectionRows), {
       nameRail: rowName,
       vehicles: [],
     });
+    return newDoc;
   };
 
   const handleOnChangeRow = (event: ChangeEvent<HTMLInputElement>) => {

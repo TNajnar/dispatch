@@ -100,7 +100,7 @@ const VehicleRow = ({
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event?.preventDefault();
-    handleUpdateList(event.dataTransfer.getData("id")!, document.id!);
+    handleUpdateList(event.dataTransfer.getData("id"), document.id);
     handleDragging(false);
 
     const dropArea = window.document.getElementsByClassName("dropArea");
@@ -136,8 +136,8 @@ const VehicleRow = ({
         <div className="flex gap-4 justify-end">
           {vehicles.map((vehicle) => (
             <div
-              onClick={() => handleOpenMenu(vehicle.id)}
               key={`${vehicle.id}_${vehicle.spz}`}
+              onClick={() => handleOpenMenu(vehicle.id)}
             >
               <Vehicle
                 id={vehicle.id}
@@ -175,7 +175,7 @@ const VehicleRow = ({
         {lines.map(
           (line) =>
             !!line.nameLine && (
-              <div onClick={() => handleOpenMenu(line.id)} key={line.id}>
+              <div key={line.id} onClick={() => handleOpenMenu(line.id)}>
                 <Line
                   id={line.id}
                   nameLine={line.nameLine}
