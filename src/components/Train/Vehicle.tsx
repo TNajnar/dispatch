@@ -9,9 +9,10 @@ import {
 } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
-import { TVehicleObject } from "../types";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
+import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
+import { TVehicleObject } from "../types";
 import CarRepairSign from "../ui/CarRepairSign";
 
 interface IVehicleProps {
@@ -47,6 +48,13 @@ const Vehicle = ({
   const [spzState, setSpzState] = useState<string>("");
 
   const collectionRows = collection(database, `${collectionName}`);
+  const docRefToUpdate = doc(collectionRows, documentID);
+
+  const { editVehTransaction } = useVehTransaction(
+    true,
+    vehicleDoc,
+    docRefToUpdate
+  );
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -55,26 +63,15 @@ const Vehicle = ({
   };
 
   const handleSumbitEditVehicleSpz = async () => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      spz: spzState,
-      class: vehicleClass,
-      repairDate: vehicleRepairDate,
-      isVehicle: true,
-      vehicleDoc: vehicleDoc,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
-    });
-    setIsEditable(false);
+    editVehTransaction(
+      id,
+      vehicleSpz,
+      vehicleClass,
+      vehicleRepairDate,
+      setIsMenuOpen
+    );
     setIsMenuOpen("");
+    setIsEditable(false);
   };
 
   const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
@@ -82,52 +79,22 @@ const Vehicle = ({
   };
 
   const handleClassColor = async (colors: string) => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      spz: vehicleSpz,
-      class: colors,
-      repairDate: vehicleRepairDate,
-      isVehicle: true,
-      vehicleDoc: vehicleDoc,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
-    });
-    setIsMenuOpen("");
+    editVehTransaction(
+      id,
+      vehicleSpz,
+      colors,
+      vehicleRepairDate,
+      setIsMenuOpen
+    );
   };
 
   const handleVehicleRepairDate = async (repairD: Timestamp) => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      spz: vehicleSpz,
-      class: vehicleClass,
-      repairDate: repairD,
-      isVehicle: true,
-      vehicleDoc: vehicleDoc,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { vehicles: filterVehicles });
-    });
+    editVehTransaction(id, vehicleSpz, vehicleClass, repairD);
     setIsMenuOpen("");
   };
 
   const deleteVehicle = async () => {
-    const getDocRef = doc(database, `${collectionName}`, documentID!);
-    await updateDoc(getDocRef, {
+    await updateDoc(docRefToUpdate, {
       vehicles: arrayRemove({
         id: id,
         spz: vehicleSpz,

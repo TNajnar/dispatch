@@ -1,13 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import Locomotive from "../Train/Locomotive";
 import Vehicle from "../Train/Vehicle";
-import {
-  arrayUnion,
-  collection,
-  doc,
-  runTransaction,
-  updateDoc,
-} from "firebase/firestore";
+import { arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
@@ -16,6 +10,7 @@ import { TManageTrainDoc, TVehicleObject } from "../types";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
+import useFirestore from "../../hooks/Firestore/useVehTransaction";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
@@ -36,6 +31,8 @@ const VehicleRow = ({
 
   const id = nanoid();
 
+  const docRefToUpdate = doc(collectionRows, document.id);
+
   const collectionName = "ManageTrains";
   const vehicles = document.vehicles;
   const lines = document.line;
@@ -51,27 +48,17 @@ const VehicleRow = ({
     collectionName
   );
 
+  const { addVehicleTransaction } = useFirestore(
+    true,
+    document.id,
+    docRefToUpdate
+  );
+
   const addVehicle = async () => {
-    const docRefToUpdate = doc(collectionRows, document.id);
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      if (!sfDoc.exists()) {
-        throw "Document does not exist!";
-      }
-      const newVehicle = (sfDoc.data().vehicles = arrayUnion({
-        id: id,
-        spz: "",
-        class: "",
-        repairDate: "",
-        isVehicle: true,
-        vehicleDoc: document.id,
-      }));
-      transaction.update(docRefToUpdate, { vehicles: newVehicle });
-    });
+    addVehicleTransaction(id, "", "", "");
   };
 
   const addLine = async () => {
-    const docRefToUpdate = doc(collectionRows, document.id);
     await updateDoc(docRefToUpdate, {
       line: arrayUnion({ id: id, nameLine: nameLine }),
     });
