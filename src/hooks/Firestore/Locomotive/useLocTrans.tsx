@@ -38,7 +38,8 @@ const useLocTrans = (
     id: string,
     spz: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>
+    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
+    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -56,6 +57,7 @@ const useLocTrans = (
         },
       });
     });
+    setIsEditable?.(false)
     setIsMenuOpen?.("");
   };
 
@@ -63,7 +65,7 @@ const useLocTrans = (
     id: string,
     spz: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>
+    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);

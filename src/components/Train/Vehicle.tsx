@@ -1,18 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import {
-  arrayRemove,
-  collection,
-  doc,
-  runTransaction,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
+import {collection, doc, Timestamp} from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
 import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
-import { TVehicleObject } from "../types";
 import CarRepairSign from "../ui/CarRepairSign";
 
 interface IVehicleProps {
@@ -50,7 +42,7 @@ const Vehicle = ({
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editVehTransaction } = useVehTransaction(vehicleDoc, docRefToUpdate);
+  const { editVehTransaction, deleteVehicle } = useVehTransaction(vehicleDoc, docRefToUpdate);
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -58,16 +50,8 @@ const Vehicle = ({
     setSpzState("");
   };
 
-  const handleSumbitEditVehicleSpz = async () => {
-    editVehTransaction(
-      id,
-      spzState,
-      vehicleClass,
-      vehicleRepairDate,
-      setIsMenuOpen
-    );
-    setIsMenuOpen("");
-    setIsEditable(false);
+  const handleSumbitEditVehicleSpz = () => {   
+    editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen, setIsEditable);
   };
 
   const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
@@ -75,13 +59,7 @@ const Vehicle = ({
   };
 
   const handleClassColor = async (colors: string) => {
-    editVehTransaction(
-      id,
-      vehicleSpz,
-      colors,
-      vehicleRepairDate,
-      setIsMenuOpen
-    );
+    editVehTransaction(id, vehicleSpz, colors, vehicleRepairDate, setIsMenuOpen);
   };
 
   const handleVehicleRepairDate = async (repairD: Timestamp) => {
@@ -89,17 +67,8 @@ const Vehicle = ({
     setIsMenuOpen("");
   };
 
-  const deleteVehicle = async () => {
-    await updateDoc(docRefToUpdate, {
-      vehicles: arrayRemove({
-        id: id,
-        spz: vehicleSpz,
-        class: vehicleClass,
-        repairDate: vehicleRepairDate,
-        isVehicle: true,
-        vehicleDoc: vehicleDoc,
-      }),
-    });
+  const handleDeleteVehicle = async () => {
+    deleteVehicle(id, vehicleSpz, vehicleClass, vehicleRepairDate)
   };
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
@@ -147,7 +116,7 @@ const Vehicle = ({
           <Menu
             carRepairDate={vehicleRepairDate}
             rowIndex={rowIndex}
-            deleteItem={deleteVehicle}
+            deleteItem={handleDeleteVehicle}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
             handleRepairDate={handleVehicleRepairDate}
@@ -161,6 +130,7 @@ const Vehicle = ({
             realData={vehicleSpz}
             handleOnChange={handleOnChangeVehicleSPZ}
             handleSubmit={handleSumbitEditVehicleSpz}
+            // handleSubmit={() => editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen)}
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
 

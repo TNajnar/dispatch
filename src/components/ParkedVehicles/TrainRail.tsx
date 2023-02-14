@@ -39,10 +39,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
     collectionName
   );
 
-  const { addVehicleTransaction } = useVehTransaction(
-    document.id,
-    docRefToUpdate
-  );
+  const { addVehicleTransaction } = useVehTransaction(document.id, docRefToUpdate);
 
   const { addLocTransaction } = useLocTrans(document.id, docRefToUpdate);
 

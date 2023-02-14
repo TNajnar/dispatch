@@ -59,14 +59,12 @@ const Locomotive = ({
     setIsMenuOpen("");
   };
 
-  const handleSubmitEditLocomotive = async () => {
+  const handleSubmitEditLocomotive = () => {
     if (!isParked) {
-      editTransaction(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen);
+      editTransaction(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen, setIsEditable);
     } else {
-      editTransactionF(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen);
+      editTransactionF(id, locoStateSpz, locomotiveRepairDate, setIsMenuOpen, setIsEditable);
     }
-    setIsMenuOpen("");
-    setIsEditable(false);
     setLocoStateSpz("");
   };
 

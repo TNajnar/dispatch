@@ -15,7 +15,8 @@ const useLocFilterTrans = (
     id: string,
     spz: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>
+    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
+    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     const newValues = {
       id: id,
@@ -33,6 +34,7 @@ const useLocFilterTrans = (
       ];
       transaction.update(docRefToUpdate, { vehicles: filterCars });
     });
+    setIsEditable?.(false)
     setIsMenuOpen?.("");
   };
 

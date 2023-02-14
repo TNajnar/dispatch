@@ -1,9 +1,11 @@
 import {
+  arrayRemove,
   arrayUnion,
   DocumentData,
   DocumentReference,
   runTransaction,
   Timestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { TVehicleObject } from "../../components/types";
 import database from "../../shared/firebaseconfig";
@@ -40,7 +42,8 @@ const useVehTransaction = (
     spz: string,
     classColor: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>
+    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
+    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     const newValues = {
       id: id,
@@ -60,9 +63,28 @@ const useVehTransaction = (
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
     setIsMenuOpen?.("");
+    setIsEditable?.(false)
   };
 
-  return { addVehicleTransaction, editVehTransaction };
+  const deleteVehicle = async (
+    id: string,
+    spz: string,
+    classColor: string,
+    repairDate: Timestamp,
+    ) => {
+    await updateDoc(docRefToUpdate, {
+      vehicles: arrayRemove({
+        id: id,
+        spz: spz,
+        class: classColor,
+        repairDate: repairDate,
+        isVehicle: true,
+        vehicleDoc: vehicleDoc,
+      }),
+    });
+  }
+
+  return { addVehicleTransaction, editVehTransaction, deleteVehicle };
 };
 
 export default useVehTransaction;
