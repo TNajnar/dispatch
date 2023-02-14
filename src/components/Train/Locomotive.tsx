@@ -72,13 +72,12 @@ const Locomotive = ({
     setLocoStateSpz(event?.target.value);
   };
 
-  const handleLocomotiveRepairDate = async (repairD: Timestamp) => {
+  const handleLocomotiveRepairDate = (repairD: Timestamp) => {
     if (!isParked) {
       dateTransaction(id, locomotiveSpz, repairD, setIsMenuOpen);
     } else {
       dateFilterTransaction(id, locomotiveSpz, repairD, setIsMenuOpen);
     }
-    setIsMenuOpen("");
   };
 
   const deleteLocomotive = async () => {

@@ -6,6 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
+import useLineTransaction from "../../hooks/Firestore/useLineTransaction";
 import database from "../../shared/firebaseconfig";
 import { TLineObject } from "../types";
 import EditableField from "../ui/EditableField";
@@ -14,7 +15,7 @@ import Menu from "../ui/Menu/Menu";
 interface ILineprops {
   id: string;
   nameLine: string;
-  documentID?: string;
+  documentID: string;
   rowIndex?: number;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
   isMenuOpen?: string;
@@ -34,44 +35,26 @@ const Line = ({
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [lineState, setLineState] = useState<string>("");
 
+  const docRefToUpdate = doc(collectionRows, documentID);
+
+  const { editLineTransaction, deleteLine} = useLineTransaction(docRefToUpdate);
+
   const handleEditLine = () => {
     setIsEditable(true);
     setOpenPopMenuID("");
   };
 
-  const handleSubmitEditLine = async () => {
-    const docRefToUpdate = doc(collectionRows, documentID);
-    const newValues = {
-      id: id,
-      nameLine: lineState,
-    };
-    await runTransaction(database, async (transaction) => {
-      const sfDoc = await transaction.get(docRefToUpdate);
-      const data = sfDoc.data();
-      const filterLines = [
-        ...data?.line.filter((line: TLineObject) => line.id !== id),
-        newValues,
-      ];
-      transaction.update(docRefToUpdate, { line: filterLines });
-    });
-    setIsEditable(false);
-    setOpenPopMenuID("");
-    setLineState("");
-    setIsMenuOpen("");
+  const handleSubmitEditLine = () => {
+    editLineTransaction(id, lineState, setIsEditable, setOpenPopMenuID, setIsMenuOpen);
+    setLineState("")
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
     setLineState(event?.target.value);
   };
 
-  const handleDeleteLine = async () => {
-    const getDocRef = doc(database, "ManageTrains", documentID!);
-    await updateDoc(getDocRef, {
-      line: arrayRemove({
-        id: id,
-        nameLine: nameLine,
-      }),
-    });
+  const handleDeleteLine = () => {
+    deleteLine(id, nameLine)
   };
 
   return (

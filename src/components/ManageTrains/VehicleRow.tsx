@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import Locomotive from "../Train/Locomotive";
 import Vehicle from "../Train/Vehicle";
-import { arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
+import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import Button from "../ui/Button";
@@ -10,7 +10,8 @@ import { TManageTrainDoc, TVehicleObject } from "../types";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
-import useFirestore from "../../hooks/Firestore/useVehTransaction";
+import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
+import useLineTransaction from "../../hooks/Firestore/useLineTransaction";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
@@ -48,16 +49,15 @@ const VehicleRow = ({
     collectionName
   );
 
-  const { addVehicleTransaction } = useFirestore(document.id, docRefToUpdate);
+  const { addVehicleTransaction } = useVehTransaction(document.id, docRefToUpdate);
+  const { addLine } = useLineTransaction(docRefToUpdate);
 
-  const addVehicle = async () => {
+  const addVehicle = () => {
     addVehicleTransaction(id, "", "", "");
   };
 
-  const addLine = async () => {
-    await updateDoc(docRefToUpdate, {
-      line: arrayUnion({ id: id, nameLine: nameLine }),
-    });
+  const handleAddLine = () => {
+    addLine(id, nameLine);
     setOpenPopMenuID("");
   };
 
@@ -69,7 +69,7 @@ const VehicleRow = ({
     if (event && event.preventDefault) {
       event.preventDefault();
     }
-    addLine();
+    handleAddLine();
     setNameLine("");
     setOpenPopMenuID("");
   };
