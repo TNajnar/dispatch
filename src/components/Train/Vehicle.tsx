@@ -4,7 +4,7 @@ import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
-import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
+import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
 import CarRepairSign from "../ui/CarRepairSign";
 
 interface IVehicleProps {

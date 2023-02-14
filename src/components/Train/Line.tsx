@@ -6,7 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
-import useLineTransaction from "../../hooks/Firestore/useLineTransaction";
+import useLineTransaction from "../../hooks/Firestore/Line/useLineTransaction";
 import database from "../../shared/firebaseconfig";
 import { TLineObject } from "../types";
 import EditableField from "../ui/EditableField";

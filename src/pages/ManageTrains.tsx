@@ -4,13 +4,13 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  setDoc,
 } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
 import Button from "../components/ui/Button";
 import { TManageTrainDoc } from "../components/types";
+import useBasicFirestore from "../hooks/Firestore/Pages/useBasicFirestore";
 
 const collectionRows = collection(database, "ManageTrains");
 
@@ -20,24 +20,16 @@ const ManageTrains = () => {
 
   const id = nanoid();
 
+  const currentDoc = doc(collectionRows);
+
+  const { addRow } = useBasicFirestore(currentDoc.id, currentDoc)
+
   const getAllVehicles = docRow.map((veh) => {
     return veh.vehicles;
   });
 
-  const addRow = async () => {
-    const currentDoc = doc(collectionRows);
-    await setDoc(currentDoc, {
-      vehicles: [],
-      locomotives: {
-        id: id,
-        lSpz: "",
-        repairDate: "",
-        isVehicle: false,
-        vehicleDoc: currentDoc.id,
-      },
-      line: [],
-    });
-    setIsClicked(true);
+  const handleAddRow = () => {
+    addRow(id, "", "", setIsClicked)
   };
 
   const deleteRow = async (rowID: string) => {
@@ -85,7 +77,7 @@ const ManageTrains = () => {
         </div>
       ))}
 
-      <Button text="+" onClick={addRow} isRounded={true} />
+      <Button text="+" onClick={handleAddRow} isRounded={true} />
     </div>
   );
 };

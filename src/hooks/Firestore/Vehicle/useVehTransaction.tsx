@@ -7,8 +7,8 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { TVehicleObject } from "../../components/types";
-import database from "../../shared/firebaseconfig";
+import { TVehicleObject } from "../../../components/types";
+import database from "../../../shared/firebaseconfig";
 
 const useVehTransaction = (
   vehicleDoc: string,

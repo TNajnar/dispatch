@@ -10,8 +10,8 @@ import { TManageTrainDoc, TVehicleObject } from "../types";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
-import useVehTransaction from "../../hooks/Firestore/useVehTransaction";
-import useLineTransaction from "../../hooks/Firestore/useLineTransaction";
+import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
+import useLineTransaction from "../../hooks/Firestore/Line/useLineTransaction";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
