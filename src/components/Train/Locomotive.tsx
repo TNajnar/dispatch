@@ -80,7 +80,7 @@ const Locomotive = ({
     }
   };
 
-  const deleteLocomotive = async () => {
+  const deleteLocomotive = () => {
     deleteLoc(id, locomotiveSpz, locomotiveRepairDate);
   };
 

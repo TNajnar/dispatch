@@ -58,16 +58,16 @@ const Vehicle = ({
     setSpzState(event?.target.value);
   };
 
-  const handleClassColor = async (colors: string) => {
+  const handleClassColor = (colors: string) => {
     editVehTransaction(id, vehicleSpz, colors, vehicleRepairDate, setIsMenuOpen);
   };
 
-  const handleVehicleRepairDate = async (repairD: Timestamp) => {
+  const handleVehicleRepairDate = (repairD: Timestamp) => {
     editVehTransaction(id, vehicleSpz, vehicleClass, repairD);
     setIsMenuOpen("");
   };
 
-  const handleDeleteVehicle = async () => {
+  const handleDeleteVehicle = () => {
     deleteVehicle(id, vehicleSpz, vehicleClass, vehicleRepairDate)
   };
 
@@ -76,10 +76,12 @@ const Vehicle = ({
     handleDragging?.(true);
 
     const dropArea = window.document.getElementsByClassName("dropArea");
+    
     for (let i = 0; i < dropArea.length; i++) {
       const divElement = dropArea[i] as HTMLElement;
 
       if (!isDragging) {
+        console.log('ahoj')
         divElement.classList.add(
           "border-1",
           "border-dashed",
@@ -130,7 +132,6 @@ const Vehicle = ({
             realData={vehicleSpz}
             handleOnChange={handleOnChangeVehicleSPZ}
             handleSubmit={handleSumbitEditVehicleSpz}
-            // handleSubmit={() => editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen)}
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
 
@@ -138,10 +139,7 @@ const Vehicle = ({
         </div>
       </div>
       {/* Wheels */}
-      <div
-        className="relative overflow-hidden w-30 h-3"
-        onClick={() => console.log(vehicleRepairDate)}
-      >
+      <div className="relative overflow-hidden w-30 h-3">
         <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
         <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] bg-white border border-black rounded-full" />
       </div>
