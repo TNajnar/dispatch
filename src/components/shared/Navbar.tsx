@@ -18,6 +18,11 @@ const NavItems = [
     icon: "",
     url: "/parked-vehicles",
   },
+  {
+    name: "Export dat",
+    icon: "",
+    url: "/export",
+  },
 ];
 
 const Navbar = () => {
@@ -40,7 +45,7 @@ const Navbar = () => {
         onClick={() => logout()}
         className="flex justify-center items-center py-4 w-[148px] gap-2 hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm"
       >
-        <LogoutIcon sx={{ fontSize: "19px" }} />
+        <LogoutIcon className="logout" />
         <button>Odhlasit se</button>
       </div>
     </nav>

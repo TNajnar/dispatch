@@ -26,3 +26,27 @@
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.buttonHover {
     @apply bg-secondary-yellow;
 }
+
+/* Icons */
+.css-i4bv87-MuiSvgIcon-root.menuIcons {
+    @apply text-base;
+}
+
+.css-i4bv87-MuiSvgIcon-root.logout {
+    @apply text-lg;
+}
+
+.css-i4bv87-MuiSvgIcon-root.edit {
+    @apply absolute right-0 top-0;
+    @apply text-sm;
+}
+
+/* Data export page */
+table, th, td {
+    @apply p-2 h-11;
+    @apply border-t border-r border-l border-black;
+}
+
+tr:last-of-type {
+    @apply border-b border-black;
+}

@@ -20,6 +20,7 @@ const useBasicFirestore = (
         vehicleDoc: vehicleDoc,
       },
       line: [],
+      contact: { carLeader: "", phone: "" },
     });
     setIsClicked(true);
   };

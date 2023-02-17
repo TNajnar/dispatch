@@ -1,10 +1,4 @@
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  setDoc,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { ChangeEvent, useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import database from "../shared/firebaseconfig";
@@ -56,18 +50,15 @@ const ParkedVagons = () => {
 
   useEffect(() => {
     //onSnapshot instead of getDocs so that you also listen for updates to the data.
-    const unsub = onSnapshot(
-      collection(database, "ParkedVehicles"),
-      (docSnapshot) => {
-        const documents = docSnapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        });
-        setDocRow(documents as TParkedVehicleDoc[]);
-      }
-    );
+    const unsub = onSnapshot(collection(database, "ParkedVehicles"), (docSnapshot) => {
+      const documents = docSnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      setDocRow(documents as TParkedVehicleDoc[]);
+    });
     return () => unsub();
   }, []);
 
@@ -82,11 +73,7 @@ const ParkedVagons = () => {
             clasName="absolute -right-10 inset-y-1/2"
             onClick={() => deleteRow(document.id)}
           />
-          <TrainRail
-            document={document}
-            getAllCars={getAllCars}
-            rowIndex={index}
-          />
+          <TrainRail document={document} getAllCars={getAllCars} rowIndex={index} />
         </div>
       ))}
 

@@ -11,6 +11,7 @@ export type TManageTrainDoc = {
     line: TLineObject[];
     locomotives: TLocomotiveObject;
     vehicles: TVehicleObject[];
+    contact: TContactObject;
 }
 
 export type TVehicleObject = {
@@ -33,4 +34,9 @@ export type TLocomotiveObject = {
     repairDate: Timestamp;
     isVehicle: boolean;
     vehicleDoc: string;
+}
+
+type TContactObject = {
+    carLeader: string;
+    phone: string;
 }

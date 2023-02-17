@@ -48,10 +48,7 @@ const EditableField = ({
         onChange={handleOnChange}
       />
       {isEditable && (
-        <div
-          className="w-max h-max text-xs border border-black"
-          onClick={handleSubmit}
-        >
+        <div onClick={handleSubmit} className="w-max h-max text-xs border border-black">
           OK
         </div>
       )}

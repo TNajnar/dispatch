@@ -15,8 +15,8 @@ const CarRepairMenu = ({
   handleRepairDate,
 }: ICarRepairMenuProps) => (
   <div className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow">
-    <ConstructionIcon sx={{ fontSize: "16px" }} /> Oprava Vozu
-    <KeyboardDoubleArrowRightIcon sx={{ fontSize: "16px" }} />
+    <ConstructionIcon className="menuIcons" /> Oprava Vozu
+    <KeyboardDoubleArrowRightIcon className="menuIcons" />
     {isHoveredRepair && (
       <MultiMenu carRepairDate={carRepairDate} handleRepairDate={handleRepairDate} />
     )}

@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import MainComponent from "./components/MainComponent";
 import Navbar from "./components/shared/Navbar";
+import Export from "./pages/Export";
 import HomePage from "./pages/HomePage";
 import ManageTrains from "./pages/ManageTrains";
 import ParkedVagons from "./pages/ParkedVehicles";
@@ -35,6 +36,16 @@ const App = () => (
           element={
             <MainComponent>
               <ParkedVagons />
+            </MainComponent>
+          }
+        ></Route>
+      </Routes>
+      <Routes>
+        <Route
+          path="/export"
+          element={
+            <MainComponent>
+              <Export />
             </MainComponent>
           }
         ></Route>

@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
@@ -22,14 +17,14 @@ const ManageTrains = () => {
 
   const currentDoc = doc(collectionRows);
 
-  const { addRow } = useBasicFirestore(currentDoc.id, currentDoc)
+  const { addRow } = useBasicFirestore(currentDoc.id, currentDoc);
 
   const getAllVehicles = docRow.map((veh) => {
     return veh.vehicles;
   });
 
   const handleAddRow = () => {
-    addRow(id, "", "", setIsClicked)
+    addRow(id, "", "", setIsClicked);
   };
 
   const deleteRow = async (rowID: string) => {
@@ -38,18 +33,15 @@ const ManageTrains = () => {
 
   useEffect(() => {
     //onSnapshot instead of getDocs so that you also listen for updates to the data.
-    const unsub = onSnapshot(
-      collection(database, "ManageTrains"),
-      (docSnapshot) => {
-        const documents = docSnapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        });
-        setDocRow(documents as TManageTrainDoc[]);
-      }
-    );
+    const unsub = onSnapshot(collection(database, "ManageTrains"), (docSnapshot) => {
+      const documents = docSnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      setDocRow(documents as TManageTrainDoc[]);
+    });
 
     return () => unsub();
   }, []);
@@ -64,11 +56,7 @@ const ManageTrains = () => {
 
       {docRow.map((document, index: number) => (
         <div key={document.id} className="flex w-full items-center">
-          <VehicleRow
-            rowIndex={index}
-            document={document}
-            getAllVehicles={getAllVehicles}
-          />
+          <VehicleRow rowIndex={index} document={document} getAllVehicles={getAllVehicles} />
           <Button
             text="-"
             clasName="absolute right-8"

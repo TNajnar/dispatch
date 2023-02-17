@@ -46,7 +46,7 @@ const Menu = ({
         className="flex items-center px-4 py-2 gap-4 hover:bg-secondary-yellow"
         onClick={editItem}
       >
-        <EditIcon sx={{ fontSize: "16px" }} /> Edituj
+        <EditIcon className="menuIcons" /> Edituj
       </div>
 
       {!isLineMenu && !isLocomotive && (
@@ -81,7 +81,7 @@ const Menu = ({
         )}
         onClick={deleteItem}
       >
-        <DeleteOutlineIcon sx={{ fontSize: "16px" }} />
+        <DeleteOutlineIcon className="menuIcons" />
         Odstraň
       </div>
     </div>

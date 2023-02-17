@@ -65,11 +65,15 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   return (
-    <div className="flex items-center py-4 gap-4 border-b border-primary-gray">
+    <div className="flex items-center py-4 h-[101px] gap-4 border-b border-primary-gray">
       {!!nameRail && (
-        <h2 className="w-20 text-h3 font-bold border-r border-black">{nameRail}</h2>
+        <h2 className="mr-2 w-24 text-h3 font-bold border-r border-black">{nameRail}</h2>
       )}
-      <div className="flex gap-5 w-full" onDrop={handleDrop} onDragOver={handleDragOver}>
+      <div
+        className="flex gap-5 w-full h-full"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
         {parkedVehicles.map((car) => (
           <div key={car.id} onClick={() => handleOpenMenu(car.id)}>
             {car.isVehicle ? (

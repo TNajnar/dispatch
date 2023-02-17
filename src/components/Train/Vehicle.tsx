@@ -52,6 +52,10 @@ const Vehicle = ({
     setSpzState("");
   };
 
+  const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
+    setSpzState(event?.target.value);
+  };
+
   const handleSumbitEditVehicleSpz = () => {
     editVehTransaction(
       id,
@@ -61,10 +65,6 @@ const Vehicle = ({
       setIsMenuOpen,
       setIsEditable
     );
-  };
-
-  const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
-    setSpzState(event?.target.value);
   };
 
   const handleClassColor = (colors: string) => {
@@ -101,10 +101,10 @@ const Vehicle = ({
           <Menu
             carRepairDate={vehicleRepairDate}
             rowIndex={rowIndex}
-            deleteItem={handleDeleteVehicle}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
             handleRepairDate={handleVehicleRepairDate}
+            deleteItem={handleDeleteVehicle}
           />
         )}
 
