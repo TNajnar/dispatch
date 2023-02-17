@@ -18,10 +18,7 @@ const CarRepairMenu = ({
     <ConstructionIcon sx={{ fontSize: "16px" }} /> Oprava Vozu
     <KeyboardDoubleArrowRightIcon sx={{ fontSize: "16px" }} />
     {isHoveredRepair && (
-      <MultiMenu
-        carRepairDate={carRepairDate}
-        handleRepairDate={handleRepairDate}
-      />
+      <MultiMenu carRepairDate={carRepairDate} handleRepairDate={handleRepairDate} />
     )}
   </div>
 );

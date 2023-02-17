@@ -1,20 +1,17 @@
 import clsx from "clsx";
 import { Timestamp } from "firebase/firestore";
 
-interface ICarRepairSignProps {
-  carRepairDate?: Timestamp;
+interface ICarRepairLightProps {
+  carRepairDate: Timestamp;
+  setShowDateInfo: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const today = new Date(
-  Date.UTC(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate()
-  )
+  Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 );
 const todayTimestamp = Timestamp.fromDate(today);
 
-const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
+const CarRepairLight = ({ carRepairDate, setShowDateInfo }: ICarRepairLightProps) => {
   let carRepairTomorrowDateTimestamp;
 
   //24=number of hours in a day || 60=number of minutes in an hour || 60=number of seconds in minute || 1000=number of miliseconds in second
@@ -33,12 +30,13 @@ const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
 
   const repairIsOver = carRepairDate?.seconds === todayTimestamp.seconds;
 
-  const expiredDate =
-    carRepairDate && carRepairDate?.seconds < todayTimestamp.seconds;
+  const expiredDate = carRepairDate && carRepairDate?.seconds < todayTimestamp.seconds;
 
   return (
     <div>
       <div
+        onMouseEnter={() => setShowDateInfo?.(true)}
+        onMouseLeave={() => setShowDateInfo?.(false)}
         className={clsx(
           "absolute left-1 top-1 w-3 h-3 rounded-full",
           !carRepairDate && "hidden",
@@ -52,4 +50,4 @@ const CarRepairSign = ({ carRepairDate }: ICarRepairSignProps) => {
   );
 };
 
-export default CarRepairSign;
+export default CarRepairLight;

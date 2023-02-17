@@ -36,7 +36,7 @@ const Menu = ({
     <div
       className={clsx(
         "vehicleMenu",
-        "absolute z-30 py-3 w-max h-max bg-secondary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg",
+        "absolute z-30 py-3 w-max h-max bg-secondary-gray shadow-default rounded-lg",
         !isLineMenu && rowIndex === 0 && "top-14 left-1/2",
         isLineMenu && rowIndex === 0 && "top-[41px] right-1/2",
         isLineMenu ? "bottom-[41px] right-1/2" : "bottom-[69px] left-1/2"

@@ -21,11 +21,7 @@ interface IVehicleRowProps {
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({
-  document,
-  getAllVehicles,
-  rowIndex,
-}: IVehicleRowProps) => {
+const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) => {
   const [openPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [nameLine, setNameLine] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
@@ -87,21 +83,9 @@ const VehicleRow = ({
     event?.preventDefault();
     handleUpdateList(event.dataTransfer.getData("id"), document.id);
     handleDragging(false);
-
-    const dropArea = window.document.getElementsByClassName("dropArea");
-    for (let i = 0; i < dropArea.length; i++) {
-      const divElement = dropArea[i] as HTMLElement;
-
-      divElement.classList.remove(
-        "border-1",
-        "border-dashed",
-        "border-primary-gray"
-      );
-    }
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) =>
-    event.preventDefault();
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   return (
     <div className="grid grid-cols-4 place-items-center pb-2 w-full h-[101px] border-b border-primary-gray">

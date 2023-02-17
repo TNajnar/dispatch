@@ -1,10 +1,10 @@
 import { collection, doc, Timestamp } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
 import useLocFilterTrans from "../../hooks/Firestore/Locomotive/useLocFilterTrans";
-import useLocTransaction from "../../hooks/Firestore/Locomotive/useLocFilterTrans";
 import useLocTrans from "../../hooks/Firestore/Locomotive/useLocTrans";
 import database from "../../shared/firebaseconfig";
-import CarRepairSign from "../ui/CarRepairSign";
+import CarDateInfo from "../ui/CarRepairDate/CarDateInfo";
+import CarRepairLight from "../ui/CarRepairDate/CarRepairLight";
 import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
@@ -40,6 +40,7 @@ const Locomotive = ({
 }: ILocomotiveProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
+  const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
 
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
@@ -112,6 +113,8 @@ const Locomotive = ({
         />
       )}
 
+      {showDateInfo && <CarDateInfo date={locomotiveRepairDate} />}
+
       <div className="relative w-32 h-14 overflow-hidden flex bg-white border border-black rounded-lg rounded-tr-[35px]">
         <EditableField
           isEditable={isEditable}
@@ -121,7 +124,10 @@ const Locomotive = ({
           handleOnChange={handleOnChangeLocomotive}
           handleSubmit={handleSubmitEditLocomotive}
         />
-        <CarRepairSign carRepairDate={locomotiveRepairDate} />
+        <CarRepairLight
+          carRepairDate={locomotiveRepairDate}
+          setShowDateInfo={setShowDateInfo}
+        />
         <div className="absolute -top-[1px] left-20 w-16 h-8  border rounded-l-xl border-black" />
         <div className="absolute -bottom-5 -left-5 w-20 h-8 border rounded-md border-black" />
       </div>

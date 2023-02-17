@@ -1,11 +1,12 @@
 import { ChangeEvent, useState } from "react";
-import {collection, doc, Timestamp} from "firebase/firestore";
+import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import clsx from "clsx";
 import Menu from "../ui/Menu/Menu";
 import EditableField from "../ui/EditableField";
 import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
-import CarRepairSign from "../ui/CarRepairSign";
+import CarDateInfo from "../ui/CarRepairDate/CarDateInfo";
+import CarRepairLight from "../ui/CarRepairDate/CarRepairLight";
 
 interface IVehicleProps {
   id: string;
@@ -38,6 +39,7 @@ const Vehicle = ({
 }: IVehicleProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
+  const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
 
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
@@ -50,8 +52,15 @@ const Vehicle = ({
     setSpzState("");
   };
 
-  const handleSumbitEditVehicleSpz = () => {   
-    editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen, setIsEditable);
+  const handleSumbitEditVehicleSpz = () => {
+    editVehTransaction(
+      id,
+      spzState,
+      vehicleClass,
+      vehicleRepairDate,
+      setIsMenuOpen,
+      setIsEditable
+    );
   };
 
   const handleOnChangeVehicleSPZ = (event: ChangeEvent<HTMLInputElement>) => {
@@ -68,42 +77,16 @@ const Vehicle = ({
   };
 
   const handleDeleteVehicle = () => {
-    deleteVehicle(id, vehicleSpz, vehicleClass, vehicleRepairDate)
+    deleteVehicle(id, vehicleSpz, vehicleClass, vehicleRepairDate);
   };
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData("id", id!);
     handleDragging?.(true);
-
-    const dropArea = window.document.getElementsByClassName("dropArea");
-    
-    for (let i = 0; i < dropArea.length; i++) {
-      const divElement = dropArea[i] as HTMLElement;
-
-      if (!isDragging) {
-        console.log('ahoj')
-        divElement.classList.add(
-          "border-1",
-          "border-dashed",
-          "border-primary-gray"
-        );
-      }
-    }
   };
 
   const handleDragEnd = () => {
     handleDragging?.(false);
-
-    const dropArea = window.document.getElementsByClassName("dropArea");
-    for (let i = 0; i < dropArea.length; i++) {
-      const divElement = dropArea[i] as HTMLElement;
-
-      divElement.classList.remove(
-        "border-1",
-        "border-dashed",
-        "border-primary-gray"
-      );
-    }
   };
 
   return (
@@ -125,6 +108,8 @@ const Vehicle = ({
           />
         )}
 
+        {showDateInfo && <CarDateInfo date={vehicleRepairDate} />}
+
         <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
           <EditableField
             isEditable={isEditable}
@@ -135,7 +120,10 @@ const Vehicle = ({
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
 
-          <CarRepairSign carRepairDate={vehicleRepairDate} />
+          <CarRepairLight
+            carRepairDate={vehicleRepairDate}
+            setShowDateInfo={setShowDateInfo}
+          />
         </div>
       </div>
       {/* Wheels */}
