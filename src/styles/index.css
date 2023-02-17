@@ -50,3 +50,7 @@ table, th, td {
 tr:last-of-type {
     @apply border-b border-black;
 }
+
+.css-sghohy-MuiButtonBase-root-MuiButton-root.exportButton {
+    @apply self-center w-36;
+}

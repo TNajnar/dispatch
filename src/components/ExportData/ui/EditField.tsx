@@ -22,7 +22,7 @@ const EditField = ({
         type="text"
         value={isEditable ? state : realData}
         className={clsx(
-          "text-center w-[100px] text-gray-600 bg-secondary-gray border border-primary-gray rounded-sm hover:border-black"
+          "text-center w-4/5 text-gray-600 bg-secondary-gray border border-primary-gray rounded-sm hover:border-black"
         )}
         disabled={!isEditable}
         onChange={handleOnChange}

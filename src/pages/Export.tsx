@@ -1,8 +1,11 @@
+import { Button } from "@mui/material";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import TableRow from "../components/ExportData/TableRow";
 import { TManageTrainDoc } from "../components/types";
 import database from "../shared/firebaseconfig";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { CSVLink } from "react-csv";
 
 const Export = () => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
@@ -23,7 +26,7 @@ const Export = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-10">
       <table className="w-full">
         <thead>
           <tr>
@@ -39,7 +42,9 @@ const Export = () => {
         ))}
       </table>
 
-      <button className="">Exportovat</button>
+      <Button variant="contained" className="exportButton" endIcon={<ExitToAppIcon />}>
+        <CSVLink data={docRow}>Exportovat</CSVLink>
+      </Button>
     </div>
   );
 };
