@@ -34,7 +34,7 @@ const useLocFilterTrans = (
       ];
       transaction.update(docRefToUpdate, { vehicles: filterCars });
     });
-    setIsEditable?.(false)
+    setIsEditable?.(false);
     setIsMenuOpen?.("");
   };
 

@@ -22,11 +22,7 @@ const KeycloakContext = createContext<IKeycloakContextProps>({
   logout: () => {},
 });
 
-const KeycloakContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const KeycloakContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [keycloackValue, setKeycloackValue] = useState<Keycloak | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -58,9 +54,7 @@ const KeycloakContextProvider = ({
   }, []);
 
   return (
-    <KeycloakContext.Provider
-      value={{ keycloakValue: keycloackValue, authenticated, logout }}
-    >
+    <KeycloakContext.Provider value={{ keycloakValue: keycloackValue, authenticated, logout }}>
       {children}
     </KeycloakContext.Provider>
   );

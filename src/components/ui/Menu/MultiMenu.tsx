@@ -55,10 +55,7 @@ const MultiClassMenu = ({
           <input
             type="date"
             className="border border-primary-gray rounded-sm hover:border-black"
-            value={
-              carRepairDate &&
-              carRepairDate.toDate().toISOString().substring(0, 10)
-            }
+            value={carRepairDate && carRepairDate.toDate().toISOString().substring(0, 10)}
             onChange={handleOnChange}
           />
         </div>

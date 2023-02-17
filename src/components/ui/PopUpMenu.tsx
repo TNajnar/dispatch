@@ -14,9 +14,7 @@ interface IPopUpMenu {
   label?: string;
   handleClose: () => void;
   handleOnSubmit: () => void;
-  handleOnChange: React.ChangeEventHandler<
-    HTMLTextAreaElement | HTMLInputElement
-  >;
+  handleOnChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
 const PopUpMenu = ({
@@ -48,10 +46,10 @@ const PopUpMenu = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button className="button buttonHover" onClick={handleClose}>
+        <Button onClick={handleClose} className="button buttonHover">
           Zavři
         </Button>
-        <Button className="button buttonHover" onClick={handleOnSubmit}>
+        <Button onClick={handleOnSubmit} className="button buttonHover">
           Potvrď
         </Button>
       </DialogActions>

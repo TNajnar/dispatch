@@ -63,15 +63,15 @@ const useVehTransaction = (
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
     setIsMenuOpen?.("");
-    setIsEditable?.(false)
+    setIsEditable?.(false);
   };
 
   const deleteVehicle = async (
     id: string,
     spz: string,
     classColor: string,
-    repairDate: Timestamp,
-    ) => {
+    repairDate: Timestamp
+  ) => {
     await updateDoc(docRefToUpdate, {
       vehicles: arrayRemove({
         id: id,
@@ -82,7 +82,7 @@ const useVehTransaction = (
         vehicleDoc: vehicleDoc,
       }),
     });
-  }
+  };
 
   return { addVehicleTransaction, editVehTransaction, deleteVehicle };
 };
