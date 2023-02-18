@@ -25,6 +25,25 @@ const Export = () => {
     return () => unsub();
   }, []);
 
+  const headers = [
+    { label: "Vozidla", key: "vehicles" },
+    { label: "Lokomotiva", key: "locomotives" },
+    { label: "Linka", key: "line" },
+    { label: "Strojvedoucí", key: "carLeader" },
+    { label: "Telefonní číslo", key: "phone" },
+  ];
+
+  // Define the data to be exported
+  const data = docRow.map((doc) => {
+    return {
+      vehicles: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
+      locomotives: doc.locomotives.lSpz,
+      line: doc.line.map((line) => line.nameLine).join(", "),
+      carLeader: doc.contact.carLeader,
+      phone: doc.contact.phone,
+    };
+  });
+
   return (
     <div className="flex flex-col gap-10">
       <table className="w-full">
@@ -43,7 +62,9 @@ const Export = () => {
       </table>
 
       <Button variant="contained" className="exportButton" endIcon={<ExitToAppIcon />}>
-        <CSVLink data={docRow}>Exportovat</CSVLink>
+        <CSVLink headers={headers} data={data}>
+          Exportovat
+        </CSVLink>
       </Button>
     </div>
   );

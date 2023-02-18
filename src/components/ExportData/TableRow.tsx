@@ -4,6 +4,7 @@ import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import CarLeader from "./CarLeader";
 import CarPhone from "./CarPhone";
+import clsx from "clsx";
 
 interface ITableRowProps {
   document: TManageTrainDoc;
@@ -27,16 +28,22 @@ const TableRow = ({ document }: ITableRowProps) => {
     <tbody className="w-full">
       <tr>
         <td className="">
-          {vehicles.map((vehicle) => (
-            <span key={vehicle.id} className="pr-2">
+          {vehicles.map((vehicle, indexV) => (
+            <span
+              key={vehicle.id}
+              className={clsx("border-r border-black", indexV > 0 ? "px-2" : "pr-2")}
+            >
               {vehicle.spz}
             </span>
           ))}
         </td>
         <td className="text-center">{locomotive.lSpz}</td>
         <td>
-          {lines.map((line) => (
-            <span key={line.id} className="pr-2">
+          {lines.map((line, index) => (
+            <span
+              key={line.id}
+              className={clsx("border-r border-black", index > 0 ? "px-2" : "pr-2")}
+            >
               {line.nameLine}
             </span>
           ))}
