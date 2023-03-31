@@ -21,6 +21,7 @@ const useBasicFirestore = (
       },
       line: [],
       contact: { carLeader: "", phone: "" },
+      station: { from: "", to: "" },
     });
     setIsClicked(true);
   };

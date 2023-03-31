@@ -1,30 +1,23 @@
 import { ChangeEvent, useState } from "react";
 import EditField from "./ui/EditField";
 import EditIcon from "@mui/icons-material/Edit";
-import { DocumentData, DocumentReference, runTransaction } from "firebase/firestore";
+import { DocumentData, DocumentReference } from "firebase/firestore";
 import useExportTransaction from "../../hooks/Firestore/Pages/ExportTransactions";
 
 interface ICarLeaderProps {
-  isEditable: boolean;
   carLeader: string;
   phone: string;
   docRefToUpdate: DocumentReference<DocumentData>;
-  setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CarLeader = ({
-  isEditable,
-  carLeader,
-  phone,
-  docRefToUpdate,
-  setIsEditable,
-}: ICarLeaderProps) => {
+const CarLeader = ({ carLeader, phone, docRefToUpdate }: ICarLeaderProps) => {
+  const [isEditableLeader, setIsEditableLeader] = useState<boolean>(false);
   const [leaderState, setLeaderState] = useState<string>("");
 
   const { editLeaderTransaction } = useExportTransaction(docRefToUpdate);
 
   const handleEditCarLeader = () => {
-    setIsEditable(true);
+    setIsEditableLeader(true);
   };
 
   const handleOnChangeLeader = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +25,15 @@ const CarLeader = ({
   };
 
   const handleSumbitLeader = () => {
-    editLeaderTransaction(leaderState, phone, setIsEditable);
+    editLeaderTransaction(leaderState, phone, setIsEditableLeader);
     setLeaderState("");
   };
 
   return (
     <div>
-      {isEditable && (
+      {isEditableLeader && (
         <EditField
-          isEditable={isEditable}
+          isEditable={isEditableLeader}
           state={leaderState}
           realData={carLeader}
           handleOnChange={handleOnChangeLeader}
@@ -48,9 +41,9 @@ const CarLeader = ({
         />
       )}
 
-      {!isEditable && carLeader}
+      {!isEditableLeader && carLeader}
 
-      {!isEditable && (
+      {!isEditableLeader && (
         <span onClick={handleEditCarLeader}>
           <EditIcon className="edit" />
         </span>

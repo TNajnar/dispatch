@@ -44,7 +44,54 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
     setIsEditable(false);
   };
 
-  return { editLeaderTransaction, editPhoneTransaction };
+  const editFromTransaction = async (
+    fromStationState: string,
+    to: string,
+    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      if (!sfDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const newFromStation = (sfDoc.data().station = fromStationState);
+      transaction.update(docRefToUpdate, {
+        station: {
+          from: newFromStation,
+          to: to,
+        },
+      });
+    });
+    setIsEditable(false);
+  };
+
+  const editToTransaction = async (
+    from: string,
+    toStationState: string,
+    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    await runTransaction(database, async (transaction) => {
+      const sfDoc = await transaction.get(docRefToUpdate);
+      if (!sfDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const newToStation = (sfDoc.data().station = toStationState);
+      transaction.update(docRefToUpdate, {
+        station: {
+          from: from,
+          to: newToStation,
+        },
+      });
+    });
+    setIsEditable(false);
+  };
+
+  return {
+    editLeaderTransaction,
+    editPhoneTransaction,
+    editFromTransaction,
+    editToTransaction,
+  };
 };
 
 export default useExportTransaction;

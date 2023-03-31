@@ -1,30 +1,23 @@
 import { ChangeEvent, useState } from "react";
 import EditField from "./ui/EditField";
 import EditIcon from "@mui/icons-material/Edit";
-import { DocumentData, DocumentReference, runTransaction } from "firebase/firestore";
+import { DocumentData, DocumentReference } from "firebase/firestore";
 import useExportTransaction from "../../hooks/Firestore/Pages/ExportTransactions";
 
 interface ICarPhoneProps {
-  isEditable: boolean;
   carLeader: string;
   phone: string;
   docRefToUpdate: DocumentReference<DocumentData>;
-  setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CarPhone = ({
-  isEditable,
-  carLeader,
-  phone,
-  docRefToUpdate,
-  setIsEditable,
-}: ICarPhoneProps) => {
+const CarPhone = ({ carLeader, phone, docRefToUpdate }: ICarPhoneProps) => {
+  const [isEditablePhone, setIsEditablePhone] = useState<boolean>(false);
   const [phoneState, setPhoneState] = useState<string>("");
 
   const { editPhoneTransaction } = useExportTransaction(docRefToUpdate);
 
   const handleEditCarPhone = () => {
-    setIsEditable(true);
+    setIsEditablePhone(true);
   };
 
   const handleOnChangePhone = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +25,15 @@ const CarPhone = ({
   };
 
   const handleSumbitPhone = () => {
-    editPhoneTransaction(carLeader, phoneState, setIsEditable);
+    editPhoneTransaction(carLeader, phoneState, setIsEditablePhone);
     setPhoneState("");
   };
 
   return (
     <div>
-      {isEditable && (
+      {isEditablePhone && (
         <EditField
-          isEditable={isEditable}
+          isEditable={isEditablePhone}
           state={phoneState}
           realData={phone}
           handleOnChange={handleOnChangePhone}
@@ -48,9 +41,9 @@ const CarPhone = ({
         />
       )}
 
-      {!isEditable && phone}
+      {!isEditablePhone && phone}
 
-      {!isEditable && (
+      {!isEditablePhone && (
         <span onClick={handleEditCarPhone}>
           <EditIcon className="edit" />
         </span>

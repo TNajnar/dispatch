@@ -7,6 +7,16 @@ import database from "../shared/firebaseconfig";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { CSVLink } from "react-csv";
 
+const headers = [
+  { label: "Vozidla", key: "vehicles" },
+  { label: "Lokomotiva", key: "locomotives" },
+  { label: "Linka", key: "line" },
+  { label: "Strojvedoucí", key: "carLeader" },
+  { label: "Telefonní číslo", key: "phone" },
+  { label: "Z žst.", key: "from" },
+  { label: "Do žst.", key: "to" },
+];
+
 const Export = () => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
 
@@ -25,14 +35,6 @@ const Export = () => {
     return () => unsub();
   }, []);
 
-  const headers = [
-    { label: "Vozidla", key: "vehicles" },
-    { label: "Lokomotiva", key: "locomotives" },
-    { label: "Linka", key: "line" },
-    { label: "Strojvedoucí", key: "carLeader" },
-    { label: "Telefonní číslo", key: "phone" },
-  ];
-
   // Define the data to be exported
   const data = docRow.map((doc) => {
     return {
@@ -41,6 +43,8 @@ const Export = () => {
       line: doc.line.map((line) => line.nameLine).join(", "),
       carLeader: doc.contact.carLeader,
       phone: doc.contact.phone,
+      from: doc.station.from,
+      to: doc.station.to,
     };
   });
 
@@ -49,11 +53,13 @@ const Export = () => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="w-1/2">Vozy</th>
+            <th className="w-[30%]">Vozy</th>
             <th className="w-[10%]">Lokomotiva</th>
             <th className="w-[15%]">Linky</th>
             <th className="w-[13%]">Strojvedoucí</th>
             <th className="w-[12%]">Tel. číslo</th>
+            <th className="w-[10%]">Z žst.</th>
+            <th className="w-[10%]">Do žst.</th>
           </tr>
         </thead>
         {docRow.map((document) => (
