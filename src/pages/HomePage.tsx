@@ -1,6 +1,4 @@
 import { useContext } from "react";
-import Locomotive from "../components/Train/Locomotive";
-import Vehicle from "../components/Train/Vehicle";
 import { KeycloakContext } from "../helpers/KeycloakContext";
 
 const HomePage = () => {

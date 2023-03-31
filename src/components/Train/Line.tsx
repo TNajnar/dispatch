@@ -1,14 +1,7 @@
-import {
-  arrayRemove,
-  collection,
-  doc,
-  runTransaction,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
 import useLineTransaction from "../../hooks/Firestore/Line/useLineTransaction";
 import database from "../../shared/firebaseconfig";
-import { TLineObject } from "../types";
 import EditableField from "../ui/EditableField";
 import Menu from "../ui/Menu/Menu";
 
@@ -37,7 +30,7 @@ const Line = ({
 
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editLineTransaction, deleteLine} = useLineTransaction(docRefToUpdate);
+  const { editLineTransaction, deleteLine } = useLineTransaction(docRefToUpdate);
 
   const handleEditLine = () => {
     setIsEditable(true);
@@ -46,7 +39,7 @@ const Line = ({
 
   const handleSubmitEditLine = () => {
     editLineTransaction(id, lineState, setIsEditable, setOpenPopMenuID, setIsMenuOpen);
-    setLineState("")
+    setLineState("");
   };
 
   const handleOnChangeLine = (event: ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +47,7 @@ const Line = ({
   };
 
   const handleDeleteLine = () => {
-    deleteLine(id, nameLine)
+    deleteLine(id, nameLine);
   };
 
   return (
