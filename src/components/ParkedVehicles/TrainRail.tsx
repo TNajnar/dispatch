@@ -109,7 +109,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
       <div className="flex-1" />
       <div>
         <Button text="L" onClick={addLocomotive} isRounded={true} />
-        <Button text="+" onClick={addVehicle} isRounded={true} />
+        <Button text="V" onClick={addVehicle} isRounded={true} />
       </div>
     </div>
   );

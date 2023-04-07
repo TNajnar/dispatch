@@ -8,8 +8,8 @@ import ParkedVagons from "./pages/ParkedVehicles";
 
 const App = () => (
   <div className="pageLayout">
-    <Navbar />
     <Router>
+      <Navbar />
       <Routes>
         <Route
           path="/"

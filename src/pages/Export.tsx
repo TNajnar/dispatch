@@ -6,6 +6,7 @@ import { TManageTrainDoc } from "../components/types";
 import database from "../shared/firebaseconfig";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { CSVLink } from "react-csv";
+import ReactXlsxExport from "react-xlsx-export";
 
 const headers = [
   { label: "Vozidla", key: "vehicles" },
@@ -38,6 +39,18 @@ const Export = () => {
   // Define the data to be exported
   const data = docRow.map((doc) => {
     return {
+      Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
+      Lokomotiva: doc.locomotives.lSpz,
+      Linky: doc.line.map((line) => line.nameLine).join(", "),
+      Strojvedoucí: doc.contact.carLeader,
+      "Tel. číslo": doc.contact.phone,
+      "Z žst.": doc.station.from,
+      "Do žst.": doc.station.to,
+    };
+  });
+
+  const dataCsv = docRow.map((doc) => {
+    return {
       vehicles: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
       locomotives: doc.locomotives.lSpz,
       line: doc.line.map((line) => line.nameLine).join(", "),
@@ -67,11 +80,24 @@ const Export = () => {
         ))}
       </table>
 
-      <Button variant="contained" className="exportButton" endIcon={<ExitToAppIcon />}>
-        <CSVLink headers={headers} data={data}>
-          Exportovat
-        </CSVLink>
-      </Button>
+      <div className="flex justify-center gap-4">
+        <ReactXlsxExport
+          data={data}
+          filename="TrainManagement"
+          className="border-none"
+          children={
+            <Button variant="contained" endIcon={<ExitToAppIcon />}>
+              Exportovat do Excelu
+            </Button>
+          }
+        />
+
+        <Button variant="contained" className="w-60" endIcon={<ExitToAppIcon />}>
+          <CSVLink headers={headers} data={dataCsv} filename="TrainManagement">
+            Exportovat CSV
+          </CSVLink>
+        </Button>
+      </div>
     </div>
   );
 };

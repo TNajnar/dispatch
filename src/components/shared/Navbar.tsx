@@ -1,41 +1,53 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { KeycloakContext } from "../../helpers/KeycloakContext";
 import LogoutIcon from "@mui/icons-material/Logout";
+import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 const NavItems = [
   {
     name: "Domů",
-    icon: "",
     url: "/",
   },
   {
     name: "Managemnet vozů",
-    icon: "",
     url: "/manage-vehicles",
   },
   {
     name: "Odstavené vozy",
-    icon: "",
     url: "/parked-vehicles",
   },
   {
     name: "Export dat",
-    icon: "",
     url: "/export",
   },
 ];
 
 const Navbar = () => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const navigate = useNavigate();
   const { logout } = useContext(KeycloakContext);
+
+  const handleNavItemClick = (index: number, url: string) => {
+    setActiveIndex(index);
+    navigate(url);
+  };
 
   return (
     <nav className="flex items-center justify-around bg-primary-yellow text-black">
       <div className="flex">
-        {NavItems.map(({ name, url }) => (
+        {NavItems.map(({ name, url }, index) => (
           <a
             key={name}
             href={url}
-            className="py-4 w-[148px] text-center hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm"
+            onClick={(event) => {
+              event.preventDefault();
+              handleNavItemClick(index, url);
+            }}
+            className={clsx(
+              "py-4 w-[148px] text-center shadow-sm hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm",
+              activeIndex === index && "bg-white"
+            )}
           >
             {name}
           </a>
