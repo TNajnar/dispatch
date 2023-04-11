@@ -28,14 +28,14 @@ const TableRow = ({ document }: ITableRowProps) => {
     <tbody className="w-full">
       <tr>
         <td>
-          {vehicles.map((vehicle, indexV) => (
+          {vehicles.map((vehicle, indexV) => vehicle.spz && 
             <span
               key={vehicle.id}
-              className={clsx(vehicle.spz && "border-r border-black", indexV > 0 ? "px-2" : "pr-2")}
+              className={clsx("border-r border-black", indexV > 0 ? "px-2" : "pr-2")}
             >
               {vehicle.spz}
             </span>
-          ))}
+          )}
         </td>
         <td className="text-center">{locomotive.lSpz}</td>
         <td>
