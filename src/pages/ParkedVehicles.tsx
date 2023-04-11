@@ -5,6 +5,7 @@ import database from "../shared/firebaseconfig";
 import TrainRail from "../components/ParkedVehicles/TrainRail";
 import PopUpMenu from "../components/ui/PopUpMenu";
 import { TParkedVehicleDoc } from "../components/types";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const collectionRows = collection(database, "ParkedVehicles");
 const newDoc = doc(collectionRows);
@@ -68,11 +69,9 @@ const ParkedVagons = () => {
 
       {docRow.map((document, index: number) => (
         <div key={document.id} className="relative">
-          <Button
-            text="-"
-            clasName="absolute -right-10 inset-y-1/2"
-            onClick={() => deleteRow(document.id)}
-          />
+          <div className="absolute -right-11 top-7 p-1 hover:bg-secondary-yellow hover:rounded-full"  onClick={() => deleteRow(document.id)}>
+            <DeleteOutlineIcon />
+          </div>
           <TrainRail document={document} getAllCars={getAllCars} rowIndex={index} />
         </div>
       ))}
