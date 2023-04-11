@@ -31,7 +31,7 @@ const TableRow = ({ document }: ITableRowProps) => {
           {vehicles.map((vehicle, indexV) => (
             <span
               key={vehicle.id}
-              className={clsx("border-r border-black", indexV > 0 ? "px-2" : "pr-2")}
+              className={clsx(vehicle.spz && "border-r border-black", indexV > 0 ? "px-2" : "pr-2")}
             >
               {vehicle.spz}
             </span>
