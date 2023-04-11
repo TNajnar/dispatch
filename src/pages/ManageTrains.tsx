@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import Button from "../components/ui/Button";
 import { TManageTrainDoc } from "../components/types";
 import useBasicFirestore from "../hooks/Firestore/Pages/useBasicFirestore";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const collectionRows = collection(database, "ManageTrains");
 
@@ -57,11 +58,9 @@ const ManageTrains = () => {
       {docRow.map((document, index: number) => (
         <div key={document.id} className="flex w-full items-center">
           <VehicleRow rowIndex={index} document={document} getAllVehicles={getAllVehicles} />
-          <Button
-            text="-"
-            clasName="absolute right-8"
-            onClick={() => deleteRow(document.id)}
-          />
+          <div className="absolute right-8 p-1 hover:bg-secondary-yellow hover:rounded-full"  onClick={() => deleteRow(document.id)}>
+            <DeleteOutlineIcon />
+          </div>
         </div>
       ))}
 
