@@ -1,11 +1,8 @@
-import { TManageTrainDoc } from "../types";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import CarLeader from "./CarLeader";
-import CarPhone from "./CarPhone";
+import { CarLeader, CarPhone, FromStation, ToStation } from "./components";
+import { TManageTrainDoc } from "../types";
 import clsx from "clsx";
-import FromStation from "./FromStation";
-import ToStation from "./ToStation";
 
 interface ITableRowProps {
   document: TManageTrainDoc;

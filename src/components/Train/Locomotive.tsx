@@ -1,12 +1,8 @@
-import { collection, doc, Timestamp } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
-import useLocFilterTrans from "../../hooks/Firestore/Locomotive/useLocFilterTrans";
-import useLocTrans from "../../hooks/Firestore/Locomotive/useLocTrans";
+import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import CarDateInfo from "../ui/CarRepairDate/CarDateInfo";
-import CarRepairLight from "../ui/CarRepairDate/CarRepairLight";
-import EditableField from "../ui/EditableField";
-import Menu from "../ui/Menu/Menu";
+import { useLocFilterTrans, useLocoTransaction } from '../../hooks/Firestore'
+import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 
 interface ILocomotiveProps {
   id: string;
@@ -45,7 +41,7 @@ const Locomotive = ({
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editTransaction, dateTransaction, deleteLoc } = useLocTrans(
+  const { editTransaction, dateTransaction, deleteLoc } = useLocoTransaction(
     locomotiveDoc,
     docRefToUpdate
   );

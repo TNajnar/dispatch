@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import { Timestamp } from "firebase/firestore";
 import { ChangeEvent } from "react";
+import { Timestamp } from "firebase/firestore";
+import clsx from "clsx";
 
 interface IMultiClassMenuProps {
   isColorClass?: boolean;

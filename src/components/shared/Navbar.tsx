@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { KeycloakContext } from "../../helpers/KeycloakContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
 
 const NavItems = [
   {

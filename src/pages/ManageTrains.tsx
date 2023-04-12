@@ -3,10 +3,10 @@ import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import VehicleRow from "../components/ManageTrains/VehicleRow";
 import { nanoid } from "nanoid";
-import Button from "../components/ui/Button";
+import { useBasicFirestore } from "../hooks/Firestore";
 import { TManageTrainDoc } from "../components/types";
-import useBasicFirestore from "../hooks/Firestore/Pages/useBasicFirestore";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { Button } from "../components/ui";
 
 const collectionRows = collection(database, "ManageTrains");
 

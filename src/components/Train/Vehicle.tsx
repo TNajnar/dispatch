@@ -1,12 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import { useVehicleTransaction } from '../../hooks/Firestore' 
+import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
-import Menu from "../ui/Menu/Menu";
-import EditableField from "../ui/EditableField";
-import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
-import CarDateInfo from "../ui/CarRepairDate/CarDateInfo";
-import CarRepairLight from "../ui/CarRepairDate/CarRepairLight";
 
 interface IVehicleProps {
   id: string;
@@ -44,7 +41,7 @@ const Vehicle = ({
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editVehTransaction, deleteVehicle } = useVehTransaction(vehicleDoc, docRefToUpdate);
+  const { editVehTransaction, deleteVehicle } = useVehicleTransaction(vehicleDoc, docRefToUpdate);
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);

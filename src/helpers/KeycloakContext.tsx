@@ -1,6 +1,5 @@
-import Keycloak from "keycloak-js";
-
 import { createContext, useEffect, useState } from "react";
+import Keycloak from "keycloak-js";
 
 let initOptions = {
   url: "https://localhost:8443",

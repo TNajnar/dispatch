@@ -5,7 +5,7 @@ import {
   runTransaction,
   Timestamp,
 } from "firebase/firestore";
-import database from "../../shared/firebaseconfig";
+import database from "../../../shared/firebaseconfig";
 
 const useDropTransaction = (
   id: string,

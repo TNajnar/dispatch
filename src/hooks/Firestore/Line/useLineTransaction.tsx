@@ -6,7 +6,7 @@ import {
     runTransaction,
     updateDoc,
   } from "firebase/firestore";
-  import { TLineObject } from "../../../components/types";
+import { TLineObject } from "../../../components/types";
   import database from "../../../shared/firebaseconfig";
   
   const useLineTransaction = (docRefToUpdate: DocumentReference<DocumentData>) => {

@@ -1,10 +1,9 @@
 import { useState } from "react";
+import { Timestamp } from "firebase/firestore";
+import { CarRepairMenu, ChooseClassMenu } from "./components";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
-import { Timestamp } from "firebase/firestore";
-import ChooseClassMenu from "./ChooseClassMenu";
-import CarRepairMenu from "./CarRepairMenu";
 
 interface IMenuProps {
   carRepairDate?: Timestamp;

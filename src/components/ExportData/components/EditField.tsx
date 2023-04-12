@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { ChangeEvent } from "react";
+import clsx from "clsx";
 
 interface IEditFieldProps {
   isEditable?: boolean;

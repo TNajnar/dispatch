@@ -1,9 +1,8 @@
-import { collection, doc } from "firebase/firestore";
 import { ChangeEvent, useState } from "react";
-import useLineTransaction from "../../hooks/Firestore/Line/useLineTransaction";
+import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import EditableField from "../ui/EditableField";
-import Menu from "../ui/Menu/Menu";
+import { useLineTransaction } from "../../hooks/Firestore";
+import { EditableField, Menu } from "../ui";
 
 interface ILineprops {
   id: string;

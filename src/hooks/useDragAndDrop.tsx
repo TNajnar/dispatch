@@ -1,10 +1,8 @@
-import { collection, doc } from "firebase/firestore";
 import { useState } from "react";
-import { TVehicleObject } from "../components/types";
+import { collection, doc } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
-import LocomotiveTransaction from "./Firestore/Locomotive/useLocTrans";
-import DropTransaction from "./Firestore/useDropTransaction";
-import VehicleTransaction from "./Firestore/Vehicle/useVehTransaction";
+import { useLocoTransaction as locomotiveTransaction, useVehicleTransaction as vehicleTransaction, useDropTransaction as dropTransaction } from './Firestore'
+import { TVehicleObject } from "../components/types";
 
 const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -25,14 +23,15 @@ const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
     const docRefToUpdate = doc(collectionRows, docID);
     const docRefToRemove = doc(collectionRows, draggedCarDoc);
 
-    const { updateDropVehicle, updateDropLocomotive } = DropTransaction(
+    const { updateDropVehicle, updateDropLocomotive } = dropTransaction(
       draggedCar.id,
       draggedCar.spz,
       draggedCar.repairDate,
       draggedCar.isVehicle
     );
-    const { deleteVehicle } = VehicleTransaction(draggedCarDoc, docRefToRemove)
-    const { deleteLoc } = LocomotiveTransaction(draggedCarDoc, docRefToRemove)
+
+    const { deleteVehicle } = vehicleTransaction(draggedCarDoc, docRefToRemove)
+    const { deleteLoc } = locomotiveTransaction(draggedCarDoc, docRefToRemove)
 
     if (draggedCar && draggedCar.vehicleDoc !== docID) {
       updatedDoc = draggedCar.vehicleDoc = docID;

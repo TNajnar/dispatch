@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { Timestamp } from "firebase/firestore";
+import clsx from "clsx";
 
 interface ICarRepairLightProps {
   carRepairDate: Timestamp;

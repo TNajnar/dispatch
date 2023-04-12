@@ -1,17 +1,15 @@
 import { ChangeEvent, useState } from "react";
-import Locomotive from "../Train/Locomotive";
-import Vehicle from "../Train/Vehicle";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
-import Button from "../ui/Button";
-import PopUpMenu from "../ui/PopUpMenu";
-import { TManageTrainDoc, TVehicleObject } from "../types";
+import Locomotive from "../Train/Locomotive";
+import Vehicle from "../Train/Vehicle";
 import Line from "../Train/Line";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
-import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
-import useLineTransaction from "../../hooks/Firestore/Line/useLineTransaction";
+import { useVehicleTransaction, useLineTransaction } from '../../hooks/Firestore'
+import { TManageTrainDoc, TVehicleObject } from "../types";
+import { Button, PopUpMenu } from "../ui";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
@@ -45,7 +43,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
     collectionName
   );
 
-  const { addVehicleTransaction } = useVehTransaction(document.id, docRefToUpdate);
+  const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
   const { addLine } = useLineTransaction(docRefToUpdate);
 
   const addVehicle = () => {

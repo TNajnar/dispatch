@@ -1,15 +1,14 @@
+import { useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import Vehicle from "../Train/Vehicle";
-import Button from "../ui/Button";
 import { nanoid } from "nanoid";
-import { TParkedVehicleDoc, TVehicleObject } from "../types";
+import Vehicle from "../Train/Vehicle";
 import Locomotive from "../Train/Locomotive";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
-import { useState } from "react";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
-import useVehTransaction from "../../hooks/Firestore/Vehicle/useVehTransaction";
-import useLocTrans from "../../hooks/Firestore/Locomotive/useLocTrans";
+import { useVehicleTransaction, useLocoTransaction } from '../../hooks/Firestore'
+import { TParkedVehicleDoc, TVehicleObject } from "../types";
+import { Button } from "../ui";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
@@ -39,9 +38,9 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
     collectionName
   );
 
-  const { addVehicleTransaction } = useVehTransaction(document.id, docRefToUpdate);
+  const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
 
-  const { addLocTransaction } = useLocTrans(document.id, docRefToUpdate);
+  const { addLocTransaction } = useLocoTransaction(document.id, docRefToUpdate);
 
   const addVehicle = async () => {
     addVehicleTransaction(id, "", "", "");
