@@ -23,7 +23,11 @@ const NavItems = [
   },
 ];
 
-const Navbar = () => {
+interface INavbarProps {
+  isDarkMode: boolean;
+}
+
+const Navbar = ({ isDarkMode }: INavbarProps) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const navigate = useNavigate();
   const { logout } = useContext(KeycloakContext);
@@ -32,9 +36,9 @@ const Navbar = () => {
     setActiveIndex(index);
     navigate(url);
   };
-
+  
   return (
-    <nav className="flex items-center justify-around bg-primary-yellow text-black">
+    <nav className={clsx("flex items-center justify-around", isDarkMode ? 'bg-[#0F4C75] text-[#BBE1FA]' : 'bg-primary-yellow text-black')}>
       <div className="flex">
         {NavItems.map(({ name, url }, index) => (
           <a
@@ -45,17 +49,20 @@ const Navbar = () => {
               handleNavItemClick(index, url);
             }}
             className={clsx(
-              "py-4 w-[148px] text-center shadow-sm hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm",
-              activeIndex === index && "bg-white"
+              "py-4 w-[148px] text-center hover:border-gray-300 hover:shadow-md",
+              isDarkMode ? 'hover:bg-[#3282B8]' : 'hover:bg-white',
+              isDarkMode && activeIndex === index && "bg-[#3282B8] shadow-sm",
+              !isDarkMode && activeIndex === index && "bg-white shadow-sm",
             )}
           >
             {name}
           </a>
         ))}
       </div>
+
       <div
         onClick={() => logout()}
-        className="flex justify-center items-center py-4 w-[148px] gap-2 hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm"
+        className={clsx("flex justify-center items-center py-4 w-[148px] gap-2 hover:shadow-md", isDarkMode ? 'hover:bg-[#3282B8]' : 'hover:bg-white hover:border-gray-300')}
       >
         <LogoutIcon className="logout" />
         <button>Odhlasit se</button>

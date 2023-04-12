@@ -7,10 +7,15 @@ import { useBasicFirestore } from "../hooks/Firestore";
 import { TManageTrainDoc } from "../components/types";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Button } from "../components/ui";
+import clsx from "clsx";
 
 const collectionRows = collection(database, "ManageTrains");
 
-const ManageTrains = () => {
+interface IMangeTrainProps {
+  isDarkMode: boolean;
+}
+
+const ManageTrains = ({ isDarkMode }: IMangeTrainProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
 
@@ -49,9 +54,9 @@ const ManageTrains = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-8">
-      <div className="grid grid-cols-4 text-center font-bold border-b border-black w-full">
-        <h3 className="col-span-2 border-r border-black">Vozy</h3>
-        <h3 className="font-bold border-r border-black">Lokomotiva</h3>
+      <div className={clsx("grid grid-cols-4 text-center font-bold border-b w-full", isDarkMode ? 'border-[#BBE1FA]' : 'border-black')}>
+        <h3 className={clsx("col-span-2 border-r", isDarkMode ? 'border-[#BBE1FA]' : 'border-black')}>Vozy</h3>
+        <h3 className={clsx("font-bold border-r", isDarkMode ? 'border-[#BBE1FA]' : 'border-black')}>Lokomotiva</h3>
         <h3 className="font-bold">Spoj</h3>
       </div>
 

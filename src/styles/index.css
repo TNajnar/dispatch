@@ -5,7 +5,7 @@
 
 * {
     @apply m-0;
-    @apply font-sans
+    @apply font-sans;
 }
 
 .pageLayout {
@@ -13,7 +13,6 @@
 }
 
 .contentLayout {
-    @apply bg-white;
     @apply w-full max-w-[90%];     /* max-w prevent too wide texts on large screens  */
     @apply m-auto pt-8;         /* pt prevent hiding content behind navbar */
 }
@@ -44,7 +43,6 @@
 /* Data export page */
 table, th, td {
     @apply p-2 h-11;
-    @apply border-t border-r border-l border-black;
 }
 
 tr:last-of-type {

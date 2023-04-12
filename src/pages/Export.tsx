@@ -7,6 +7,7 @@ import { CSVLink } from "react-csv";
 import ReactXlsxExport from "react-xlsx-export";
 import { Button } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import clsx from "clsx";
 
 const headers = [
   { label: "Vozidla", key: "vehicles" },
@@ -18,7 +19,12 @@ const headers = [
   { label: "Do žst.", key: "to" },
 ];
 
-const Export = () => {
+interface IExportProps {
+  isDarkMode: boolean;
+}
+
+
+const Export = ({ isDarkMode }: IExportProps) => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
 
   useEffect(() => {
@@ -63,9 +69,9 @@ const Export = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <table className="w-full">
+      <table className={clsx("w-full border", isDarkMode ? ' border-[#BBE1FA]' : 'border-black')}>
         <thead>
-          <tr>
+          <tr className="">
             <th className="w-[30%]">Vozy</th>
             <th className="w-[10%]">Lokomotiva</th>
             <th className="w-[15%]">Linky</th>
