@@ -2,10 +2,9 @@ import { useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
-import Vehicle from "../Train/Vehicle";
-import Locomotive from "../Train/Locomotive";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
+import { Locomotive, Vehicle } from "../Train";
 import { useVehicleTransaction, useLocoTransaction } from '../../hooks/Firestore'
 import { TParkedVehicleDoc, TVehicleObject } from "../types";
 import { Button } from "../ui";

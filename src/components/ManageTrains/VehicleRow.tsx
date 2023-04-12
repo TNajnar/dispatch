@@ -2,9 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
-import Locomotive from "../Train/Locomotive";
-import Vehicle from "../Train/Vehicle";
-import Line from "../Train/Line";
+import { Line, Locomotive, Vehicle } from "../Train";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import { useVehicleTransaction, useLineTransaction } from '../../hooks/Firestore'
