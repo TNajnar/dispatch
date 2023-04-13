@@ -2,6 +2,8 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { KeycloakContext } from "../../helpers/KeycloakContext";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import clsx from "clsx";
 
 const NavItems = [
@@ -46,16 +48,19 @@ const Navbar = () => {
             }}
             className={clsx(
               "py-4 w-[148px] text-center shadow-sm hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm",
-              activeIndex === index && "bg-white"
+              activeIndex === index && "bg-white",
+              index === 0 && "flex justify-center items-center gap-3"
             )}
           >
+            {index === 0 && <HomeIcon className="" />}
+            {index === 3 && <FileDownloadIcon className="export" />}
             {name}
           </a>
         ))}
       </div>
       <div
         onClick={() => logout()}
-        className="flex justify-center items-center py-4 w-[148px] gap-2 hover:bg-white hover:border-gray-300 hover:shadow-md hover:rounded-sm"
+        className="flex justify-center items-center py-4 w-[148px] gap-2 hover:bg-white hover:border-gray-300 hover:shadow-md"
       >
         <LogoutIcon className="logout" />
         <button>Odhlasit se</button>

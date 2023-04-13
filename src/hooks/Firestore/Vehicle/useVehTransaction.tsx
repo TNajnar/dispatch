@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { TVehicleObject } from "../../../components/types";
 import database from "../../../shared/firebaseconfig";
+import { Dispatch, SetStateAction } from "react";
 
 const useVehTransaction = (
   vehicleDoc: string,
@@ -42,8 +43,8 @@ const useVehTransaction = (
     spz: string,
     classColor: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
-    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMenuOpen?: Dispatch<SetStateAction<string>>,
+    setIsEditable?: Dispatch<SetStateAction<boolean>>
   ) => {
     const newValues = {
       id: id,

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import Keycloak from "keycloak-js";
 
 let initOptions = {
@@ -21,9 +21,9 @@ const KeycloakContext = createContext<IKeycloakContextProps>({
   logout: () => {},
 });
 
-const KeycloakContextProvider = ({ children }: { children: React.ReactNode }) => {
+const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
   const [keycloackValue, setKeycloackValue] = useState<Keycloak | null>(null);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
 
   const setKeycloak = () => {
     const keycloak = new Keycloak(initOptions);

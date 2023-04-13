@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
-import { useLocoTransaction as locomotiveTransaction, useVehicleTransaction as vehicleTransaction, useDropTransaction as dropTransaction } from './Firestore'
+import {
+  useLocoTransaction as locomotiveTransaction,
+  useVehicleTransaction as vehicleTransaction,
+  useDropTransaction as dropTransaction,
+} from "./Firestore";
 import { TVehicleObject } from "../components/types";
 
 const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const collectionRows = collection(database, `${collectionName}`);
+  const collectionRows = collection(database, collectionName);
 
   const handleUpdateList = async (id: string, docID: string) => {
     let findDraggedCar = data.filter((car) => {
@@ -30,26 +34,21 @@ const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
       draggedCar.isVehicle
     );
 
-    const { deleteVehicle } = vehicleTransaction(draggedCarDoc, docRefToRemove)
-    const { deleteLoc } = locomotiveTransaction(draggedCarDoc, docRefToRemove)
+    const { deleteVehicle } = vehicleTransaction(draggedCarDoc, docRefToRemove);
+    const { deleteLoc } = locomotiveTransaction(draggedCarDoc, docRefToRemove);
 
     if (draggedCar && draggedCar.vehicleDoc !== docID) {
       updatedDoc = draggedCar.vehicleDoc = docID;
+      console.log(updatedDoc);
 
       if (draggedCar.isVehicle) {
         updateDropVehicle(draggedCar.class, docRefToUpdate, updatedDoc);
 
-        deleteVehicle(         
-          draggedCar.id,
-          draggedCar.spz,
-          draggedCar.class,
-          draggedCar.repairDate,
-        )
-
+        deleteVehicle(draggedCar.id, draggedCar.spz, draggedCar.class, draggedCar.repairDate);
       } else {
         updateDropLocomotive(docRefToUpdate, updatedDoc);
 
-        deleteLoc(draggedCar.id, draggedCar.spz, draggedCar.repairDate)
+        deleteLoc(draggedCar.id, draggedCar.spz, draggedCar.repairDate);
       }
     }
   };
