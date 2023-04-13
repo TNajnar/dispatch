@@ -19,10 +19,19 @@ const headers = [
   { label: "Do žst.", key: "to" },
 ];
 
+const tableHeader = [
+  "Vozy",
+  "Lokomotiva",
+  "Linky",
+  "Strojvedoucí",
+  "Tel. číslo",
+  "Z žst.",
+  "Do žst.",
+];
+
 interface IExportProps {
   isDarkMode: boolean;
 }
-
 
 const Export = ({ isDarkMode }: IExportProps) => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
@@ -69,20 +78,31 @@ const Export = ({ isDarkMode }: IExportProps) => {
 
   return (
     <div className="flex flex-col gap-10">
-      <table className={clsx("w-full border", isDarkMode ? ' border-[#BBE1FA]' : 'border-black')}>
+      <table className="w-full">
         <thead>
-          <tr className="">
-            <th className="w-[30%]">Vozy</th>
-            <th className="w-[10%]">Lokomotiva</th>
-            <th className="w-[15%]">Linky</th>
-            <th className="w-[13%]">Strojvedoucí</th>
-            <th className="w-[12%]">Tel. číslo</th>
-            <th className="w-[10%]">Z žst.</th>
-            <th className="w-[10%]">Do žst.</th>
+          <tr>
+            {tableHeader.map((item, index) => (
+              <th
+                key={`${index}_${item}`}
+                className={clsx(
+                  "border",
+                  index === 0 && "w-[30%]",
+                  index === 1 && "w-[10%]",
+                  index === 2 && "w-[15%]",
+                  index === 3 && "w-[13%]",
+                  index === 4 && "w-[12%]",
+                  index === 5 && "w-[10%]",
+                  index === 6 && "w-[10%]",
+                  isDarkMode ? "border-[#BBE1FA]" : "border-black"
+                )}
+              >
+                {item}
+              </th>
+            ))}
           </tr>
         </thead>
         {docRow.map((document) => (
-          <TableRow key={document.id} document={document} />
+          <TableRow key={document.id} document={document} isDarkMode={isDarkMode} />
         ))}
       </table>
 
