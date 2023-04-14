@@ -8,36 +8,7 @@ import ReactXlsxExport from "react-xlsx-export";
 import { Button } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import clsx from "clsx";
-
-const headers = [
-  { label: "Vozidla", key: "vehicles" },
-  { label: "Lokomotiva", key: "locomotives" },
-  { label: "Linka", key: "line" },
-  { label: "Strojvedoucí", key: "carLeader" },
-  { label: "Telefonní číslo", key: "phone" },
-  { label: "Z žst.", key: "from" },
-  { label: "Do žst.", key: "to" },
-];
-
-const tableHeader = [
-  "Vozy",
-  "Lokomotiva",
-  "Linky",
-  "Strojvedoucí",
-  "Tel. číslo",
-  "Z žst.",
-  "Do žst.",
-];
-
-const columnWidths = [
-  "w-[30%]",
-  "w-[10%]",
-  "w-[15%]",
-  "w-[13%]",
-  "w-[12%]",
-  "w-[10%]",
-  "w-[10%]",
-];
+import data from "../data.json";
 
 interface IExportProps {
   isDarkMode: boolean;
@@ -45,6 +16,10 @@ interface IExportProps {
 
 const Export = ({ isDarkMode }: IExportProps) => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
+
+  const headers = data.headers;
+  const tableHeader = data.tableHeader;
+  const columnWidths = data.columnWidths;
 
   useEffect(() => {
     //onSnapshot instead of getDocs so that you also listen for updates to the data.
