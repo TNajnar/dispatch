@@ -25,6 +25,16 @@
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.buttonHover {
     @apply bg-secondary-yellow;
 }
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root.darkButton {
+    @apply text-primary-lightBlue;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.darkButtonHover {
+    @apply bg-primary-blue;
+}
+.css-qfso29-MuiTypography-root-MuiDialogContentText-root.content {
+    @apply text-primary-lightBlue;
+}
 
 /* Icons */
 .css-i4bv87-MuiSvgIcon-root.menuIcons {

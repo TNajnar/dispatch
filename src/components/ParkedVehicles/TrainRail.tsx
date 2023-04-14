@@ -5,22 +5,26 @@ import { nanoid } from "nanoid";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import { Locomotive, Vehicle } from "../Train";
-import { useVehicleTransaction, useLocoTransaction } from '../../hooks/Firestore'
+import { useVehicleTransaction, useLocoTransaction } from "../../hooks/Firestore";
 import { TParkedVehicleDoc, TVehicleObject } from "../types";
 import { Button } from "../ui";
+import clsx from "clsx";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
   getAllCars: TVehicleObject[][];
   rowIndex: number;
+  isDarkMode: boolean;
 }
 
 const collectionRows = collection(database, "ParkedVehicles");
 
-const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
+const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
-
   const id = nanoid();
+
+  const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-primary-gray";
+  const darkTrail = isDarkMode ? "border-primary-lightBlue" : "border-black";
 
   const docRefToUpdate = doc(collectionRows, document.id);
 
@@ -63,9 +67,9 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   return (
-    <div className="flex items-center py-4 h-[101px] gap-4 border-b border-primary-gray">
+    <div className={clsx("flex items-center py-4 h-[101px] gap-4 border-b", darkMode)}>
       {!!nameRail && (
-        <h2 className="mr-2 w-24 text-h3 font-bold border-r border-black">{nameRail}</h2>
+        <h2 className={clsx("mr-2 w-24 text-h3 font-bold border-r", darkTrail)}>{nameRail}</h2>
       )}
       <div
         className="flex gap-5 w-full h-full"
@@ -83,6 +87,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
                 vehicleDoc={car.vehicleDoc}
                 documentID={document.id}
                 rowIndex={rowIndex}
+                isDarkMode={isDarkMode}
                 collectionName={collectionName}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
@@ -97,6 +102,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
                 collectionName={collectionName}
                 isParked={true}
                 rowIndex={rowIndex}
+                isDarkMode={isDarkMode}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
               />
@@ -106,8 +112,8 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
       </div>
       <div className="flex-1" />
       <div className="absolute right-0 bottom-2 flex flex-col justify-center items-center gap-1">
-        <Button text="L" onClick={addLocomotive} isRounded={true} />
-        <Button text="V" onClick={addVehicle} isRounded={true} />
+        <Button text="L" onClick={addLocomotive} isRounded={true} isDarkMode={isDarkMode} />
+        <Button text="V" onClick={addVehicle} isRounded={true} isDarkMode={isDarkMode} />
       </div>
     </div>
   );

@@ -18,10 +18,15 @@ module.exports = {
         primary: {
           yellow: "#fabb00",
           gray: '#c4c4c4',
+          darkBlue1: '#1B262C',
+          darkBlue: '#0F4C75',
+          blue: '#3282B8',
+          lightBlue: '#BBE1FA'
         },
         secondary: {
           yellow: '#FFE1A4',
           gray: "#FFFFFF",
+          green: '#1ed01e',
         }
       }
     },

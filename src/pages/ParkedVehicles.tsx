@@ -1,18 +1,26 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import TrainRail from "../components/ParkedVehicles/TrainRail";
 import { Button, PopUpMenu } from "../components/ui";
 import { TParkedVehicleDoc } from "../components/types";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import clsx from "clsx";
+
+interface IParkedVagonsProps {
+  isDarkMode: boolean;
+}
 
 const collectionRows = collection(database, "ParkedVehicles");
 const newDoc = doc(collectionRows);
 
-const ParkedVagons = () => {
+const ParkedVagons = ({ isDarkMode }: IParkedVagonsProps) => {
   const [openMenuName, setOpenMenuName] = useState<string>();
   const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
   const [rowName, setRowName] = useState<string>("");
+
+  const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-black";
+  const darkHover = isDarkMode ? "hover:bg-primary-blue" : "hover:bg-secondary-yellow";
 
   const getAllCars = docRow.map((car) => {
     return car.vehicles;
@@ -30,7 +38,7 @@ const ParkedVagons = () => {
     setRowName(event.target.value);
   };
 
-  const handleSubmitRow = async (event: React.FormEvent<HTMLInputElement>) => {
+  const handleSubmitRow = async (event: FormEvent<HTMLInputElement>) => {
     if (event && event.preventDefault) {
       event.preventDefault();
     }
@@ -64,14 +72,22 @@ const ParkedVagons = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="w-full text-h2 font-bold border-b border-black">Kolej</h2>
+      <h2 className={clsx("w-full text-h2 font-bold border-b", darkMode)}>Kolej</h2>
 
       {docRow.map((document, index: number) => (
         <div key={document.id} className="relative">
-          <div className="absolute -right-11 top-7 p-1 hover:bg-secondary-yellow hover:rounded-full"  onClick={() => deleteRow(document.id)}>
+          <div
+            className={clsx("absolute -right-11 top-7 p-1 hover:rounded-full", darkHover)}
+            onClick={() => deleteRow(document.id)}
+          >
             <DeleteOutlineIcon />
           </div>
-          <TrainRail document={document} getAllCars={getAllCars} rowIndex={index} />
+          <TrainRail
+            document={document}
+            getAllCars={getAllCars}
+            rowIndex={index}
+            isDarkMode={isDarkMode}
+          />
         </div>
       ))}
 
@@ -80,6 +96,7 @@ const ParkedVagons = () => {
         text="+"
         onClick={() => setOpenMenuName(newDoc.id)}
         isRounded={true}
+        isDarkMode={isDarkMode}
       />
 
       <PopUpMenu
@@ -91,6 +108,7 @@ const ParkedVagons = () => {
         handleClose={handleCloseMenuRow}
         handleOnSubmit={() => handleSubmitRow(this!)}
         handleOnChange={handleOnChangeRow}
+        isDarkMode={isDarkMode}
       />
     </div>
   );

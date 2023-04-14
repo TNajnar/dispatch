@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 interface ICarRepairLightProps {
   carRepairDate: Timestamp;
-  setShowDateInfo: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowDateInfo: (value: boolean) => void;
 }
 
 const today = new Date(
@@ -42,7 +42,7 @@ const CarRepairLight = ({ carRepairDate, setShowDateInfo }: ICarRepairLightProps
           !carRepairDate && "hidden",
           informationDayRepairDone && "hidden",
           carIsRepaired && "bg-red-600",
-          repairIsOver && "bg-green-600",
+          repairIsOver && "bg-secondary-green",
           expiredDate && "hidden"
         )}
       />

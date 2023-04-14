@@ -3,14 +3,23 @@ import { DocumentData, DocumentReference } from "firebase/firestore";
 import useExportTransaction from "../../../hooks/Firestore/Pages/ExportTransactions";
 import EditIcon from "@mui/icons-material/Edit";
 import EditField from "./EditField";
+import clsx from "clsx";
 
 interface IToStationProps {
   stationNameFrom: string;
   stationNameTo: string;
   docRefToUpdate: DocumentReference<DocumentData>;
+  isDarkMode: boolean;
+  darkEdit: string;
 }
 
-const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate }: IToStationProps) => {
+const ToStation = ({
+  stationNameFrom,
+  stationNameTo,
+  docRefToUpdate,
+  isDarkMode,
+  darkEdit,
+}: IToStationProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [toStationState, setToStationState] = useState<string>("");
 
@@ -35,6 +44,7 @@ const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate }: IToStatio
           isEditable={isEditable}
           state={toStationState}
           realData={stationNameTo}
+          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeStation}
           handleSubmit={handleSumbitStation}
         />
@@ -42,7 +52,7 @@ const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate }: IToStatio
       {!isEditable && stationNameTo}
       {!isEditable && (
         <span onClick={handleEditToStation}>
-          <EditIcon className="edit" />
+          <EditIcon className={clsx("edit", darkEdit)} />
         </span>
       )}
     </div>

@@ -12,12 +12,12 @@ const Switcher = ({ isDarkMode, setDarkMode }: ISwitcherProps) => {
 
   return (
     <DarkModeSwitch
-      className="absolute top-3 w-8 h-8"
+      className="absolute top-3"
       checked={isDarkMode}
       onChange={toggleDarkMode}
-      size={120}
+      size={35}
     />
-  )
-}
+  );
+};
 
-export default Switcher
+export default Switcher;

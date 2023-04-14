@@ -1,7 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import { useVehicleTransaction } from '../../hooks/Firestore' 
+import { useVehicleTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
 
@@ -16,7 +16,8 @@ interface IVehicleProps {
   rowIndex: number;
   isMenuOpen?: string;
   isDragging?: boolean;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isDarkMode: boolean;
+  setIsMenuOpen: Dispatch<SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
 }
 
@@ -31,6 +32,7 @@ const Vehicle = ({
   isMenuOpen,
   vehicleDoc,
   isDragging,
+  isDarkMode,
   setIsMenuOpen,
   handleDragging,
 }: IVehicleProps) => {
@@ -38,10 +40,15 @@ const Vehicle = ({
   const [spzState, setSpzState] = useState<string>("");
   const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
 
+  const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
+
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editVehTransaction, deleteVehicle } = useVehicleTransaction(vehicleDoc, docRefToUpdate);
+  const { editVehTransaction, deleteVehicle } = useVehicleTransaction(
+    vehicleDoc,
+    docRefToUpdate
+  );
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -98,6 +105,7 @@ const Vehicle = ({
           <Menu
             carRepairDate={vehicleRepairDate}
             rowIndex={rowIndex}
+            isDarkMode={isDarkMode}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
             handleRepairDate={handleVehicleRepairDate}
@@ -105,13 +113,19 @@ const Vehicle = ({
           />
         )}
 
-        {showDateInfo && <CarDateInfo date={vehicleRepairDate} />}
+        {showDateInfo && <CarDateInfo date={vehicleRepairDate} isDarkMode={isDarkMode} />}
 
-        <div className="relative flex justify-center w-[100px] h-14 overflow-hidden bg-white border border-black rounded-lg">
+        <div
+          className={clsx(
+            "relative flex justify-center w-[100px] h-14 overflow-hidden border border-black rounded-lg",
+            darkModeBg
+          )}
+        >
           <EditableField
             isEditable={isEditable}
             state={spzState}
             realData={vehicleSpz}
+            isDarkMode={isDarkMode}
             handleOnChange={handleOnChangeVehicleSPZ}
             handleSubmit={handleSumbitEditVehicleSpz}
           />
@@ -125,8 +139,18 @@ const Vehicle = ({
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3">
-        <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
-        <div className="absolute -top-[3px] left-[70px] w-[13px] h-[14px] bg-white border border-black rounded-full" />
+        <div
+          className={clsx(
+            "absolute -top-[3px] left-4 w-[13px] h-[14px] border border-black rounded-full",
+            darkModeBg
+          )}
+        />
+        <div
+          className={clsx(
+            "absolute -top-[3px] left-[70px] w-[13px] h-[14px] border border-black rounded-full",
+            darkModeBg
+          )}
+        />
       </div>
     </div>
   );

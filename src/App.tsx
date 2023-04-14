@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import MainComponent from "./components/MainComponent";
@@ -8,15 +7,13 @@ import HomePage from "./pages/HomePage";
 import ManageTrains from "./pages/ManageTrains";
 import ParkedVagons from "./pages/ParkedVehicles";
 
-
 const App = () => {
   const [isDarkMode, setDarkMode] = useState<boolean>(false);
 
-  // https://colorhunt.co/palette/1b262c0f4c753282b8bbe1fa
-  document.body.style.backgroundColor = `${isDarkMode ? '#1B262C' : '#ffff'}`;
+  document.body.style.backgroundColor = `${isDarkMode ? "#1B262C" : "#ffff"}`;
 
   return (
-    <div className={clsx("pageLayout")}>
+    <div className="pageLayout">
       <Router>
         <Navbar isDarkMode={isDarkMode} />
         <Routes>
@@ -44,7 +41,7 @@ const App = () => {
             path="/parked-vehicles"
             element={
               <MainComponent isDarkMode={isDarkMode} setDarkMode={setDarkMode}>
-                <ParkedVagons />
+                <ParkedVagons isDarkMode={isDarkMode} />
               </MainComponent>
             }
           ></Route>
@@ -61,7 +58,7 @@ const App = () => {
         </Routes>
       </Router>
     </div>
-  )
+  );
 };
 
 export default App;

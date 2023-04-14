@@ -3,13 +3,15 @@ import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { useLineTransaction } from "../../hooks/Firestore";
 import { EditableField, Menu } from "../ui";
+import clsx from "clsx";
 
 interface ILineprops {
   id: string;
   nameLine: string;
   documentID: string;
   rowIndex?: number;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  isDarkMode: boolean;
+  setIsMenuOpen: (value: string) => void;
   isMenuOpen?: string;
 }
 
@@ -20,12 +22,15 @@ const Line = ({
   nameLine,
   documentID,
   rowIndex,
+  isDarkMode,
   isMenuOpen,
   setIsMenuOpen,
 }: ILineprops) => {
   const [isOpenPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [lineState, setLineState] = useState<string>("");
+
+  const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
   const docRefToUpdate = doc(collectionRows, documentID);
 
@@ -50,13 +55,16 @@ const Line = ({
   };
 
   return (
-    <div className="relative py-2 w-[70px] border border-black cursor-default">
+    <div
+      className={clsx("relative py-2 w-[70px] border border-black cursor-default", darkModeBg)}
+    >
       {!isEditable && isMenuOpen === id && (
         <Menu
           editItem={handleEditLine}
           deleteItem={handleDeleteLine}
           isLineMenu={true}
           rowIndex={rowIndex}
+          isDarkMode={isDarkMode}
         />
       )}
       <div className="flex justify-center">
@@ -65,6 +73,7 @@ const Line = ({
           state={lineState}
           realData={nameLine}
           isLine={true}
+          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeLine}
           handleSubmit={handleSubmitEditLine}
         />

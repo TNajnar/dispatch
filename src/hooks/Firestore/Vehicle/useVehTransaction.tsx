@@ -42,8 +42,8 @@ const useVehTransaction = (
     spz: string,
     classColor: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
-    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMenuOpen?: (value: string) => void,
+    setIsEditable?: (value: boolean) => void
   ) => {
     const newValues = {
       id: id,

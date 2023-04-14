@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import Switcher from "./shared/Switcher";
+import clsx from "clsx";
 
 interface IMainComponentProps {
   children: JSX.Element;
@@ -8,11 +8,10 @@ interface IMainComponentProps {
 }
 
 const MainComponent = ({ children, isDarkMode, setDarkMode }: IMainComponentProps) => (
-  <div className={clsx("contentLayout", isDarkMode && 'text-[#BBE1FA]')}>
+  <div className={clsx("contentLayout", isDarkMode && "text-primary-lightBlue")}>
     <Switcher isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
     {children}
   </div>
 );
-
 
 export default MainComponent;

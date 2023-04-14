@@ -20,7 +20,8 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
   const fromStation = document.station.from;
   const toStation = document.station.to;
 
-  const darkMode = isDarkMode ? "border-[#BBE1FA]" : "border-black";
+  const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-black";
+  const darkEdit = isDarkMode ? "hover:text-primary-blue" : "hover:text-primary-yellow";
 
   const docRefToUpdate = doc(collectionRows, document.id);
 
@@ -52,16 +53,30 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
           ))}
         </td>
         <td className={clsx("relative text-center border", darkMode)}>
-          <CarLeader carLeader={carLeader} phone={phone} docRefToUpdate={docRefToUpdate} />
+          <CarLeader
+            carLeader={carLeader}
+            phone={phone}
+            docRefToUpdate={docRefToUpdate}
+            isDarkMode={isDarkMode}
+            darkEdit={darkEdit}
+          />
         </td>
         <td className={clsx("relative text-center border", darkMode)}>
-          <CarPhone carLeader={carLeader} phone={phone} docRefToUpdate={docRefToUpdate} />
+          <CarPhone
+            carLeader={carLeader}
+            phone={phone}
+            docRefToUpdate={docRefToUpdate}
+            isDarkMode={isDarkMode}
+            darkEdit={darkEdit}
+          />
         </td>
         <td className={clsx("relative text-center border", darkMode)}>
           <FromStation
             stationNameFrom={fromStation}
             stationNameTo={toStation}
             docRefToUpdate={docRefToUpdate}
+            isDarkMode={isDarkMode}
+            darkEdit={darkEdit}
           />
         </td>
         <td className={clsx("relative text-center border", darkMode)}>
@@ -69,6 +84,8 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
             stationNameFrom={fromStation}
             stationNameTo={toStation}
             docRefToUpdate={docRefToUpdate}
+            isDarkMode={isDarkMode}
+            darkEdit={darkEdit}
           />
         </td>
       </tr>

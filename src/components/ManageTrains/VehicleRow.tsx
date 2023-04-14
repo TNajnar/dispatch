@@ -5,24 +5,28 @@ import { nanoid } from "nanoid";
 import { Line, Locomotive, Vehicle } from "../Train";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
-import { useVehicleTransaction, useLineTransaction } from '../../hooks/Firestore'
+import { useVehicleTransaction, useLineTransaction } from "../../hooks/Firestore";
 import { TManageTrainDoc, TVehicleObject } from "../types";
 import { Button, PopUpMenu } from "../ui";
+import clsx from "clsx";
 
 interface IVehicleRowProps {
   document: TManageTrainDoc;
-  getAllVehicles: TVehicleObject[][];
+  allVehicles: TVehicleObject[][];
   rowIndex: number;
+  isDarkMode: boolean;
 }
 
 const collectionRows = collection(database, "ManageTrains");
 
-const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) => {
+const VehicleRow = ({ document, allVehicles, rowIndex, isDarkMode }: IVehicleRowProps) => {
   const [openPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [nameLine, setNameLine] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
 
   const id = nanoid();
+
+  const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-primary-gray";
 
   const docRefToUpdate = doc(collectionRows, document.id);
 
@@ -30,7 +34,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
   const vehicles = document.vehicles;
   const lines = document.line;
   const locomotive = document.locomotives;
-  const transferredVehicles = getAllVehicles.flat();
+  const transferredVehicles = allVehicles.flat();
 
   const linesLenght = Object.keys(lines).length;
 
@@ -84,7 +88,12 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   return (
-    <div className="grid grid-cols-4 place-items-center pb-2 w-full h-[101px] border-b border-primary-gray">
+    <div
+      className={clsx(
+        "grid grid-cols-4 place-items-center pb-2 w-full h-[101px] border-b",
+        darkMode
+      )}
+    >
       {/* <div className="flex justify-end items-center col-span-2 mr-2 w-[99%] overflow-x-scroll overflow-y-hidden"> */}
       <div
         onDrop={handleDrop}
@@ -96,6 +105,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
           text="+"
           onClick={addVehicle}
           isRounded={true}
+          isDarkMode={isDarkMode}
         />
         {/* <div className="flex gap-4 overflow-x-auto overflow-y-hidden whitespace-nowrap"> */}
         <div className="flex gap-4 justify-end">
@@ -115,6 +125,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
                 rowIndex={rowIndex}
                 isMenuOpen={isMenuOpen}
                 isDragging={isDragging}
+                isDarkMode={isDarkMode}
                 setIsMenuOpen={setIsMenuOpen}
                 handleDragging={handleDragging}
               />
@@ -131,6 +142,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
           documentID={document.id}
           collectionName={collectionName}
           rowIndex={rowIndex}
+          isDarkMode={isDarkMode}
           setIsMenuOpen={setIsMenuOpen}
           isMenuOpen={isMenuOpen}
         />
@@ -147,6 +159,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
                   nameLine={line.nameLine}
                   documentID={document.id}
                   rowIndex={rowIndex}
+                  isDarkMode={isDarkMode}
                   setIsMenuOpen={setIsMenuOpen}
                   isMenuOpen={isMenuOpen}
                 />
@@ -164,6 +177,7 @@ const VehicleRow = ({ document, getAllVehicles, rowIndex }: IVehicleRowProps) =>
         handleClose={handleCloseMenu}
         handleOnSubmit={() => handleSubmitLine(this!)}
         handleOnChange={handleOnChangeLine}
+        isDarkMode={isDarkMode}
       />
     </div>
   );

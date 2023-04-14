@@ -1,10 +1,12 @@
+import clsx from "clsx";
 import { Timestamp } from "firebase/firestore";
 
 interface ICarDateInfoProps {
   date: Timestamp;
+  isDarkMode: boolean;
 }
 
-const CarDateInfo = ({ date }: ICarDateInfoProps) => {
+const CarDateInfo = ({ date, isDarkMode }: ICarDateInfoProps) => {
   const formateDate = date
     .toDate()
     .toLocaleString("cs-CZ", {
@@ -15,7 +17,12 @@ const CarDateInfo = ({ date }: ICarDateInfoProps) => {
     .replace(/\//, ".");
 
   return (
-    <div className="absolute -top-12 left-0 px-2 w-[125px] bg-secondary-gray shadow-default rounded-lg">
+    <div
+      className={clsx(
+        "absolute -top-12 left-0 px-2 w-[125px] shadow-default rounded-lg",
+        isDarkMode ? "bg-primary-darkBlue" : "bg-secondary-gray"
+      )}
+    >
       <p className="font-bold">Oprava končí:</p>
       <p>{formateDate}</p>
     </div>

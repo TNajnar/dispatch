@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-const useClickAbleMenu = (
-  id: string,
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>
-) => {
+const useClickAbleMenu = (id: string, setIsMenuOpen: (value: string) => void) => {
   const handleClickOutside = (event?: MouseEvent) => {
     const menuElements = window.document.getElementsByClassName("vehicleMenu");
 

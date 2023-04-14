@@ -29,6 +29,16 @@ const tableHeader = [
   "Do žst.",
 ];
 
+const columnWidths = [
+  "w-[30%]",
+  "w-[10%]",
+  "w-[15%]",
+  "w-[13%]",
+  "w-[12%]",
+  "w-[10%]",
+  "w-[10%]",
+];
+
 interface IExportProps {
   isDarkMode: boolean;
 }
@@ -52,7 +62,7 @@ const Export = ({ isDarkMode }: IExportProps) => {
   }, []);
 
   // Define the data to be exported
-  const data = docRow.map((doc) => {
+  const dataXlsx = docRow.map((doc) => {
     return {
       Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
       Lokomotiva: doc.locomotives.lSpz,
@@ -86,14 +96,8 @@ const Export = ({ isDarkMode }: IExportProps) => {
                 key={`${index}_${item}`}
                 className={clsx(
                   "border",
-                  index === 0 && "w-[30%]",
-                  index === 1 && "w-[10%]",
-                  index === 2 && "w-[15%]",
-                  index === 3 && "w-[13%]",
-                  index === 4 && "w-[12%]",
-                  index === 5 && "w-[10%]",
-                  index === 6 && "w-[10%]",
-                  isDarkMode ? "border-[#BBE1FA]" : "border-black"
+                  columnWidths[index],
+                  isDarkMode ? "border-primary-lightBlue" : "border-black"
                 )}
               >
                 {item}
@@ -108,7 +112,7 @@ const Export = ({ isDarkMode }: IExportProps) => {
 
       <div className="flex justify-center gap-4">
         <ReactXlsxExport
-          data={data}
+          data={dataXlsx}
           filename="TrainManagement"
           className="border-none"
           children={
