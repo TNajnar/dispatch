@@ -43,8 +43,8 @@ const useVehTransaction = (
     spz: string,
     classColor: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: Dispatch<SetStateAction<string>>,
-    setIsEditable?: Dispatch<SetStateAction<boolean>>
+    setIsMenuOpen?: (value: string) => void,
+    setIsEditable?: (value: boolean) => void
   ) => {
     const newValues = {
       id: id,

@@ -7,19 +7,19 @@ import { CSVLink } from "react-csv";
 import ReactXlsxExport from "react-xlsx-export";
 import { Button } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import clsx from "clsx";
+import data from "../data.json";
 
-const headers = [
-  { label: "Vozidla", key: "vehicles" },
-  { label: "Lokomotiva", key: "locomotives" },
-  { label: "Linka", key: "line" },
-  { label: "Strojvedoucí", key: "carLeader" },
-  { label: "Telefonní číslo", key: "phone" },
-  { label: "Z žst.", key: "from" },
-  { label: "Do žst.", key: "to" },
-];
+interface IExportProps {
+  isDarkMode: boolean;
+}
 
-const Export = () => {
+const Export = ({ isDarkMode }: IExportProps) => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
+
+  const headers = data.headers;
+  const tableHeader = data.tableHeader;
+  const columnWidths = data.columnWidths;
 
   useEffect(() => {
     //onSnapshot instead of getDocs so that you also listen for updates to the data.
@@ -37,7 +37,7 @@ const Export = () => {
   }, []);
 
   // Define the data to be exported
-  const data = docRow.map((doc) => {
+  const dataXlsx = docRow.map((doc) => {
     return {
       Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
       Lokomotiva: doc.locomotives.lSpz,
@@ -66,23 +66,28 @@ const Export = () => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="w-[30%]">Vozy</th>
-            <th className="w-[10%]">Lokomotiva</th>
-            <th className="w-[15%]">Linky</th>
-            <th className="w-[13%]">Strojvedoucí</th>
-            <th className="w-[12%]">Tel. číslo</th>
-            <th className="w-[10%]">Z žst.</th>
-            <th className="w-[10%]">Do žst.</th>
+            {tableHeader.map((item, index) => (
+              <th
+                key={`${index}_${item}`}
+                className={clsx(
+                  "border",
+                  columnWidths[index],
+                  isDarkMode ? "border-primary-lightBlue" : "border-black"
+                )}
+              >
+                {item}
+              </th>
+            ))}
           </tr>
         </thead>
         {docRow.map((document) => (
-          <TableRow key={document.id} document={document} />
+          <TableRow key={document.id} document={document} isDarkMode={isDarkMode} />
         ))}
       </table>
 
       <div className="flex justify-center gap-4">
         <ReactXlsxExport
-          data={data}
+          data={dataXlsx}
           filename="TrainManagement"
           className="border-none"
           children={

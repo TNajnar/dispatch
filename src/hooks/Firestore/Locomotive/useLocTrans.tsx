@@ -9,15 +9,8 @@ import {
 } from "firebase/firestore";
 import database from "../../../shared/firebaseconfig";
 
-const useLocTrans = (
-  vehicleDoc: string,
-  docRefToUpdate: DocumentReference<DocumentData>
-) => {
-  const addLocTransaction = async (
-    id: string,
-    spz: string,
-    repairDate: string
-  ) => {
+const useLocTrans = (vehicleDoc: string, docRefToUpdate: DocumentReference<DocumentData>) => {
+  const addLocTransaction = async (id: string, spz: string, repairDate: string) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {
@@ -38,8 +31,8 @@ const useLocTrans = (
     id: string,
     spz: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
-    setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMenuOpen?: (value: string) => void,
+    setIsEditable?: (value: boolean) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -57,7 +50,7 @@ const useLocTrans = (
         },
       });
     });
-    setIsEditable?.(false)
+    setIsEditable?.(false);
     setIsMenuOpen?.("");
   };
 
@@ -65,7 +58,7 @@ const useLocTrans = (
     id: string,
     spz: string,
     repairDate: Timestamp,
-    setIsMenuOpen?: React.Dispatch<React.SetStateAction<string>>,
+    setIsMenuOpen?: (value: string) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);

@@ -5,6 +5,7 @@ import clsx from "clsx";
 interface IMultiClassMenuProps {
   isColorClass?: boolean;
   carRepairDate?: Timestamp;
+  isDarkMode: boolean;
   classColor?: (colors: string) => void;
   handleRepairDate?: (repairD: Timestamp) => void;
 }
@@ -21,10 +22,13 @@ const vehicleClasses = Object.freeze<Record<number, string | undefined>>({
 const MultiClassMenu = ({
   isColorClass,
   carRepairDate,
+  isDarkMode,
   classColor,
   handleRepairDate,
 }: IMultiClassMenuProps) => {
   const colors = [0, 1, 2, 3, 4, 5];
+
+  const darkMode = isDarkMode ? "bg-primary-darkBlue" : "bg-secondary-gray";
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedDate = new Date(event.target.value);
@@ -32,7 +36,9 @@ const MultiClassMenu = ({
   };
 
   return (
-    <div className="absolute -right-[192px] p-3 w-48 bg-secondary-gray shadow-[0_0px_14px_-4px_rgba(0,0,0,0.3)] rounded-lg">
+    <div
+      className={clsx("absolute -right-[192px] p-3 w-48 shadow-default rounded-lg", darkMode)}
+    >
       {isColorClass ? (
         <div className="flex flex-col justify-center">
           <p className="font-bold">Vyber barvu třídy:</p>
@@ -42,7 +48,8 @@ const MultiClassMenu = ({
                 key={index}
                 onClick={() => classColor?.(vehicleClasses[index]!)}
                 className={clsx(
-                  "w-4 h-4 hover:border border-secondary-yellow rounded-full",
+                  "w-4 h-4 hover:border rounded-full",
+                  isDarkMode ? "border-primary-lightBlue" : "border-secondary-yellow",
                   vehicleClasses[index]
                 )}
               />
@@ -54,7 +61,10 @@ const MultiClassMenu = ({
           <label className="font-bold">Datum opravy:</label>
           <input
             type="date"
-            className="border border-primary-gray rounded-sm hover:border-black"
+            className={clsx(
+              "border border-primary-gray rounded-sm hover:border-black",
+              darkMode
+            )}
             value={carRepairDate && carRepairDate.toDate().toISOString().substring(0, 10)}
             onChange={handleOnChange}
           />

@@ -8,7 +8,7 @@ const useBasicFirestore = (
     id: string,
     spz: string,
     repairDate: string,
-    setIsClicked: React.Dispatch<React.SetStateAction<boolean>>
+    setIsClicked: (value: boolean) => void
   ) => {
     await setDoc(docRefToUpdate, {
       vehicles: [],

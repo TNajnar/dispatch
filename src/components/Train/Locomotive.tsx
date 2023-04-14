@@ -1,8 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import { useLocFilterTrans, useLocoTransaction } from '../../hooks/Firestore'
+import { useLocFilterTrans, useLocoTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
+import clsx from "clsx";
 
 interface ILocomotiveProps {
   id: string;
@@ -15,8 +16,9 @@ interface ILocomotiveProps {
   isParked?: boolean;
   isMenuOpen?: string;
   isDragging?: boolean;
+  isDarkMode: boolean;
   handleVehicleRepairDate?: (repairD: Timestamp) => void;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<string>>;
+  setIsMenuOpen: Dispatch<SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
 }
 
@@ -31,12 +33,16 @@ const Locomotive = ({
   isParked,
   isMenuOpen,
   isDragging,
+  isDarkMode,
   setIsMenuOpen,
   handleDragging,
 }: ILocomotiveProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
   const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
+
+  const darkModeBorder = isDarkMode ? "border-primary-lightBlue" : "border-black";
+  const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
@@ -103,20 +109,27 @@ const Locomotive = ({
           rowIndex={rowIndex}
           isLocomotive={true}
           isParked={isParked}
+          isDarkMode={isDarkMode}
           editItem={handleEditLocomotive}
           deleteItem={deleteLocomotive}
           handleRepairDate={handleLocomotiveRepairDate}
         />
       )}
 
-      {showDateInfo && <CarDateInfo date={locomotiveRepairDate} />}
+      {showDateInfo && <CarDateInfo date={locomotiveRepairDate} isDarkMode={isDarkMode} />}
 
-      <div className="relative w-32 h-14 overflow-hidden flex bg-white border border-black rounded-lg rounded-tr-[35px]">
+      <div
+        className={clsx(
+          "relative w-32 h-14 overflow-hidden flex border border-black rounded-lg rounded-tr-[35px]",
+          darkModeBg
+        )}
+      >
         <EditableField
           isEditable={isEditable}
           state={locoStateSpz}
           realData={locomotiveSpz}
           isLocomotive={true}
+          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeLocomotive}
           handleSubmit={handleSubmitEditLocomotive}
         />
@@ -124,14 +137,41 @@ const Locomotive = ({
           carRepairDate={locomotiveRepairDate}
           setShowDateInfo={setShowDateInfo}
         />
-        <div className="absolute -top-[1px] left-20 w-16 h-8  border rounded-l-xl border-black" />
-        <div className="absolute -bottom-5 -left-5 w-20 h-8 border rounded-md border-black" />
+        <div
+          className={clsx(
+            "absolute -top-[1px] left-20 w-16 h-8 border rounded-l-xl",
+            darkModeBg,
+            darkModeBorder
+          )}
+        />
+        <div
+          className={clsx(
+            "absolute -bottom-5 -left-5 w-20 h-8 border rounded-md",
+            darkModeBg,
+            darkModeBorder
+          )}
+        />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3 ">
-        <div className="absolute -top-[3px] left-4 w-[13px] h-[14px] bg-white border border-black rounded-full" />
-        <div className="absolute -top-[3px] left-24 w-[13px] h-[14px] bg-white border border-black rounded-full" />
-        <div className="absolute -top-[3px] left-20 w-[13px] h-[14px] bg-white border border-black rounded-full" />
+        <div
+          className={clsx(
+            "absolute -top-[3px] left-4 w-[13px] h-[14px] border border-black rounded-full",
+            darkModeBg
+          )}
+        />
+        <div
+          className={clsx(
+            "absolute -top-[3px] left-24 w-[13px] h-[14px] border border-black rounded-full",
+            darkModeBg
+          )}
+        />
+        <div
+          className={clsx(
+            "absolute -top-[3px] left-20 w-[13px] h-[14px] border border-black rounded-full",
+            darkModeBg
+          )}
+        />
       </div>
     </div>
   );

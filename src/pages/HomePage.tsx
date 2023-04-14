@@ -9,7 +9,7 @@ const HomePage = () => {
       <div className="text-center text-h1 font-bold">
         Vítej {keycloakValue?.idTokenParsed?.preferred_username}
       </div>
-      <h1 className="text-h2 font-bold pb-6">Možnosti na navigačních stránkách</h1>
+      <h1 className="text-h2 font-bold pb-6">Orientační pokyny k používání aplikace</h1>
       <h3 className="text-h3 font-bold">Management vozů</h3>
       <p className="pb-6">
         Zde můžeš libovolně skládat vlaky a přenášet vozy z jedné koleje na druhou. Tyto data
@@ -22,8 +22,13 @@ const HomePage = () => {
       </p>
       <h3 className="text-h3 font-bold">Export dat</h3>
       <p>
-        Zde exportuj tabulku do .csv nebo .xlsx souboru. Lze doplnit i kontakt na
+        Zde exportuj tabulku do CSV(.csv) nebo Excel(.xlsx) souboru. Lze doplnit i kontakt na
         strojvedoucího a odkud kam vlak jede.
+      </p>
+      <h3 className="text-h3 font-bold">Zvol si tema</h3>
+      <p>
+        Pomocí přepínače v levém horním rohu si můžeš navolit mód. Jsou k dispozici světlý a
+        tmavý mód.
       </p>
     </div>
   );

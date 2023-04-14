@@ -1,0 +1,57 @@
+{
+  "NavItems": [
+    {
+      "name": "Domů",
+      "url": "/"
+    },
+    {
+      "name": "Managemnet vozů",
+      "url": "/manage-vehicles"
+    },
+    {
+      "name": "Odstavené vozy",
+      "url": "/parked-vehicles"
+    },
+    {
+      "name": "Export dat",
+      "url": "/export"
+    }
+  ],
+
+   "headers": [
+    { "label": "Vozidla", "key": "vehicles" },
+    { "label": "Lokomotiva", "key": "locomotives" },
+    { "label": "Linka", "key": "line" },
+    { "label": "Strojvedoucí", "key": "carLeader" },
+    { "label": "Telefonní číslo", "key": "phone" },
+    { "label": "Z žst.", "key": "from" },
+    { "label": "Do žst.", "key": "to" }
+  ],
+
+   "tableHeader": [
+    "Vozy",
+    "Lokomotiva",
+    "Linky",
+    "Strojvedoucí",
+    "Tel. číslo",
+    "Z žst.",
+    "Do žst."
+  ],
+  
+   "columnWidths" : [
+    "w-[30%]",
+    "w-[10%]",
+    "w-[15%]",
+    "w-[13%]",
+    "w-[12%]",
+    "w-[10%]",
+    "w-[10%]"
+  ]
+}
+
+  
+  
+  
+  
+  
+  

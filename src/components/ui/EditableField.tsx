@@ -7,6 +7,7 @@ interface IEditableFieldProps {
   realData?: string;
   isLine?: boolean;
   isLocomotive?: boolean;
+  isDarkMode?: boolean;
   handleOnChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit?: () => void;
 }
@@ -17,6 +18,7 @@ const EditableField = ({
   realData,
   isLine,
   isLocomotive,
+  isDarkMode,
   handleOnChange,
   handleSubmit,
 }: IEditableFieldProps) => {
@@ -24,6 +26,9 @@ const EditableField = ({
   const width = isLine ? "w-10" : "w-12";
   const hover = (isLocomotive || isLine) && isEditable;
   const padding = isLocomotive;
+  const darkMode = isDarkMode
+    ? "bg-primary-blue text-primary-lightBlue"
+    : "bg-white text-gray-600";
 
   return (
     <div
@@ -39,10 +44,11 @@ const EditableField = ({
         type="text"
         value={isEditable ? state : realData}
         className={clsx(
-          "text-center text-gray-600 bg-white",
+          "text-center",
           border && "border-b border-primary-gray rounded-sm",
           width,
-          hover && "border border-primary-gray hover:border-black"
+          hover && "border border-primary-gray hover:border-black",
+          darkMode
         )}
         disabled={!isEditable}
         onChange={handleOnChange}

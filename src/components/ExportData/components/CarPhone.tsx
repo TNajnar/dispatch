@@ -3,14 +3,23 @@ import { DocumentData, DocumentReference } from "firebase/firestore";
 import useExportTransaction from "../../../hooks/Firestore/Pages/ExportTransactions";
 import EditField from "./EditField";
 import EditIcon from "@mui/icons-material/Edit";
+import clsx from "clsx";
 
 interface ICarPhoneProps {
   carLeader: string;
   phone: string;
   docRefToUpdate: DocumentReference<DocumentData>;
+  isDarkMode: boolean;
+  darkEdit: string;
 }
 
-const CarPhone = ({ carLeader, phone, docRefToUpdate }: ICarPhoneProps) => {
+const CarPhone = ({
+  carLeader,
+  phone,
+  docRefToUpdate,
+  isDarkMode,
+  darkEdit,
+}: ICarPhoneProps) => {
   const [isEditablePhone, setIsEditablePhone] = useState<boolean>(false);
   const [phoneState, setPhoneState] = useState<string>("");
 
@@ -36,6 +45,7 @@ const CarPhone = ({ carLeader, phone, docRefToUpdate }: ICarPhoneProps) => {
           isEditable={isEditablePhone}
           state={phoneState}
           realData={phone}
+          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangePhone}
           handleSubmit={handleSumbitPhone}
         />
@@ -45,7 +55,7 @@ const CarPhone = ({ carLeader, phone, docRefToUpdate }: ICarPhoneProps) => {
 
       {!isEditablePhone && (
         <span onClick={handleEditCarPhone}>
-          <EditIcon className="edit" />
+          <EditIcon className={clsx("edit", darkEdit)} />
         </span>
       )}
     </div>

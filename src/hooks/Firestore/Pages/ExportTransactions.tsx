@@ -5,7 +5,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
   const editLeaderTransaction = async (
     leaderState: string,
     phone: string,
-    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEditable: (value: boolean) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -26,7 +26,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
   const editPhoneTransaction = async (
     carLeader: string,
     phoneState: string,
-    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEditable: (value: boolean) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -47,7 +47,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
   const editFromTransaction = async (
     fromStationState: string,
     to: string,
-    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEditable: (value: boolean) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
@@ -68,7 +68,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
   const editToTransaction = async (
     from: string,
     toStationState: string,
-    setIsEditable: React.Dispatch<React.SetStateAction<boolean>>
+    setIsEditable: (value: boolean) => void
   ) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
