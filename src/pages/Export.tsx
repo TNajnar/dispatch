@@ -39,7 +39,7 @@ const Export = ({ isDarkMode }: IExportProps) => {
   // Define the data to be exported
   const dataXlsx = docRow.map((doc) => {
     return {
-      Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
+      Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).filter(spz => spz !== "").join(", "),
       Lokomotiva: doc.locomotives.lSpz,
       Linky: doc.line.map((line) => line.nameLine).join(", "),
       Strojvedoucí: doc.contact.carLeader,
@@ -51,7 +51,7 @@ const Export = ({ isDarkMode }: IExportProps) => {
 
   const dataCsv = docRow.map((doc) => {
     return {
-      vehicles: doc.vehicles.map((vehicle) => vehicle.spz).join(", "),
+      vehicles: doc.vehicles.map((vehicle) => vehicle.spz).filter(spz => spz !== "").join(", "),
       locomotives: doc.locomotives.lSpz,
       line: doc.line.map((line) => line.nameLine).join(", "),
       carLeader: doc.contact.carLeader,
