@@ -6,25 +6,20 @@ interface ICarRepairLightProps {
   setShowDateInfo: (value: boolean) => void;
 }
 
-const today = new Date(
-  Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-);
+const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
 const todayTimestamp = Timestamp.fromDate(today);
 
 const CarRepairLight = ({ carRepairDate, setShowDateInfo }: ICarRepairLightProps) => {
   let carRepairTomorrowDateTimestamp;
 
   //24=number of hours in a day || 60=number of minutes in an hour || 60=number of seconds in minute || 1000=number of miliseconds in second
-  const carTomorrow = carRepairDate
-    ? new Date(carRepairDate.toMillis() + 24 * 60 * 60 * 1000)
-    : undefined;
+  const carTomorrow = carRepairDate ? new Date(carRepairDate.toMillis() + 24 * 60 * 60 * 1000) : undefined;
 
   if (carTomorrow) {
     carRepairTomorrowDateTimestamp = Timestamp.fromDate(carTomorrow);
   }
 
-  const informationDayRepairDone = // if repairs is over next day controll light is hidden
-    carRepairTomorrowDateTimestamp?.seconds === todayTimestamp.seconds;
+  const informationDayRepairDone = carRepairTomorrowDateTimestamp?.seconds === todayTimestamp.seconds; // if repairs is over next day controll light is hidden
 
   const carIsRepaired = carRepairDate?.seconds !== todayTimestamp.seconds;
 

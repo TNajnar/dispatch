@@ -1,4 +1,5 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, useContext } from "react";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -14,23 +15,14 @@ interface IPopUpMenu {
   title?: string;
   context?: string;
   label?: string;
-  isDarkMode?: boolean;
   handleClose: () => void;
   handleOnSubmit: () => void;
   handleOnChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
-const PopUpMenu = ({
-  open,
-  value,
-  title,
-  context,
-  label,
-  isDarkMode,
-  handleClose,
-  handleOnSubmit,
-  handleOnChange,
-}: IPopUpMenu) => {
+const PopUpMenu = ({ open, value, title, context, label, handleClose, handleOnSubmit, handleOnChange }: IPopUpMenu) => {
+  const { isDarkMode } = useContext(ThemeContext);
+
   const darkMode = isDarkMode ? " bg-primary-darkBlue" : "bg-white";
   const darkText = isDarkMode && "text-primary-lightBlue";
   const darkButton = isDarkMode ? "darkButton darkButtonHover" : "button buttonHover";
@@ -38,9 +30,7 @@ const PopUpMenu = ({
     <Dialog open={open} onClose={handleClose} onSubmit={handleOnSubmit}>
       <DialogTitle className={clsx(darkMode, darkText)}>{title}</DialogTitle>
       <DialogContent className={clsx(darkMode)}>
-        <DialogContentText className={clsx(isDarkMode && "content")}>
-          {context}
-        </DialogContentText>
+        <DialogContentText className={clsx(isDarkMode && "content")}>{context}</DialogContentText>
         <TextField
           onChange={handleOnChange}
           value={value}

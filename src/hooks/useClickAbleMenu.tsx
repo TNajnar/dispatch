@@ -4,9 +4,7 @@ const useClickAbleMenu = (id: string, setIsMenuOpen: (value: string) => void) =>
   const handleClickOutside = (event?: MouseEvent) => {
     const menuElements = window.document.getElementsByClassName("vehicleMenu");
 
-    const haveClickedMenu = Array.from(menuElements).some((el) =>
-      el.contains(event?.target as Node)
-    );
+    const haveClickedMenu = Array.from(menuElements).some((el) => el.contains(event?.target as Node));
 
     if (haveClickedMenu) return;
 

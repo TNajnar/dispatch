@@ -10,6 +10,11 @@ cd dispatch
 npm config set legacy-peer-deps
 npm install
 
+### `run with Keycloak`
+
+cd dispatch
+docker-compose up
+
 ### `npm start`
 
 Runs the app in the development mode.\

@@ -36,9 +36,7 @@ const MultiClassMenu = ({
   };
 
   return (
-    <div
-      className={clsx("absolute -right-[192px] p-3 w-48 shadow-default rounded-lg", darkMode)}
-    >
+    <div className={clsx("absolute -right-[192px] p-3 w-48 shadow-default rounded-lg", darkMode)}>
       {isColorClass ? (
         <div className="flex flex-col justify-center">
           <p className="font-bold">Vyber barvu třídy:</p>
@@ -61,10 +59,7 @@ const MultiClassMenu = ({
           <label className="font-bold">Datum opravy:</label>
           <input
             type="date"
-            className={clsx(
-              "border border-primary-gray rounded-sm hover:border-black",
-              darkMode
-            )}
+            className={clsx("border border-primary-gray rounded-sm hover:border-black", darkMode)}
             value={carRepairDate && carRepairDate.toDate().toISOString().substring(0, 10)}
             onChange={handleOnChange}
           />

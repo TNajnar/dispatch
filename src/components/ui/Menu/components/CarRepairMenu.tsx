@@ -23,11 +23,7 @@ const CarRepairMenu = ({
     <ConstructionIcon className="menuIcons" /> Oprava Vozu
     <KeyboardDoubleArrowRightIcon className="menuIcons" />
     {isHoveredRepair && (
-      <MultiMenu
-        carRepairDate={carRepairDate}
-        handleRepairDate={handleRepairDate}
-        isDarkMode={isDarkMode}
-      />
+      <MultiMenu carRepairDate={carRepairDate} handleRepairDate={handleRepairDate} isDarkMode={isDarkMode} />
     )}
   </div>
 );

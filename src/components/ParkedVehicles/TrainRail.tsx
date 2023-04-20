@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import { nanoid } from "nanoid";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
@@ -14,14 +15,15 @@ interface ITrainRailProps {
   document: TParkedVehicleDoc;
   getAllCars: TVehicleObject[][];
   rowIndex: number;
-  isDarkMode: boolean;
 }
 
 const collectionRows = collection(database, "ParkedVehicles");
 
-const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailProps) => {
+const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState<string>("");
   const id = nanoid();
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-primary-gray";
   const darkTrail = isDarkMode ? "border-primary-lightBlue" : "border-black";
@@ -36,10 +38,7 @@ const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailPro
 
   useClickAbleMenu(id, setIsMenuOpen);
 
-  const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(
-    transferredCars,
-    collectionName
-  );
+  const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(transferredCars, collectionName);
 
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
 
@@ -68,14 +67,8 @@ const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailPro
 
   return (
     <div className={clsx("flex items-center py-4 h-[101px] gap-4 border-b", darkMode)}>
-      {!!nameRail && (
-        <h2 className={clsx("mr-2 w-24 text-h3 font-bold border-r", darkTrail)}>{nameRail}</h2>
-      )}
-      <div
-        className="flex gap-5 w-full h-full"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
+      {!!nameRail && <h2 className={clsx("mr-2 w-24 text-h3 font-bold border-r", darkTrail)}>{nameRail}</h2>}
+      <div className="flex gap-5 w-full h-full" onDrop={handleDrop} onDragOver={handleDragOver}>
         {parkedVehicles.map((car) => (
           <div key={car.id} onClick={() => handleOpenMenu(car.id)}>
             {car.isVehicle ? (
@@ -87,7 +80,6 @@ const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailPro
                 vehicleDoc={car.vehicleDoc}
                 documentID={document.id}
                 rowIndex={rowIndex}
-                isDarkMode={isDarkMode}
                 collectionName={collectionName}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
@@ -102,7 +94,6 @@ const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailPro
                 collectionName={collectionName}
                 isParked={true}
                 rowIndex={rowIndex}
-                isDarkMode={isDarkMode}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
               />
@@ -112,8 +103,8 @@ const TrainRail = ({ document, getAllCars, rowIndex, isDarkMode }: ITrainRailPro
       </div>
       <div className="flex-1" />
       <div className="absolute right-0 bottom-2 flex flex-col justify-center items-center gap-1">
-        <Button text="L" onClick={addLocomotive} isRounded={true} isDarkMode={isDarkMode} />
-        <Button text="V" onClick={addVehicle} isRounded={true} isDarkMode={isDarkMode} />
+        <Button text="L" onClick={addLocomotive} isRounded={true} />
+        <Button text="V" onClick={addVehicle} isRounded={true} />
       </div>
     </div>
   );

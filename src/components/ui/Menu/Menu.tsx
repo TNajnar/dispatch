@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Timestamp } from "firebase/firestore";
 import { CarRepairMenu, ChooseClassMenu } from "./components";
+import { ThemeContext } from "../../../helpers/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
@@ -11,7 +12,6 @@ interface IMenuProps {
   isLineMenu?: boolean;
   isLocomotive?: boolean;
   isParked?: boolean;
-  isDarkMode: boolean;
   editItem?: () => void;
   deleteItem?: () => void;
   handleClassColor?: (colors: string) => void;
@@ -24,7 +24,6 @@ const Menu = ({
   isLineMenu,
   isLocomotive,
   isParked,
-  isDarkMode,
   editItem,
   deleteItem,
   handleClassColor,
@@ -32,6 +31,8 @@ const Menu = ({
 }: IMenuProps) => {
   const [isHoveredClass, setIsHoveredClass] = useState<boolean>(false);
   const [isHoveredRepair, setIsHoveredRepair] = useState<boolean>(false);
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const darkHover = isDarkMode ? "hover:bg-primary-blue" : "hover:bg-secondary-yellow";
 
@@ -51,10 +52,7 @@ const Menu = ({
       </div>
 
       {!isLineMenu && !isLocomotive && (
-        <div
-          onMouseEnter={() => setIsHoveredClass(true)}
-          onMouseLeave={() => setIsHoveredClass(false)}
-        >
+        <div onMouseEnter={() => setIsHoveredClass(true)} onMouseLeave={() => setIsHoveredClass(false)}>
           <ChooseClassMenu
             isHoveredClass={isHoveredClass}
             isDarkMode={isDarkMode}
@@ -65,10 +63,7 @@ const Menu = ({
       )}
 
       {!isLineMenu && (
-        <div
-          onMouseEnter={() => setIsHoveredRepair(true)}
-          onMouseLeave={() => setIsHoveredRepair(false)}
-        >
+        <div onMouseEnter={() => setIsHoveredRepair(true)} onMouseLeave={() => setIsHoveredRepair(false)}>
           <CarRepairMenu
             isHoveredRepair={isHoveredRepair}
             carRepairDate={carRepairDate}
@@ -80,11 +75,7 @@ const Menu = ({
       )}
 
       <div
-        className={clsx(
-          "flex items-center px-4 py-2 gap-4",
-          darkHover,
-          !isParked && isLocomotive && "hidden"
-        )}
+        className={clsx("flex items-center px-4 py-2 gap-4", darkHover, !isParked && isLocomotive && "hidden")}
         onClick={deleteItem}
       >
         <DeleteOutlineIcon className="menuIcons" />

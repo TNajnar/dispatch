@@ -2,11 +2,7 @@ import { DocumentData, DocumentReference, runTransaction } from "firebase/firest
 import database from "../../../shared/firebaseconfig";
 
 const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) => {
-  const editLeaderTransaction = async (
-    leaderState: string,
-    phone: string,
-    setIsEditable: (value: boolean) => void
-  ) => {
+  const editLeaderTransaction = async (leaderState: string, phone: string, setIsEditable: (value: boolean) => void) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {
@@ -44,11 +40,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
     setIsEditable(false);
   };
 
-  const editFromTransaction = async (
-    fromStationState: string,
-    to: string,
-    setIsEditable: (value: boolean) => void
-  ) => {
+  const editFromTransaction = async (fromStationState: string, to: string, setIsEditable: (value: boolean) => void) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {
@@ -65,11 +57,7 @@ const useExportTransaction = (docRefToUpdate: DocumentReference<DocumentData>) =
     setIsEditable(false);
   };
 
-  const editToTransaction = async (
-    from: string,
-    toStationState: string,
-    setIsEditable: (value: boolean) => void
-  ) => {
+  const editToTransaction = async (from: string, toStationState: string, setIsEditable: (value: boolean) => void) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {

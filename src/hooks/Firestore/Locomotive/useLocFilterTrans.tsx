@@ -1,16 +1,8 @@
-import {
-  DocumentData,
-  DocumentReference,
-  runTransaction,
-  Timestamp,
-} from "firebase/firestore";
+import { DocumentData, DocumentReference, runTransaction, Timestamp } from "firebase/firestore";
 import { TVehicleObject } from "../../../components/types";
 import database from "../../../shared/firebaseconfig";
 
-const useLocFilterTrans = (
-  vehicleDoc: string,
-  docRefToUpdate: DocumentReference<DocumentData>
-) => {
+const useLocFilterTrans = (vehicleDoc: string, docRefToUpdate: DocumentReference<DocumentData>) => {
   const editTransactionF = async (
     id: string,
     spz: string,
@@ -28,10 +20,7 @@ const useLocFilterTrans = (
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       const data = sfDoc.data();
-      const filterCars = [
-        ...data?.vehicles.filter((car: TVehicleObject) => car.id !== id),
-        newValues,
-      ];
+      const filterCars = [...data?.vehicles.filter((car: TVehicleObject) => car.id !== id), newValues];
       transaction.update(docRefToUpdate, { vehicles: filterCars });
     });
     setIsEditable?.(false);
@@ -54,10 +43,7 @@ const useLocFilterTrans = (
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       const data = sfDoc.data();
-      const filterCars = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
+      const filterCars = [...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id), newValues];
       transaction.update(docRefToUpdate, { vehicles: filterCars });
     });
     setIsMenuOpen?.("");

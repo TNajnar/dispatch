@@ -1,21 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { KeycloakContext } from "../../helpers/KeycloakContext";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import clsx from "clsx";
 import data from "../../data.json";
 
-interface INavbarProps {
-  isDarkMode: boolean;
-}
-
-const Navbar = ({ isDarkMode }: INavbarProps) => {
+const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("");
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { logout } = useContext(KeycloakContext);
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const NavItems = data.NavItems;
 
@@ -32,8 +31,6 @@ const Navbar = ({ isDarkMode }: INavbarProps) => {
   useEffect(() => {
     setActiveTab(pathname);
   }, [pathname]);
-
-  console.log(pathname);
 
   return (
     <nav className={clsx("flex items-center justify-around", darkNavbar)}>
@@ -64,7 +61,7 @@ const Navbar = ({ isDarkMode }: INavbarProps) => {
       <div
         onClick={() => logout()}
         className={clsx(
-          "flex justify-center items-center gap-2 py-4 w-[148px] hover:shadow-md",
+          "flex justify-center items-center gap-2 py-[17px] w-[148px] hover:shadow-md",
           darkLogout
         )}
       >

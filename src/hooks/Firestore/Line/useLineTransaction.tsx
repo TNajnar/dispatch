@@ -27,10 +27,7 @@ const useLineTransaction = (docRefToUpdate: DocumentReference<DocumentData>) => 
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       const data = sfDoc.data();
-      const filterLines = [
-        ...data?.line.filter((line: TLineObject) => line.id !== id),
-        newValues,
-      ];
+      const filterLines = [...data?.line.filter((line: TLineObject) => line.id !== id), newValues];
       transaction.update(docRefToUpdate, { line: filterLines });
     });
     setIsEditable?.(false);

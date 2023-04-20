@@ -1,6 +1,7 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import { useLocFilterTrans, useLocoTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
@@ -16,7 +17,6 @@ interface ILocomotiveProps {
   isParked?: boolean;
   isMenuOpen?: string;
   isDragging?: boolean;
-  isDarkMode: boolean;
   handleVehicleRepairDate?: (repairD: Timestamp) => void;
   setIsMenuOpen: Dispatch<SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
@@ -33,7 +33,6 @@ const Locomotive = ({
   isParked,
   isMenuOpen,
   isDragging,
-  isDarkMode,
   setIsMenuOpen,
   handleDragging,
 }: ILocomotiveProps) => {
@@ -41,21 +40,17 @@ const Locomotive = ({
   const [locoStateSpz, setLocoStateSpz] = useState<string>("");
   const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
 
+  const { isDarkMode } = useContext(ThemeContext);
+
   const darkModeBorder = isDarkMode ? "border-primary-lightBlue" : "border-black";
   const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editTransaction, dateTransaction, deleteLoc } = useLocoTransaction(
-    locomotiveDoc,
-    docRefToUpdate
-  );
+  const { editTransaction, dateTransaction, deleteLoc } = useLocoTransaction(locomotiveDoc, docRefToUpdate);
 
-  const { editTransactionF, dateFilterTransaction } = useLocFilterTrans(
-    locomotiveDoc,
-    docRefToUpdate
-  );
+  const { editTransactionF, dateFilterTransaction } = useLocFilterTrans(locomotiveDoc, docRefToUpdate);
 
   const handleEditLocomotive = () => {
     setIsEditable(true);
@@ -97,19 +92,13 @@ const Locomotive = ({
   };
 
   return (
-    <div
-      className="relative group"
-      draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
+    <div className="relative group" draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       {!isEditable && isMenuOpen === id && (
         <Menu
           carRepairDate={locomotiveRepairDate}
           rowIndex={rowIndex}
           isLocomotive={true}
           isParked={isParked}
-          isDarkMode={isDarkMode}
           editItem={handleEditLocomotive}
           deleteItem={deleteLocomotive}
           handleRepairDate={handleLocomotiveRepairDate}
@@ -129,28 +118,12 @@ const Locomotive = ({
           state={locoStateSpz}
           realData={locomotiveSpz}
           isLocomotive={true}
-          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeLocomotive}
           handleSubmit={handleSubmitEditLocomotive}
         />
-        <CarRepairLight
-          carRepairDate={locomotiveRepairDate}
-          setShowDateInfo={setShowDateInfo}
-        />
-        <div
-          className={clsx(
-            "absolute -top-[1px] left-20 w-16 h-8 border rounded-l-xl",
-            darkModeBg,
-            darkModeBorder
-          )}
-        />
-        <div
-          className={clsx(
-            "absolute -bottom-5 -left-5 w-20 h-8 border rounded-md",
-            darkModeBg,
-            darkModeBorder
-          )}
-        />
+        <CarRepairLight carRepairDate={locomotiveRepairDate} setShowDateInfo={setShowDateInfo} />
+        <div className={clsx("absolute -top-[1px] left-20 w-16 h-8 border rounded-l-xl", darkModeBg, darkModeBorder)} />
+        <div className={clsx("absolute -bottom-5 -left-5 w-20 h-8 border rounded-md", darkModeBg, darkModeBorder)} />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3 ">

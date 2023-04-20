@@ -28,31 +28,25 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
   return (
     <tbody className="w-full">
       <tr>
-        <td className={clsx("border", darkMode)}>
+        <td className={clsx("border text-left", darkMode)}>
           {vehicles.map(
             (vehicle, indexV) =>
               vehicle.spz && (
-                <span
-                  key={vehicle.id}
-                  className={clsx("border-r", indexV > 0 ? "px-2" : "pr-2", darkMode)}
-                >
+                <span key={vehicle.id} className={clsx("border-r", indexV > 0 ? "px-2" : "pr-2", darkMode)}>
                   {vehicle.spz}
                 </span>
               )
           )}
         </td>
-        <td className={clsx("text-center border", darkMode)}>{locomotive.lSpz}</td>
-        <td className={`border ${darkMode}`}>
+        <td className={clsx("border", darkMode)}>{locomotive.lSpz}</td>
+        <td className={`border text-left ${darkMode}`}>
           {lines.map((line, index) => (
-            <span
-              key={line.id}
-              className={clsx("border-r", index > 0 ? "px-2" : "pr-2", darkMode)}
-            >
+            <span key={line.id} className={clsx("border-r", index > 0 ? "px-2" : "pr-2", darkMode)}>
               {line.nameLine}
             </span>
           ))}
         </td>
-        <td className={clsx("relative text-center border", darkMode)}>
+        <td className={clsx("relative border w-[13%]", darkMode)}>
           <CarLeader
             carLeader={carLeader}
             phone={phone}
@@ -61,7 +55,7 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
             darkEdit={darkEdit}
           />
         </td>
-        <td className={clsx("relative text-center border", darkMode)}>
+        <td className={clsx("relative border w-[12%]", darkMode)}>
           <CarPhone
             carLeader={carLeader}
             phone={phone}
@@ -70,7 +64,7 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
             darkEdit={darkEdit}
           />
         </td>
-        <td className={clsx("relative text-center border", darkMode)}>
+        <td className={clsx("relative border w-[10%]", darkMode)}>
           <FromStation
             stationNameFrom={fromStation}
             stationNameTo={toStation}
@@ -79,7 +73,7 @@ const TableRow = ({ document, isDarkMode }: ITableRowProps) => {
             darkEdit={darkEdit}
           />
         </td>
-        <td className={clsx("relative text-center border", darkMode)}>
+        <td className={clsx("relative border w-[10%]", darkMode)}>
           <ToStation
             stationNameFrom={fromStation}
             stationNameTo={toStation}

@@ -1,18 +1,7 @@
-import {
-  arrayUnion,
-  DocumentData,
-  DocumentReference,
-  runTransaction,
-  Timestamp,
-} from "firebase/firestore";
+import { arrayUnion, DocumentData, DocumentReference, runTransaction, Timestamp } from "firebase/firestore";
 import database from "../../../shared/firebaseconfig";
 
-const useDropTransaction = (
-  id: string,
-  spz: string,
-  repairDate: Timestamp,
-  isVehicle: boolean
-) => {
+const useDropTransaction = (id: string, spz: string, repairDate: Timestamp, isVehicle: boolean) => {
   const updateDropVehicle = async (
     classCol: string,
     docRefToUpdate: DocumentReference<DocumentData>,
@@ -35,10 +24,7 @@ const useDropTransaction = (
     });
   };
 
-  const updateDropLocomotive = async (
-    docRefToUpdate: DocumentReference<DocumentData>,
-    updatedDoc: string
-  ) => {
+  const updateDropLocomotive = async (docRefToUpdate: DocumentReference<DocumentData>, updatedDoc: string) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {

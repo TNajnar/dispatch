@@ -1,4 +1,5 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useContext } from "react";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import clsx from "clsx";
 
 interface IEditableFieldProps {
@@ -7,7 +8,6 @@ interface IEditableFieldProps {
   realData?: string;
   isLine?: boolean;
   isLocomotive?: boolean;
-  isDarkMode?: boolean;
   handleOnChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit?: () => void;
 }
@@ -18,17 +18,16 @@ const EditableField = ({
   realData,
   isLine,
   isLocomotive,
-  isDarkMode,
   handleOnChange,
   handleSubmit,
 }: IEditableFieldProps) => {
+  const { isDarkMode } = useContext(ThemeContext);
+
   const border = (isEditable || !!realData?.length) && !isLine;
   const width = isLine ? "w-10" : "w-12";
   const hover = (isLocomotive || isLine) && isEditable;
   const padding = isLocomotive;
-  const darkMode = isDarkMode
-    ? "bg-primary-blue text-primary-lightBlue"
-    : "bg-white text-gray-600";
+  const darkMode = isDarkMode ? "bg-primary-blue text-primary-lightBlue" : "bg-white text-gray-600";
 
   return (
     <div

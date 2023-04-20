@@ -9,18 +9,9 @@ import {
 } from "firebase/firestore";
 import { TVehicleObject } from "../../../components/types";
 import database from "../../../shared/firebaseconfig";
-import { Dispatch, SetStateAction } from "react";
 
-const useVehTransaction = (
-  vehicleDoc: string,
-  docRefToUpdate: DocumentReference<DocumentData>
-) => {
-  const addVehicleTransaction = async (
-    id: string,
-    spz: string,
-    classColor: string,
-    repairDate: string
-  ) => {
+const useVehTransaction = (vehicleDoc: string, docRefToUpdate: DocumentReference<DocumentData>) => {
+  const addVehicleTransaction = async (id: string, spz: string, classColor: string, repairDate: string) => {
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       if (!sfDoc.exists()) {
@@ -57,22 +48,14 @@ const useVehTransaction = (
     await runTransaction(database, async (transaction) => {
       const sfDoc = await transaction.get(docRefToUpdate);
       const data = sfDoc.data();
-      const filterVehicles = [
-        ...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id),
-        newValues,
-      ];
+      const filterVehicles = [...data?.vehicles.filter((veh: TVehicleObject) => veh.id !== id), newValues];
       transaction.update(docRefToUpdate, { vehicles: filterVehicles });
     });
     setIsMenuOpen?.("");
     setIsEditable?.(false);
   };
 
-  const deleteVehicle = async (
-    id: string,
-    spz: string,
-    classColor: string,
-    repairDate: Timestamp
-  ) => {
+  const deleteVehicle = async (id: string, spz: string, classColor: string, repairDate: Timestamp) => {
     await updateDoc(docRefToUpdate, {
       vehicles: arrayRemove({
         id: id,

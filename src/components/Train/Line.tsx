@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import { useLineTransaction } from "../../hooks/Firestore";
 import { EditableField, Menu } from "../ui";
 import clsx from "clsx";
@@ -10,25 +11,18 @@ interface ILineprops {
   nameLine: string;
   documentID: string;
   rowIndex?: number;
-  isDarkMode: boolean;
   setIsMenuOpen: (value: string) => void;
   isMenuOpen?: string;
 }
 
 const collectionRows = collection(database, "ManageTrains");
 
-const Line = ({
-  id,
-  nameLine,
-  documentID,
-  rowIndex,
-  isDarkMode,
-  isMenuOpen,
-  setIsMenuOpen,
-}: ILineprops) => {
+const Line = ({ id, nameLine, documentID, rowIndex, isMenuOpen, setIsMenuOpen }: ILineprops) => {
   const [isOpenPopMenuID, setOpenPopMenuID] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [lineState, setLineState] = useState<string>("");
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
@@ -56,19 +50,10 @@ const Line = ({
 
   return (
     <div
-      className={clsx(
-        "relative py-2 w-[70px] border hover:border-2 border-black cursor-default",
-        darkModeBg
-      )}
+      className={clsx("relative py-2 w-[70px] border hover:border-2 border-black cursor-default", darkModeBg)}
     >
       {!isEditable && isMenuOpen === id && (
-        <Menu
-          editItem={handleEditLine}
-          deleteItem={handleDeleteLine}
-          isLineMenu={true}
-          rowIndex={rowIndex}
-          isDarkMode={isDarkMode}
-        />
+        <Menu editItem={handleEditLine} deleteItem={handleDeleteLine} isLineMenu={true} rowIndex={rowIndex} />
       )}
       <div className="flex justify-center">
         <EditableField
@@ -76,7 +61,6 @@ const Line = ({
           state={lineState}
           realData={nameLine}
           isLine={true}
-          isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeLine}
           handleSubmit={handleSubmitEditLine}
         />

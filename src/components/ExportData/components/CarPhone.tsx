@@ -13,13 +13,7 @@ interface ICarPhoneProps {
   darkEdit: string;
 }
 
-const CarPhone = ({
-  carLeader,
-  phone,
-  docRefToUpdate,
-  isDarkMode,
-  darkEdit,
-}: ICarPhoneProps) => {
+const CarPhone = ({ carLeader, phone, docRefToUpdate, isDarkMode, darkEdit }: ICarPhoneProps) => {
   const [isEditablePhone, setIsEditablePhone] = useState<boolean>(false);
   const [phoneState, setPhoneState] = useState<string>("");
 

@@ -11,12 +11,7 @@ const Switcher = ({ isDarkMode, setDarkMode }: ISwitcherProps) => {
   };
 
   return (
-    <DarkModeSwitch
-      className="absolute top-3"
-      checked={isDarkMode}
-      onChange={toggleDarkMode}
-      size={35}
-    />
+    <DarkModeSwitch className="absolute top-3" checked={isDarkMode} onChange={toggleDarkMode} size={35} />
   );
 };
 

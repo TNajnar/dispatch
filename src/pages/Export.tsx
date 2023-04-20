@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import TableRow from "../components/ExportData/TableRow";
+import { ThemeContext } from "../helpers/ThemeContext";
 import { TManageTrainDoc } from "../components/types";
 import { CSVLink } from "react-csv";
 import ReactXlsxExport from "react-xlsx-export";
@@ -10,12 +11,10 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import clsx from "clsx";
 import data from "../data.json";
 
-interface IExportProps {
-  isDarkMode: boolean;
-}
-
-const Export = ({ isDarkMode }: IExportProps) => {
+const Export = () => {
   const [docRow, setDocRow] = useState<TManageTrainDoc[]>([]);
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const headers = data.headers;
   const tableHeader = data.tableHeader;
@@ -39,7 +38,10 @@ const Export = ({ isDarkMode }: IExportProps) => {
   // Define the data to be exported
   const dataXlsx = docRow.map((doc) => {
     return {
-      Vozidla: doc.vehicles.map((vehicle) => vehicle.spz).filter(spz => spz !== "").join(", "),
+      Vozidla: doc.vehicles
+        .map((vehicle) => vehicle.spz)
+        .filter((spz) => spz !== "")
+        .join(", "),
       Lokomotiva: doc.locomotives.lSpz,
       Linky: doc.line.map((line) => line.nameLine).join(", "),
       Strojvedoucí: doc.contact.carLeader,
@@ -51,7 +53,10 @@ const Export = ({ isDarkMode }: IExportProps) => {
 
   const dataCsv = docRow.map((doc) => {
     return {
-      vehicles: doc.vehicles.map((vehicle) => vehicle.spz).filter(spz => spz !== "").join(", "),
+      vehicles: doc.vehicles
+        .map((vehicle) => vehicle.spz)
+        .filter((spz) => spz !== "")
+        .join(", "),
       locomotives: doc.locomotives.lSpz,
       line: doc.line.map((line) => line.nameLine).join(", "),
       carLeader: doc.contact.carLeader,
@@ -64,7 +69,7 @@ const Export = ({ isDarkMode }: IExportProps) => {
   return (
     <div className="flex flex-col gap-10">
       <table className="w-full">
-        <thead>
+        <thead className="text-center">
           <tr>
             {tableHeader.map((item, index) => (
               <th

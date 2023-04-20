@@ -1,23 +1,22 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import { collection, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
+import { ThemeContext } from "../helpers/ThemeContext";
 import TrainRail from "../components/ParkedVehicles/TrainRail";
 import { Button, PopUpMenu } from "../components/ui";
 import { TParkedVehicleDoc } from "../components/types";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
 
-interface IParkedVagonsProps {
-  isDarkMode: boolean;
-}
-
 const collectionRows = collection(database, "ParkedVehicles");
 const newDoc = doc(collectionRows);
 
-const ParkedVagons = ({ isDarkMode }: IParkedVagonsProps) => {
+const ParkedVehicles = () => {
   const [openMenuName, setOpenMenuName] = useState<string>();
   const [docRow, setDocRow] = useState<TParkedVehicleDoc[]>([]);
   const [rowName, setRowName] = useState<string>("");
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-black";
   const darkHover = isDarkMode ? "hover:bg-primary-blue" : "hover:bg-secondary-yellow";
@@ -82,22 +81,11 @@ const ParkedVagons = ({ isDarkMode }: IParkedVagonsProps) => {
           >
             <DeleteOutlineIcon />
           </div>
-          <TrainRail
-            document={document}
-            getAllCars={getAllCars}
-            rowIndex={index}
-            isDarkMode={isDarkMode}
-          />
+          <TrainRail document={document} getAllCars={getAllCars} rowIndex={index} />
         </div>
       ))}
 
-      <Button
-        clasName="self-center"
-        text="+"
-        onClick={() => setOpenMenuName(newDoc.id)}
-        isRounded={true}
-        isDarkMode={isDarkMode}
-      />
+      <Button clasName="self-center" text="+" onClick={() => setOpenMenuName(newDoc.id)} isRounded={true} />
 
       <PopUpMenu
         open={!!openMenuName}
@@ -108,10 +96,9 @@ const ParkedVagons = ({ isDarkMode }: IParkedVagonsProps) => {
         handleClose={handleCloseMenuRow}
         handleOnSubmit={() => handleSubmitRow(this!)}
         handleOnChange={handleOnChangeRow}
-        isDarkMode={isDarkMode}
       />
     </div>
   );
 };
 
-export default ParkedVagons;
+export default ParkedVehicles;

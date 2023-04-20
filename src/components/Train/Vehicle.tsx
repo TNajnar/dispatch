@@ -1,6 +1,7 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
+import { ThemeContext } from "../../helpers/ThemeContext";
 import { useVehicleTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
@@ -16,7 +17,6 @@ interface IVehicleProps {
   rowIndex: number;
   isMenuOpen?: string;
   isDragging?: boolean;
-  isDarkMode: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
 }
@@ -32,13 +32,14 @@ const Vehicle = ({
   isMenuOpen,
   vehicleDoc,
   isDragging,
-  isDarkMode,
   setIsMenuOpen,
   handleDragging,
 }: IVehicleProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
   const [showDateInfo, setShowDateInfo] = useState<boolean>(false);
+
+  const { isDarkMode } = useContext(ThemeContext);
 
   const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
@@ -105,7 +106,6 @@ const Vehicle = ({
           <Menu
             carRepairDate={vehicleRepairDate}
             rowIndex={rowIndex}
-            isDarkMode={isDarkMode}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
             handleRepairDate={handleVehicleRepairDate}
@@ -125,7 +125,6 @@ const Vehicle = ({
             isEditable={isEditable}
             state={spzState}
             realData={vehicleSpz}
-            isDarkMode={isDarkMode}
             handleOnChange={handleOnChangeVehicleSPZ}
             handleSubmit={handleSumbitEditVehicleSpz}
           />

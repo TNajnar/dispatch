@@ -13,13 +13,7 @@ interface IToStationProps {
   darkEdit: string;
 }
 
-const ToStation = ({
-  stationNameFrom,
-  stationNameTo,
-  docRefToUpdate,
-  isDarkMode,
-  darkEdit,
-}: IToStationProps) => {
+const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate, isDarkMode, darkEdit }: IToStationProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [toStationState, setToStationState] = useState<string>("");
 
