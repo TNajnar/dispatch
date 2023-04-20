@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+       
   postgres:
     image: postgres:14.4-alpine
     volumes:
@@ -14,7 +15,7 @@ services:
       POSTGRES_HOST: postgres
 
   keycloak:
-    build: ./keycloak
+    build: keycloak
     depends_on:
        - postgres
     restart: on-failure
@@ -34,6 +35,17 @@ services:
        - KEYCLOAK_ADMIN_PASSWORD=Pa55w0rd
     command:
        - "start --optimized"
+
+  app:
+    container_name: dispatch-app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/dispatch/src
+      - ./public:/dispatch/public
 
 volumes:
   postgresql:

@@ -98,7 +98,7 @@ const Locomotive = ({
 
   return (
     <div
-      className="relative"
+      className="relative group"
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -120,7 +120,7 @@ const Locomotive = ({
 
       <div
         className={clsx(
-          "relative w-32 h-14 overflow-hidden flex border border-black rounded-lg rounded-tr-[35px]",
+          "relative w-32 h-14 overflow-hidden flex border group-hover:border-2 border-black rounded-lg rounded-tr-[35px]",
           darkModeBg
         )}
       >
@@ -156,19 +156,19 @@ const Locomotive = ({
       <div className="relative overflow-hidden w-30 h-3 ">
         <div
           className={clsx(
-            "absolute -top-[3px] left-4 w-[13px] h-[14px] border border-black rounded-full",
+            "absolute -top-[3px] left-4 w-[13px] h-[14px] border group-hover:border-2 border-black rounded-full",
             darkModeBg
           )}
         />
         <div
           className={clsx(
-            "absolute -top-[3px] left-24 w-[13px] h-[14px] border border-black rounded-full",
+            "absolute -top-[3px] left-24 w-[13px] h-[14px] border group-hover:border-2 border-black rounded-full",
             darkModeBg
           )}
         />
         <div
           className={clsx(
-            "absolute -top-[3px] left-20 w-[13px] h-[14px] border border-black rounded-full",
+            "absolute -top-[3px] left-20 w-[13px] h-[14px] border group-hover:border-2 border-black rounded-full",
             darkModeBg
           )}
         />

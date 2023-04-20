@@ -95,7 +95,7 @@ const Vehicle = ({
 
   return (
     <div
-      className="relative"
+      className="relative group"
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -117,7 +117,7 @@ const Vehicle = ({
 
         <div
           className={clsx(
-            "relative flex justify-center w-[100px] h-14 overflow-hidden border border-black rounded-lg",
+            "relative flex justify-center w-[100px] h-14 overflow-hidden border group-hover:border-2 border-black rounded-lg",
             darkModeBg
           )}
         >
@@ -141,13 +141,13 @@ const Vehicle = ({
       <div className="relative overflow-hidden w-30 h-3">
         <div
           className={clsx(
-            "absolute -top-[3px] left-4 w-[13px] h-[14px] border border-black rounded-full",
+            "absolute -top-[3px] left-4 w-[13px] h-[14px] border group-hover:border-2 border-black rounded-full",
             darkModeBg
           )}
         />
         <div
           className={clsx(
-            "absolute -top-[3px] left-[70px] w-[13px] h-[14px] border border-black rounded-full",
+            "absolute -top-[3px] left-[70px] w-[13px] h-[14px] border group-hover:border-2 border-black rounded-full",
             darkModeBg
           )}
         />

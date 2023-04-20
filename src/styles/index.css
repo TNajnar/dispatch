@@ -50,10 +50,6 @@
     @apply text-sm;
 }
 
-.css-i4bv87-MuiSvgIcon-root.export {
-    @apply mr-3;
-}
-
 /* Data export page */
 table, th, td {
     @apply p-2 h-11;

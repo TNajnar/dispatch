@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { KeycloakContext } from "../../helpers/KeycloakContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,6 +14,7 @@ interface INavbarProps {
 const Navbar = ({ isDarkMode }: INavbarProps) => {
   const [activeTab, setActiveTab] = useState<string>("");
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { logout } = useContext(KeycloakContext);
 
   const NavItems = data.NavItems;
@@ -25,16 +26,14 @@ const Navbar = ({ isDarkMode }: INavbarProps) => {
 
   const handleNavItemClick = (url: string) => {
     setActiveTab(url);
-    localStorage.setItem("activeIndex", url.toString()); // store the active index in local storage
     navigate(url);
   };
 
   useEffect(() => {
-    const storedIndex = localStorage.getItem("activeIndex");
-    if (storedIndex) {
-      setActiveTab(storedIndex);
-    }
-  }, []);
+    setActiveTab(pathname);
+  }, [pathname]);
+
+  console.log(pathname);
 
   return (
     <nav className={clsx("flex items-center justify-around", darkNavbar)}>
@@ -51,11 +50,12 @@ const Navbar = ({ isDarkMode }: INavbarProps) => {
               "py-4 w-[148px] text-center hover:border-gray-300 hover:shadow-md",
               isDarkMode ? "hover:bg-primary-blue" : "hover:bg-white",
               isDarkMode && activeTab === url && "bg-primary-blue shadow-sm",
-              !isDarkMode && activeTab === url && "bg-white shadow-sm"
+              !isDarkMode && activeTab === url && "bg-white shadow-sm",
+              index === 0 && "flex justify-center items-center gap-3"
             )}
           >
-            {index === 0 && <HomeIcon className="" />}
-            {index === 3 && <FileDownloadIcon className="export" />}
+            {index === 0 && <HomeIcon />}
+            {index === 3 && <FileDownloadIcon className="mr-3" />}
             {name}
           </a>
         ))}

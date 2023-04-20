@@ -147,7 +147,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex, isDarkMode }: IVehicleRow
           isMenuOpen={isMenuOpen}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4 h-14">
         {/* {linesLenght < 4 && <Button text="+" onClick={addLine} />} */}
         <Button text="+" onClick={() => setOpenPopMenuID(document.id)} />
         {lines.map(

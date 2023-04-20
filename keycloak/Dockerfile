@@ -1,17 +1,15 @@
-### STAGE1: prepare optimized build
-
+# STAGE 1: Build Keycloak and Metrics SPI
 FROM quay.io/keycloak/keycloak:19.0.2 as builder
 ENV KC_HEALTH_ENABLED=true
 ENV KC_METRICS_ENABLED=true
 ENV KC_FEATURES=token-exchange
 ENV KC_DB=postgres
+
 # Install custom providers
 RUN curl -sL https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar -o /opt/keycloak/providers/keycloak-metrics-spi-2.5.3.jar
 RUN /opt/keycloak/bin/kc.sh build
 
-
-### STAGE2 prepare image to run keycloak
-
+# STAGE 2: Build the final image
 FROM quay.io/keycloak/keycloak:19.0.2
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 WORKDIR /opt/keycloak
