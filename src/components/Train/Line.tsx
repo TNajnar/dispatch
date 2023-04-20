@@ -56,7 +56,10 @@ const Line = ({
 
   return (
     <div
-      className={clsx("relative py-2 w-[70px] border border-black cursor-default", darkModeBg)}
+      className={clsx(
+        "relative py-2 w-[70px] border hover:border-2 border-black cursor-default",
+        darkModeBg
+      )}
     >
       {!isEditable && isMenuOpen === id && (
         <Menu

@@ -21,7 +21,7 @@ const HomePage = () => {
         Můžeš zde také přetahovat vozy a lokomotivy mezi jednotlivými místy.
       </p>
       <h3 className="text-h3 font-bold">Export dat</h3>
-      <p>
+      <p className="pb-6">
         Zde exportuj tabulku do CSV(.csv) nebo Excel(.xlsx) souboru. Lze doplnit i kontakt na
         strojvedoucího a odkud kam vlak jede.
       </p>
