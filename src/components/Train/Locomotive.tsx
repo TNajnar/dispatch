@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import { useLocFilterTrans, useLocoTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
@@ -122,8 +122,20 @@ const Locomotive = ({
           handleSubmit={handleSubmitEditLocomotive}
         />
         <CarRepairLight carRepairDate={locomotiveRepairDate} setShowDateInfo={setShowDateInfo} />
-        <div className={clsx("absolute -top-[1px] left-20 w-16 h-8 border rounded-l-xl", darkModeBg, darkModeBorder)} />
-        <div className={clsx("absolute -bottom-5 -left-5 w-20 h-8 border rounded-md", darkModeBg, darkModeBorder)} />
+        <div
+          className={clsx(
+            "absolute -top-[1px] left-20 w-16 h-8 border rounded-l-xl",
+            darkModeBg,
+            darkModeBorder
+          )}
+        />
+        <div
+          className={clsx(
+            "absolute -bottom-5 -left-5 w-20 h-8 border rounded-md",
+            darkModeBg,
+            darkModeBorder
+          )}
+        />
       </div>
       {/* Wheels */}
       <div className="relative overflow-hidden w-30 h-3 ">

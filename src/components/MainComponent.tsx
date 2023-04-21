@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ThemeContext } from "../helpers/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext";
 import Switcher from "./shared/Switcher";
 import clsx from "clsx";
 

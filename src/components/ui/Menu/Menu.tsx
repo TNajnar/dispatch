@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Timestamp } from "firebase/firestore";
 import { CarRepairMenu, ChooseClassMenu } from "./components";
-import { ThemeContext } from "../../../helpers/ThemeContext";
+import { ThemeContext } from "../../../context/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
@@ -75,7 +75,11 @@ const Menu = ({
       )}
 
       <div
-        className={clsx("flex items-center px-4 py-2 gap-4", darkHover, !isParked && isLocomotive && "hidden")}
+        className={clsx(
+          "flex items-center px-4 py-2 gap-4",
+          darkHover,
+          !isParked && isLocomotive && "hidden"
+        )}
         onClick={deleteItem}
       >
         <DeleteOutlineIcon className="menuIcons" />

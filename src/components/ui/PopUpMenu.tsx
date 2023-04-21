@@ -1,5 +1,5 @@
 import { ChangeEventHandler, useContext } from "react";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -20,7 +20,16 @@ interface IPopUpMenu {
   handleOnChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
-const PopUpMenu = ({ open, value, title, context, label, handleClose, handleOnSubmit, handleOnChange }: IPopUpMenu) => {
+const PopUpMenu = ({
+  open,
+  value,
+  title,
+  context,
+  label,
+  handleClose,
+  handleOnSubmit,
+  handleOnChange,
+}: IPopUpMenu) => {
   const { isDarkMode } = useContext(ThemeContext);
 
   const darkMode = isDarkMode ? " bg-primary-darkBlue" : "bg-white";

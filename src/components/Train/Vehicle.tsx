@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import { useVehicleTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
@@ -46,10 +46,7 @@ const Vehicle = ({
   const collectionRows = collection(database, `${collectionName}`);
   const docRefToUpdate = doc(collectionRows, documentID);
 
-  const { editVehTransaction, deleteVehicle } = useVehicleTransaction(
-    vehicleDoc,
-    docRefToUpdate
-  );
+  const { editVehTransaction, deleteVehicle } = useVehicleTransaction(vehicleDoc, docRefToUpdate);
 
   const handleEditSpzVehicle = () => {
     setIsEditable(true);
@@ -62,14 +59,7 @@ const Vehicle = ({
   };
 
   const handleSumbitEditVehicleSpz = () => {
-    editVehTransaction(
-      id,
-      spzState,
-      vehicleClass,
-      vehicleRepairDate,
-      setIsMenuOpen,
-      setIsEditable
-    );
+    editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen, setIsEditable);
   };
 
   const handleClassColor = (colors: string) => {
@@ -95,12 +85,7 @@ const Vehicle = ({
   };
 
   return (
-    <div
-      className="relative group"
-      draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
+    <div className="relative group" draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div>
         {!isEditable && isMenuOpen === id && (
           <Menu
@@ -130,10 +115,7 @@ const Vehicle = ({
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
 
-          <CarRepairLight
-            carRepairDate={vehicleRepairDate}
-            setShowDateInfo={setShowDateInfo}
-          />
+          <CarRepairLight carRepairDate={vehicleRepairDate} setShowDateInfo={setShowDateInfo} />
         </div>
       </div>
       {/* Wheels */}

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import { nanoid } from "nanoid";
 import useClickAbleMenu from "../../hooks/useClickAbleMenu";
 import useDragAndDrop from "../../hooks/useDragAndDrop";

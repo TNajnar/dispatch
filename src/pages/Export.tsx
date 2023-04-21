@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
 import TableRow from "../components/ExportData/TableRow";
-import { ThemeContext } from "../helpers/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext";
 import { TManageTrainDoc } from "../components/types";
 import { CSVLink } from "react-csv";
 import ReactXlsxExport from "react-xlsx-export";

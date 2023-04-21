@@ -33,6 +33,8 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
         if (authenticated) {
           setKeycloackValue(keycloak);
           setAuthenticated(true);
+        } else {
+          window.location.reload(); // if user not logged, should appear log screen
         }
       })
       .catch(function () {
@@ -46,7 +48,7 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
     if (keycloackValue) {
       keycloackValue?.logout();
     }
-  }, []);
+  }, [keycloackValue]);
 
   useEffect(() => {
     setKeycloak();

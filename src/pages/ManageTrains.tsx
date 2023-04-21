@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { useBasicFirestore } from "../hooks/Firestore";
 import { TManageTrainDoc } from "../components/types";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { ThemeContext } from "../helpers/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext";
 import { Button } from "../components/ui";
 import clsx from "clsx";
 

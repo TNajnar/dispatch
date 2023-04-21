@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext } from "react";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import clsx from "clsx";
 
 interface IEditableFieldProps {

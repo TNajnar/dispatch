@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { KeycloakContext } from "../../helpers/KeycloakContext";
-import { ThemeContext } from "../../helpers/ThemeContext";
+import { KeycloakContext } from "../../context/KeycloakContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
