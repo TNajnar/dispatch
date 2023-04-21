@@ -24,6 +24,7 @@ const KeycloakContext = createContext<IKeycloakContextProps>({
 const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
   const [keycloackValue, setKeycloackValue] = useState<Keycloak | null>(null);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const setKeycloak = () => {
     const keycloak = new Keycloak(initOptions);
@@ -33,12 +34,13 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
         if (authenticated) {
           setKeycloackValue(keycloak);
           setAuthenticated(true);
-        } else {
-          window.location.reload(); // if user not logged, should appear log screen
         }
       })
       .catch(function () {
         console.log("failed to initialized");
+      })
+      .finally(function () {
+        setIsLoading(false);
       });
   };
 
@@ -56,7 +58,7 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <KeycloakContext.Provider value={{ keycloakValue: keycloackValue, authenticated, logout }}>
-      {children}
+      {isLoading ? <div>Loading...</div> : children}
     </KeycloakContext.Provider>
   );
 };
