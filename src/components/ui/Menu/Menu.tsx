@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Timestamp } from "firebase/firestore";
-import { CarRepairMenu, ChooseClassMenu } from "./components";
+import { Arrow, CarRepairMenu, ChooseClassMenu } from "./components";
 import { ThemeContext } from "../../../context/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -36,17 +36,22 @@ const Menu = ({
 
   const darkHover = isDarkMode ? "hover:bg-primary-blue" : "hover:bg-secondary-yellow";
 
+  const firstLineVehicles = !isLineMenu && rowIndex === 0;
+  const firstLineLines = isLineMenu && rowIndex === 0;
+
   return (
     <div
       className={clsx(
         "vehicleMenu",
         "absolute z-30 py-3 w-max h-max shadow-default rounded-lg",
         isDarkMode ? "bg-primary-darkBlue" : "bg-secondary-gray",
-        !isLineMenu && rowIndex === 0 && "top-14 left-1/2",
-        isLineMenu && rowIndex === 0 && "top-[41px] right-1/2",
-        isLineMenu ? "bottom-[41px] right-1/2" : "bottom-[69px] left-1/2"
+        firstLineVehicles && "top-[58px] left-1/2",
+        firstLineLines && "top-11 right-1/2",
+        isLineMenu ? "bottom-11 right-1/2" : "bottom-[69px] left-1/2"
       )}
     >
+      <Arrow isTop={rowIndex === 0} isLineMenu={isLineMenu} isDarkMode={isDarkMode} />
+
       <div className={clsx("flex items-center px-4 py-2 gap-4", darkHover)} onClick={editItem}>
         <EditIcon className="menuIcons" /> Edituj
       </div>

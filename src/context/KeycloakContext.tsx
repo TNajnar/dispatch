@@ -40,7 +40,9 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
         console.log("failed to initialized");
       })
       .finally(function () {
-        setIsLoading(false);
+        if (!keycloackValue) {
+          setIsLoading(false);
+        }
       });
   };
 
@@ -58,7 +60,7 @@ const KeycloakContextProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <KeycloakContext.Provider value={{ keycloakValue: keycloackValue, authenticated, logout }}>
-      {isLoading ? <div>Loading...</div> : children}
+      {authenticated && isLoading ? <div>Loading...</div> : children}
     </KeycloakContext.Provider>
   );
 };

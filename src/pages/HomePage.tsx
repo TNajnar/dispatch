@@ -25,7 +25,7 @@ const HomePage = () => {
         Zde exportuj tabulku do CSV(.csv) nebo Excel(.xlsx) souboru. Lze doplnit i kontakt na strojvedoucího a
         odkud kam vlak jede.
       </p>
-      <h3 className="text-h3 font-bold">Zvol si tema</h3>
+      <h3 className="text-h3 font-bold">Zvol si téma</h3>
       <p>Pomocí přepínače v levém horním rohu si můžeš navolit mód. Jsou k dispozici světlý a tmavý mód.</p>
     </div>
   );

@@ -91,7 +91,7 @@ const ParkedVehicles = () => {
         open={!!openMenuName}
         value={rowName}
         title="Název koleje"
-        context="Zde napiš nápiš název koleje na které budou vozy"
+        context="Zde napiš název koleje, na které budou vozy."
         label="Název koleje"
         handleClose={handleCloseMenuRow}
         handleOnSubmit={() => handleSubmitRow(this!)}

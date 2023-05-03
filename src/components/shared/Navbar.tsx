@@ -12,8 +12,8 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("");
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { logout } = useContext(KeycloakContext);
 
+  const { logout } = useContext(KeycloakContext);
   const { isDarkMode } = useContext(ThemeContext);
 
   const NavItems = data.NavItems;

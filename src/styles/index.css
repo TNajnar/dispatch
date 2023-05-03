@@ -4,57 +4,74 @@
 
 
 * {
-    @apply m-0;
-    @apply font-sans;
+  @apply m-0;
+  @apply font-sans;
 }
 
 .pageLayout {
-    @apply w-full m-auto;
+  @apply w-full m-auto;
 }
 
 .contentLayout {
-    @apply w-full max-w-[90%];     /* max-w prevent too wide texts on large screens  */
-    @apply m-auto pt-8;         /* pt prevent hiding content behind navbar */
+  @apply w-full max-w-[90%];     /* max-w prevent too wide texts on large screens  */
+  @apply m-auto pt-8;         /* pt prevent hiding content behind navbar */
 }
 
 /* Pop up menu */
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root.button {
-    @apply text-black;
+.MuiButton-root.button {
+  @apply text-black;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.buttonHover {
-    @apply bg-secondary-yellow;
+.MuiButton-root:hover.buttonHover {
+  @apply bg-secondary-yellow;
 }
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root.darkButton {
-    @apply text-primary-lightBlue;
+.MuiButton-root.darkButton {
+  @apply text-primary-lightBlue;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover.darkButtonHover {
-    @apply bg-primary-blue;
+.MuiButton-root:hover.darkButtonHover {
+  @apply bg-primary-blue;
 }
-.css-qfso29-MuiTypography-root-MuiDialogContentText-root.content {
-    @apply text-primary-lightBlue;
+.MuiDialogContentText-root.content {
+  @apply text-primary-lightBlue;
 }
 
 /* Icons */
-.css-i4bv87-MuiSvgIcon-root.menuIcons {
-    @apply text-base;
+.MuiSvgIcon-root.menuIcons {
+  @apply text-base;
 }
 
-.css-i4bv87-MuiSvgIcon-root.logout {
-    @apply text-lg;
+.MuiSvgIcon-root.logout {
+  @apply text-lg;
 }
 
-.css-i4bv87-MuiSvgIcon-root.edit {
-    @apply absolute right-0 top-0;
-    @apply text-sm;
+.MuiSvgIcon-root.edit {
+  @apply absolute right-0 top-0;
+  @apply text-sm;
 }
 
 /* Data export page */
 table, th, td {
-    @apply p-2 h-11;
+  @apply p-2 h-11;
 }
 
 tr:last-of-type {
-    @apply border-b border-black;
+  @apply border-b border-black;
+}
+
+/* arrow */
+.arrow-down {
+  @apply w-0 h-0;
+  @apply border-t-[12px];  
+  
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+}
+
+.arrow-top {
+  @apply w-0 h-0;
+  @apply border-b-[12px];  
+
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
 }
