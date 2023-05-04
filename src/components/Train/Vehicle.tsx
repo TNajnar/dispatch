@@ -16,7 +16,6 @@ interface IVehicleProps {
   collectionName: string;
   rowIndex: number;
   isMenuOpen?: string;
-  isDragging?: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<string>>;
   handleDragging?: (dragging: boolean) => void;
 }
@@ -31,7 +30,6 @@ const Vehicle = ({
   rowIndex,
   isMenuOpen,
   vehicleDoc,
-  isDragging,
   setIsMenuOpen,
   handleDragging,
 }: IVehicleProps) => {

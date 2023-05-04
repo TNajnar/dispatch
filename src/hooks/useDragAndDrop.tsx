@@ -39,7 +39,6 @@ const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
 
     if (draggedCar && draggedCar.vehicleDoc !== docID) {
       updatedDoc = draggedCar.vehicleDoc = docID;
-      console.log(updatedDoc);
 
       if (draggedCar.isVehicle) {
         updateDropVehicle(draggedCar.class, docRefToUpdate, updatedDoc);

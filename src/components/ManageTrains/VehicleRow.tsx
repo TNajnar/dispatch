@@ -4,10 +4,9 @@ import database from "../../shared/firebaseconfig";
 import { nanoid } from "nanoid";
 import { Line, Locomotive, Vehicle } from "../Train";
 import { ThemeContext } from "../../context/ThemeContext";
-import useClickAbleMenu from "../../hooks/useClickAbleMenu";
-import useDragAndDrop from "../../hooks/useDragAndDrop";
 import { useVehicleTransaction, useLineTransaction } from "../../hooks/Firestore";
 import { TManageTrainDoc, TVehicleObject } from "../types";
+import { useClickAbleMenu, useDragAndDrop, useDropArea } from "../../hooks";
 import { Button, PopUpMenu } from "../ui";
 import clsx from "clsx";
 
@@ -38,17 +37,17 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
   const locomotive = document.locomotives;
   const transferredVehicles = allVehicles.flat();
 
+  const vehiclesLenght = Object.keys(vehicles).length;
   const linesLenght = Object.keys(lines).length;
 
   useClickAbleMenu(id, setIsMenuOpen);
-
   const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(
     transferredVehicles,
     collectionName
   );
-
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
   const { addLine } = useLineTransaction(docRefToUpdate);
+  useDropArea(isDragging);
 
   const addVehicle = () => {
     addVehicleTransaction(id, "", "", "");
@@ -91,17 +90,21 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
 
   return (
     <div className={clsx("grid grid-cols-4 place-items-center pb-2 w-full h-[101px] border-b", darkMode)}>
-      {/* <div className="flex justify-end items-center col-span-2 mr-2 w-[99%] overflow-x-scroll overflow-y-hidden"> */}
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className="dropArea flex justify-end items-center col-span-2 pb-2 w-[98%] h-full"
+        className="dropArea flex justify-end items-center col-span-2 w-full h-full"
       >
-        <Button clasName="absolute left-3 z-10" text="+" onClick={addVehicle} isRounded={true} />
-        {/* <div className="flex gap-4 overflow-x-auto overflow-y-hidden whitespace-nowrap"> */}
+        {vehiclesLenght < 6 && (
+          <Button clasName="absolute left-3 z-10" text="+" onClick={addVehicle} isRounded={true} />
+        )}
         <div className="flex gap-4 justify-end">
-          {vehicles.map((vehicle) => (
-            <div key={`${vehicle.id}_${vehicle.spz}`} onClick={() => handleOpenMenu(vehicle.id)}>
+          {vehicles.map((vehicle, index) => (
+            <div
+              key={`${vehicle.id}_${vehicle.spz}`}
+              className={clsx(index === vehicles.length - 1 && "pr-1")}
+              onClick={() => handleOpenMenu(vehicle.id)}
+            >
               <Vehicle
                 id={vehicle.id}
                 vehicleSpz={vehicle.spz}
@@ -112,7 +115,6 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
                 collectionName={collectionName}
                 rowIndex={rowIndex}
                 isMenuOpen={isMenuOpen}
-                isDragging={isDragging}
                 setIsMenuOpen={setIsMenuOpen}
                 handleDragging={handleDragging}
               />
@@ -134,8 +136,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
         />
       </div>
       <div className="flex items-center gap-4 h-14">
-        {/* {linesLenght < 4 && <Button text="+" onClick={addLine} />} */}
-        <Button text="+" onClick={() => setOpenPopMenuID(document.id)} />
+        {linesLenght < 4 && <Button text="+" onClick={() => setOpenPopMenuID(document.id)} />}
         {lines.map(
           (line) =>
             !!line.nameLine && (
@@ -157,7 +158,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
         open={!!openPopMenuID}
         value={nameLine}
         title="Název linky"
-        context="Zde napiš nápiš název linky."
+        context="Zde napiš název linky."
         label="Název linky"
         handleClose={handleCloseMenu}
         handleOnSubmit={() => handleSubmitLine(this!)}

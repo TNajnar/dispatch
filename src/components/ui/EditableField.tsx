@@ -34,7 +34,7 @@ const EditableField = ({
       className={clsx(
         "relative flex justify-center items-center",
         isLocomotive || isLine ? "gap-1" : "gap-2",
-        isLocomotive && "left-4",
+        isLocomotive && !isEditable && "left-4",
         isLocomotive && isEditable && "left-1",
         padding && "mb-2"
       )}
@@ -49,6 +49,7 @@ const EditableField = ({
           hover && "border border-primary-gray hover:border-black",
           darkMode
         )}
+        maxLength={5}
         disabled={!isEditable}
         onChange={handleOnChange}
       />

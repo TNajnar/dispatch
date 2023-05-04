@@ -3,11 +3,10 @@ import { collection, doc } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { ThemeContext } from "../../context/ThemeContext";
 import { nanoid } from "nanoid";
-import useClickAbleMenu from "../../hooks/useClickAbleMenu";
-import useDragAndDrop from "../../hooks/useDragAndDrop";
 import { Locomotive, Vehicle } from "../Train";
 import { useVehicleTransaction, useLocoTransaction } from "../../hooks/Firestore";
 import { TParkedVehicleDoc, TVehicleObject } from "../types";
+import { useClickAbleMenu, useDragAndDrop, useDropArea } from "../../hooks";
 import { Button } from "../ui";
 import clsx from "clsx";
 
@@ -36,12 +35,12 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
 
   const transferredCars = getAllCars.flat();
 
+  const vehiclesLenght = Object.keys(parkedVehicles).length;
+
   useClickAbleMenu(id, setIsMenuOpen);
-
   const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(transferredCars, collectionName);
-
+  useDropArea(isDragging);
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
-
   const { addLocTransaction } = useLocoTransaction(document.id, docRefToUpdate);
 
   const addVehicle = async () => {
@@ -66,11 +65,15 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   return (
-    <div className={clsx("flex items-center py-4 h-[101px] gap-4 border-b", darkMode)}>
+    <div className={clsx("flex items-center py-2 h-[101px] gap-4 border-b", darkMode)}>
       {!!nameRail && <h2 className={clsx("mr-2 w-24 text-h3 font-bold border-r", darkTrail)}>{nameRail}</h2>}
-      <div className="flex gap-5 w-full h-full" onDrop={handleDrop} onDragOver={handleDragOver}>
-        {parkedVehicles.map((car) => (
-          <div key={car.id} onClick={() => handleOpenMenu(car.id)}>
+      <div
+        className="dropArea flex items-center gap-5 w-[87%] h-full"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
+        {parkedVehicles.map((car, index) => (
+          <div key={car.id} className={clsx(index === 0 && "pl-1")} onClick={() => handleOpenMenu(car.id)}>
             {car.isVehicle ? (
               <Vehicle
                 id={car.id}
@@ -83,6 +86,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
                 collectionName={collectionName}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
+                handleDragging={handleDragging}
               />
             ) : (
               <Locomotive
@@ -96,16 +100,19 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
                 rowIndex={rowIndex}
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}
+                handleDragging={handleDragging}
               />
             )}
           </div>
         ))}
       </div>
       <div className="flex-1" />
-      <div className="absolute right-0 bottom-2 flex flex-col justify-center items-center gap-1">
-        <Button text="L" onClick={addLocomotive} isRounded={true} />
-        <Button text="V" onClick={addVehicle} isRounded={true} />
-      </div>
+      {vehiclesLenght < 8 && (
+        <div className="absolute right-0 bottom-2 flex flex-col justify-center items-center gap-1">
+          <Button text="L" onClick={addLocomotive} isRounded={true} />
+          <Button text="V" onClick={addVehicle} isRounded={true} />
+        </div>
+      )}
     </div>
   );
 };
