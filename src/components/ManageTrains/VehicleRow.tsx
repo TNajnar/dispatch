@@ -6,7 +6,7 @@ import { Line, Locomotive, Vehicle } from "../Train";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useVehicleTransaction, useLineTransaction } from "../../hooks/Firestore";
 import { TManageTrainDoc, TVehicleObject } from "../types";
-import { useClickAbleMenu, useDragAndDrop, useDropArea } from "../../hooks";
+import { useClickAbleMenu, useDragAndDrop } from "../../hooks";
 import { Button, PopUpMenu } from "../ui";
 import clsx from "clsx";
 
@@ -47,7 +47,6 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
   );
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
   const { addLine } = useLineTransaction(docRefToUpdate);
-  useDropArea(isDragging);
 
   const addVehicle = () => {
     addVehicleTransaction(id, "", "", "");
@@ -93,7 +92,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className="dropArea flex justify-end items-center col-span-2 w-full h-full"
+        className="flex justify-end items-center col-span-2 w-full h-full"
       >
         {vehiclesLenght < 6 && (
           <Button clasName="absolute left-3 z-10" text="+" onClick={addVehicle} isRounded={true} />

@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { Locomotive, Vehicle } from "../Train";
 import { useVehicleTransaction, useLocoTransaction } from "../../hooks/Firestore";
 import { TParkedVehicleDoc, TVehicleObject } from "../types";
-import { useClickAbleMenu, useDragAndDrop, useDropArea } from "../../hooks";
+import { useClickAbleMenu, useDragAndDrop } from "../../hooks";
 import { Button } from "../ui";
 import clsx from "clsx";
 
@@ -39,7 +39,6 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
 
   useClickAbleMenu(id, setIsMenuOpen);
   const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(transferredCars, collectionName);
-  useDropArea(isDragging);
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
   const { addLocTransaction } = useLocoTransaction(document.id, docRefToUpdate);
 
@@ -67,11 +66,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   return (
     <div className={clsx("flex items-center py-2 h-[101px] gap-4 border-b", darkMode)}>
       {!!nameRail && <h2 className={clsx("mr-2 w-24 text-h3 font-bold border-r", darkTrail)}>{nameRail}</h2>}
-      <div
-        className="dropArea flex items-center gap-5 w-[87%] h-full"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
+      <div className="flex items-center gap-5 w-[85%] h-full" onDrop={handleDrop} onDragOver={handleDragOver}>
         {parkedVehicles.map((car, index) => (
           <div key={car.id} className={clsx(index === 0 && "pl-1")} onClick={() => handleOpenMenu(car.id)}>
             {car.isVehicle ? (
