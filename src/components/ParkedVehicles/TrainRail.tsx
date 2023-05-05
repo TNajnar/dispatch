@@ -33,6 +33,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
 
+  // convert to array, all in one arr. Datas for dragNdrop
   const transferredCars = getAllCars.flat();
 
   const vehiclesLenght = Object.keys(parkedVehicles).length;

@@ -26,6 +26,7 @@ const ManageTrains = () => {
 
   const { addRow } = useBasicFirestore(currentDoc.id, currentDoc);
 
+  // get all rows (docs) as two dimensional array. Datas for dragNdrop
   const allVehicles = docRow.map((veh) => {
     return veh.vehicles;
   });

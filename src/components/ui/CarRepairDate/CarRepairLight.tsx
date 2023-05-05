@@ -19,12 +19,15 @@ const CarRepairLight = ({ carRepairDate, setShowDateInfo }: ICarRepairLightProps
     carRepairTomorrowDateTimestamp = Timestamp.fromDate(carTomorrow);
   }
 
-  const informationDayRepairDone = carRepairTomorrowDateTimestamp?.seconds === todayTimestamp.seconds; // if repairs is over next day controll light is hidden
+  // if repairs is over next day controll light is hidden
+  const informationDayRepairDone = carRepairTomorrowDateTimestamp?.seconds === todayTimestamp.seconds;
 
   const carIsRepaired = carRepairDate?.seconds !== todayTimestamp.seconds;
 
+  // car is ready
   const repairIsOver = carRepairDate?.seconds === todayTimestamp.seconds;
 
+  // after repair, car is ready control light is hidden
   const expiredDate = carRepairDate && carRepairDate?.seconds < todayTimestamp.seconds;
 
   return (

@@ -21,6 +21,7 @@ const ParkedVehicles = () => {
   const darkMode = isDarkMode ? "border-primary-lightBlue" : "border-black";
   const darkHover = isDarkMode ? "hover:bg-primary-blue" : "hover:bg-secondary-yellow";
 
+  // get all rows (docs) as two dimensional array
   const getAllCars = docRow.map((car) => {
     return car.vehicles;
   });

@@ -35,6 +35,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
   const vehicles = document.vehicles;
   const lines = document.line;
   const locomotive = document.locomotives;
+  // convert to array, all in one arr.. Datas for dragNdrop
   const transferredVehicles = allVehicles.flat();
 
   const vehiclesLenght = Object.keys(vehicles).length;
@@ -94,7 +95,7 @@ const VehicleRow = ({ document, allVehicles, rowIndex }: IVehicleRowProps) => {
         onDragOver={handleDragOver}
         className="flex justify-end items-center col-span-2 w-full h-full"
       >
-        {vehiclesLenght < 6 && (
+        {vehiclesLenght < 5 && (
           <Button clasName="absolute left-3 z-10" text="+" onClick={addVehicle} isRounded={true} />
         )}
         <div className="flex gap-4 justify-end">

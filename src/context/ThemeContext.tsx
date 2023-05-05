@@ -12,11 +12,13 @@ const ThemeContext = createContext<IThemeContextProps>({
 
 const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
   const [isDarkMode, setDarkMode] = useState<boolean>(() => {
+    // Get store value from local storage
     const storedMode = localStorage.getItem("isDarkMode");
     return storedMode !== null ? JSON.parse(storedMode) : false;
   });
 
   useEffect(() => {
+    // Save mode to local storage
     localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 

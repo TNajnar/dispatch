@@ -32,12 +32,13 @@ const MultiClassMenu = ({
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedDate = new Date(event.target.value);
-    handleRepairDate?.(Timestamp.fromDate(selectedDate));
+    handleRepairDate?.(Timestamp.fromDate(selectedDate)); // date to timestamp for db
   };
 
   return (
     <div className={clsx("absolute -right-[192px] p-3 w-48 shadow-default rounded-lg", darkMode)}>
       {isColorClass ? (
+        // Menu choose vehicle class
         <div className="flex flex-col justify-center">
           <p className="font-bold">Vyber barvu třídy:</p>
           <div className="flex justify-center pt-1 gap-2">
@@ -55,12 +56,13 @@ const MultiClassMenu = ({
           </div>
         </div>
       ) : (
+        // Menu choose vehicle repair date
         <div className="flex flex-col gap-1">
           <label className="font-bold">Datum opravy:</label>
           <input
             type="date"
             className={clsx("border border-primary-gray rounded-sm hover:border-black", darkMode)}
-            value={carRepairDate && carRepairDate.toDate().toISOString().substring(0, 10)}
+            value={carRepairDate && carRepairDate.toDate().toISOString().substring(0, 10)} // data to date from db
             onChange={handleOnChange}
           />
         </div>

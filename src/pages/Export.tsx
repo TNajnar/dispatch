@@ -35,7 +35,7 @@ const Export = () => {
     return () => unsub();
   }, []);
 
-  // Define the data to be exported
+  // Define the data to be exported for xlsx format
   const dataXlsx = docRow.map((doc) => {
     return {
       Vozidla: doc.vehicles
@@ -51,6 +51,7 @@ const Export = () => {
     };
   });
 
+  // Define the data to be exported for xlsx format
   const dataCsv = docRow.map((doc) => {
     return {
       vehicles: doc.vehicles
