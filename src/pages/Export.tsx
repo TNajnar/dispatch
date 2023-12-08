@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
-import TableRow from "../components/ExportData/TableRow";
+import { TableRow } from "../components/pages";
 import { ThemeContext } from "../context/ThemeContext";
 import { TManageTrainDoc } from "../components/types";
 import { CSVLink } from "react-csv";

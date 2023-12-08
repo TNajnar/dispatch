@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { collection, doc } from "firebase/firestore";
-import database from "../../shared/firebaseconfig";
-import { ThemeContext } from "../../context/ThemeContext";
+import database from "../../../shared/firebaseconfig";
+import { ThemeContext } from "../../../context/ThemeContext";
+import { Locomotive, Vehicle } from "../../shared";
 import { nanoid } from "nanoid";
-import { Locomotive, Vehicle } from "../Train";
-import { useVehicleTransaction, useLocoTransaction } from "../../hooks/Firestore";
-import { TParkedVehicleDoc, TVehicleObject } from "../types";
-import { useClickAbleMenu, useDragAndDrop } from "../../hooks";
-import { Button } from "../ui";
+import { useVehicleTransaction, useLocoTransaction } from "../../../hooks/Firestore";
+import { TParkedVehicleDoc, TVehicleObject } from "../../types";
+import { useClickAbleMenu, useDragAndDrop } from "../../../hooks";
+import { Button } from "../../ui";
 import clsx from "clsx";
 
 interface ITrainRailProps {

@@ -1,13 +1,13 @@
 import { ChangeEvent, useContext, useState } from "react";
 import { collection, doc } from "firebase/firestore";
-import database from "../../shared/firebaseconfig";
+import database from "../../../shared/firebaseconfig";
+import { Line, Locomotive, Vehicle } from "../../shared";
 import { nanoid } from "nanoid";
-import { Line, Locomotive, Vehicle } from "../Train";
-import { ThemeContext } from "../../context/ThemeContext";
-import { useVehicleTransaction, useLineTransaction } from "../../hooks/Firestore";
-import { TManageTrainDoc, TVehicleObject } from "../types";
-import { useClickAbleMenu, useDragAndDrop } from "../../hooks";
-import { Button, PopUpMenu } from "../ui";
+import { ThemeContext } from "../../../context/ThemeContext";
+import { useVehicleTransaction, useLineTransaction } from "../../../hooks/Firestore";
+import { TManageTrainDoc, TVehicleObject } from "../../types";
+import { useClickAbleMenu, useDragAndDrop } from "../../../hooks";
+import { Button, PopUpMenu } from "../../ui";
 import clsx from "clsx";
 
 interface IVehicleRowProps {

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import database from "../shared/firebaseconfig";
-import VehicleRow from "../components/ManageTrains/VehicleRow";
+import { VehicleRow } from "../components/pages";
 import { nanoid } from "nanoid";
 import { useBasicFirestore } from "../hooks/Firestore";
 import { TManageTrainDoc } from "../components/types";

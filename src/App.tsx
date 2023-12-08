@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ThemeContext } from "./context/ThemeContext";
 import ParkedVehicles from "./pages/ParkedVehicles";
-import MainComponent from "./components/MainComponent";
+import MainComponent from "./components/layout/MainComponent";
 import Navbar from "./components/shared/Navbar";
 import Export from "./pages/Export";
 import HomePage from "./pages/HomePage";

@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { DocumentData, DocumentReference } from "firebase/firestore";
-import useExportTransaction from "../../../hooks/Firestore/Pages/ExportTransactions";
-import EditIcon from "@mui/icons-material/Edit";
+import useExportTransaction from "../../../../hooks/Firestore/Pages/ExportTransactions";
 import EditField from "./EditField";
+import EditIcon from "@mui/icons-material/Edit";
 import clsx from "clsx";
 
-interface IToStationProps {
+interface IFromStationProps {
   stationNameFrom: string;
   stationNameTo: string;
   docRefToUpdate: DocumentReference<DocumentData>;
@@ -13,39 +13,40 @@ interface IToStationProps {
   darkEdit: string;
 }
 
-const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate, isDarkMode, darkEdit }: IToStationProps) => {
+const FromStation = ({ stationNameFrom, stationNameTo, docRefToUpdate, isDarkMode, darkEdit }: IFromStationProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [toStationState, setToStationState] = useState<string>("");
+  const [fromStationState, setFromStationState] = useState<string>("");
 
-  const { editToTransaction } = useExportTransaction(docRefToUpdate);
+  const { editFromTransaction } = useExportTransaction(docRefToUpdate);
 
-  const handleEditToStation = () => {
+  const handleEditFromStation = () => {
     setIsEditable(true);
   };
 
   const handleOnChangeStation = (event: ChangeEvent<HTMLInputElement>) => {
-    setToStationState(event?.target.value);
+    setFromStationState(event?.target.value);
   };
 
   const handleSumbitStation = () => {
-    editToTransaction(stationNameFrom, toStationState, setIsEditable);
-    setToStationState("");
+    editFromTransaction(fromStationState, stationNameTo, setIsEditable);
+    setFromStationState("");
   };
+
   return (
     <div>
       {isEditable && (
         <EditField
           isEditable={isEditable}
-          state={toStationState}
-          realData={stationNameTo}
+          state={fromStationState}
+          realData={stationNameFrom}
           isDarkMode={isDarkMode}
           handleOnChange={handleOnChangeStation}
           handleSubmit={handleSumbitStation}
         />
       )}
-      {!isEditable && stationNameTo}
+      {!isEditable && stationNameFrom}
       {!isEditable && (
-        <span onClick={handleEditToStation}>
+        <span onClick={handleEditFromStation}>
           <EditIcon className={clsx("edit", darkEdit)} />
         </span>
       )}
@@ -53,4 +54,4 @@ const ToStation = ({ stationNameFrom, stationNameTo, docRefToUpdate, isDarkMode,
   );
 };
 
-export default ToStation;
+export default FromStation;

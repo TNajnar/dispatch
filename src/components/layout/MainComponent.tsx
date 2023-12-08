@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
-import Switcher from "./shared/Switcher";
+import { ThemeContext } from "../../context/ThemeContext";
+import Switcher from "../shared/Switcher";
 import clsx from "clsx";
 
 interface IMainComponentProps {
