@@ -1,37 +1,33 @@
-import { ChangeEvent, Dispatch, SetStateAction, useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { collection, doc, Timestamp } from "firebase/firestore";
 import database from "../../shared/firebaseconfig";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useVehicleTransaction } from "../../hooks/Firestore";
 import { CarDateInfo, CarRepairLight, EditableField, Menu } from "../ui";
 import clsx from "clsx";
+import { TVehicleObject } from "../types";
 
-interface IVehicleProps {
-  id: string;
-  vehicleSpz: string;
-  vehicleClass: string;
-  vehicleRepairDate: Timestamp;
-  vehicleDoc: string;
-  documentID: string;
+interface IVehicleProps extends TVehicleObject {
   collectionName: string;
-  rowIndex: number;
-  isMenuOpen?: string;
-  setIsMenuOpen: Dispatch<SetStateAction<string>>;
+  documentID: string;
   handleDragging?: (dragging: boolean) => void;
+  isMenuOpen?: string;
+  rowIndex: number;
+  setIsMenuOpen: (value?: string) => void;
 }
 
 const Vehicle = ({
-  id,
-  vehicleSpz,
-  vehicleClass,
-  vehicleRepairDate,
-  documentID,
+  class: vehicleClass,
   collectionName,
-  rowIndex,
-  isMenuOpen,
-  vehicleDoc,
-  setIsMenuOpen,
+  documentID,
   handleDragging,
+  id,
+  isMenuOpen,
+  repairDate,
+  rowIndex,
+  setIsMenuOpen,
+  spz,
+  vehicleDoc,
 }: IVehicleProps) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [spzState, setSpzState] = useState<string>("");
@@ -41,7 +37,7 @@ const Vehicle = ({
 
   const darkModeBg = isDarkMode ? "bg-primary-blue" : "bg-white";
 
-  const collectionRows = collection(database, `${collectionName}`);
+  const collectionRows = collection(database, collectionName);
   const docRefToUpdate = doc(collectionRows, documentID);
 
   const { editVehTransaction, deleteVehicle } = useVehicleTransaction(vehicleDoc, docRefToUpdate);
@@ -57,20 +53,20 @@ const Vehicle = ({
   };
 
   const handleSumbitEditVehicleSpz = () => {
-    editVehTransaction(id, spzState, vehicleClass, vehicleRepairDate, setIsMenuOpen, setIsEditable);
+    editVehTransaction(id, spzState, vehicleClass, repairDate, setIsMenuOpen, setIsEditable);
   };
 
   const handleClassColor = (colors: string) => {
-    editVehTransaction(id, vehicleSpz, colors, vehicleRepairDate, setIsMenuOpen);
+    editVehTransaction(id, spz, colors, repairDate, setIsMenuOpen);
   };
 
   const handleVehicleRepairDate = (repairD: Timestamp) => {
-    editVehTransaction(id, vehicleSpz, vehicleClass, repairD);
+    editVehTransaction(id, spz, vehicleClass, repairD);
     setIsMenuOpen("");
   };
 
   const handleDeleteVehicle = () => {
-    deleteVehicle(id, vehicleSpz, vehicleClass, vehicleRepairDate);
+    deleteVehicle(id, spz, vehicleClass, repairDate);
   };
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
@@ -83,11 +79,17 @@ const Vehicle = ({
   };
 
   return (
-    <div className="relative group" draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <div
+      className="relative group"
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onClick={(): void => setIsMenuOpen(id)}
+    >
       <div>
         {!isEditable && isMenuOpen === id && (
           <Menu
-            carRepairDate={vehicleRepairDate}
+            carRepairDate={repairDate}
             rowIndex={rowIndex}
             editItem={handleEditSpzVehicle}
             handleClassColor={handleClassColor}
@@ -96,7 +98,7 @@ const Vehicle = ({
           />
         )}
 
-        {showDateInfo && <CarDateInfo date={vehicleRepairDate} isDarkMode={isDarkMode} />}
+        {showDateInfo && <CarDateInfo date={repairDate} isDarkMode={isDarkMode} />}
 
         <div
           className={clsx(
@@ -107,13 +109,13 @@ const Vehicle = ({
           <EditableField
             isEditable={isEditable}
             state={spzState}
-            realData={vehicleSpz}
+            realData={spz}
             handleOnChange={handleOnChangeVehicleSPZ}
             handleSubmit={handleSumbitEditVehicleSpz}
           />
           <div className={clsx("absolute right-0 w-2 h-full", vehicleClass)} />
 
-          <CarRepairLight carRepairDate={vehicleRepairDate} setShowDateInfo={setShowDateInfo} />
+          <CarRepairLight carRepairDate={repairDate} setShowDateInfo={setShowDateInfo} />
         </div>
       </div>
       {/* Wheels */}

@@ -14,7 +14,7 @@ const useDragAndDrop = (data: TVehicleObject[], collectionName: string) => {
   const collectionRows = collection(database, collectionName);
 
   const handleUpdateList = async (id: string, docID: string) => {
-    let findDraggedCar = data.filter((car) => car.id === id);
+    const findDraggedCar = data.filter((car) => car.id === id);
 
     let draggedCar = findDraggedCar[0];
     let draggedCarDoc = draggedCar.vehicleDoc;

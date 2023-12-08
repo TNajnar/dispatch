@@ -62,12 +62,12 @@ const ManageTrains = () => {
         <h3 className="font-bold">Spoj</h3>
       </div>
 
-      {docRow.map((document, index: number) => (
-        <div key={document.id} className="flex w-full items-center">
-          <VehicleRow rowIndex={index} document={document} allVehicles={allVehicles} />
+      {docRow.map((vehicleRow, index: number) => (
+        <div key={vehicleRow.id} className="flex w-full items-center">
+          <VehicleRow rowIndex={index} vehicleRow={vehicleRow} allVehicles={allVehicles} />
           <div
             className={clsx("absolute right-8 p-1 hover:rounded-full", darkHover)}
-            onClick={() => deleteRow(document.id)}
+            onClick={() => deleteRow(vehicleRow.id)}
           >
             <DeleteOutlineIcon />
           </div>

@@ -9,6 +9,7 @@ import { TParkedVehicleDoc, TVehicleObject } from "../../types";
 import { useClickAbleMenu, useDragAndDrop } from "../../../hooks";
 import { Button } from "../../ui";
 import clsx from "clsx";
+import { ECollections } from "../../../utils/enums";
 
 interface ITrainRailProps {
   document: TParkedVehicleDoc;
@@ -19,7 +20,7 @@ interface ITrainRailProps {
 const collectionRows = collection(database, "ParkedVehicles");
 
 const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState<string>("");
+  const [isMenuOpen, setIsMenuOpen] = useState<string | undefined>(undefined);
   const id = nanoid();
 
   const { isDarkMode } = useContext(ThemeContext);
@@ -29,7 +30,6 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
 
   const docRefToUpdate = doc(collectionRows, document.id);
 
-  const collectionName = "ParkedVehicles";
   const nameRail = document.nameRail;
   const parkedVehicles = document.vehicles;
 
@@ -39,7 +39,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
   const vehiclesLenght = Object.keys(parkedVehicles).length;
 
   useClickAbleMenu(id, setIsMenuOpen);
-  const { isDragging, handleDragging, handleUpdateList } = useDragAndDrop(transferredCars, collectionName);
+  const { handleDragging, handleUpdateList } = useDragAndDrop(transferredCars, ECollections.PARKED_VEHICLES);
   const { addVehicleTransaction } = useVehicleTransaction(document.id, docRefToUpdate);
   const { addLocTransaction } = useLocoTransaction(document.id, docRefToUpdate);
 
@@ -49,7 +49,7 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
 
   const addLocomotive = async () => {
     addLocTransaction(id, "", "");
-    setIsMenuOpen("");
+    setIsMenuOpen(undefined);
   };
 
   const handleOpenMenu = (id: string) => {
@@ -72,31 +72,28 @@ const TrainRail = ({ document, getAllCars, rowIndex }: ITrainRailProps) => {
           <div key={car.id} className={clsx(index === 0 && "pl-1")} onClick={() => handleOpenMenu(car.id)}>
             {car.isVehicle ? (
               <Vehicle
-                id={car.id}
-                vehicleSpz={car.spz}
-                vehicleClass={car.class}
-                vehicleRepairDate={car.repairDate}
-                vehicleDoc={car.vehicleDoc}
+                {...car}
+                collectionName={ECollections.PARKED_VEHICLES}
                 documentID={document.id}
-                rowIndex={rowIndex}
-                collectionName={collectionName}
-                setIsMenuOpen={setIsMenuOpen}
-                isMenuOpen={isMenuOpen}
                 handleDragging={handleDragging}
+                isMenuOpen={isMenuOpen}
+                rowIndex={rowIndex}
+                setIsMenuOpen={setIsMenuOpen}
               />
             ) : (
               <Locomotive
-                id={car.id}
-                locomotiveSpz={car.spz}
-                locomotiveRepairDate={car.repairDate}
-                locomotiveDoc={car.vehicleDoc}
+                collectionName={ECollections.PARKED_VEHICLES}
                 documentID={document.id}
-                collectionName={collectionName}
-                isParked={true}
+                handleDragging={handleDragging}
+                id={car.id}
+                isMenuOpen={isMenuOpen}
+                isParked
+                isVehicle={car.isVehicle}
+                lSpz={car.spz}
+                repairDate={car.repairDate}
                 rowIndex={rowIndex}
                 setIsMenuOpen={setIsMenuOpen}
-                isMenuOpen={isMenuOpen}
-                handleDragging={handleDragging}
+                vehicleDoc={car.vehicleDoc}
               />
             )}
           </div>
